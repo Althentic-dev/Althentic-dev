@@ -1,0 +1,409 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/* =============================================================================
+   Althentic.Dev — Design System (REVISI DESAIN — skema monokrom murni)
+   Skema warna: hitam-putih-grayscale SAJA di seluruh platform (dark/light/system).
+   Background dasar platform (dark): #050505. Tidak ada tint warna apa pun pada
+   token dekoratif — card Liquid Glass memakai variasi hitam/putih/abu-abu +
+   blur + transparansi.
+   Pengecualian terdokumentasi (konvensi UI fungsional, TECHNICAL_DECISIONS.md):
+   - destructive (merah)  → HANYA semantik error/gagal.
+   - warning (amber)      → HANYA semantik peringatan (mis. banner tagihan kuning,
+                            DESIGN.md §3.3 — keputusan sumber).
+   - success (emerald)    → HANYA semantik sukses/selesai/Lunas.
+   Ketiganya tidak pernah dipakai dekoratif. Status non-e/w/s (mis. "Booked",
+   dibatalkan, kedaluwarsa) memakai netral grayscale.
+   Breakpoint: sm 640px, md 768px, lg 1024px, xl 1280px (default Tailwind).
+   Font: Plus Jakarta Sans (kriteria wajib #1).
+   ============================================================================= */
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-brand-navy: var(--brand-navy);
+  --color-brand-blue: var(--brand-blue);
+  --color-brand-sky: var(--brand-sky);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+}
+
+:root {
+  --radius: 0.875rem;
+
+  /* Token "brand" — kini jangkar grayscale (bukan navy/biru).
+     Dipakai oleh utilitas gradasi monokrom (lihat .bg-brand-gradient). */
+  --brand-navy: #171717;
+  --brand-blue: #333333;
+  --brand-sky: #4d4d4d;
+
+  --background: #fafafa;
+  --foreground: #171717;
+  --card: #ffffff;
+  --card-foreground: #171717;
+  --popover: #ffffff;
+  --popover-foreground: #171717;
+  --primary: #171717;
+  --primary-foreground: #fafafa;
+  --secondary: #ededed;
+  --secondary-foreground: #262626;
+  --muted: #f0f0f0;
+  --muted-foreground: #525252;
+  --accent: #ebebeb;
+  --accent-foreground: #171717;
+  --destructive: #dc2626;
+  --border: rgba(23, 23, 23, 0.12);
+  --input: rgba(23, 23, 23, 0.16);
+  --ring: #171717;
+  --chart-1: #171717;
+  --chart-2: #525252;
+  --chart-3: #737373;
+  --chart-4: #a3a3a3;
+  --chart-5: #d4d4d4;
+  --sidebar: #ffffff;
+  --sidebar-foreground: #171717;
+  --sidebar-primary: #171717;
+  --sidebar-primary-foreground: #fafafa;
+  --sidebar-accent: #ebebeb;
+  --sidebar-accent-foreground: #171717;
+  --sidebar-border: rgba(23, 23, 23, 0.12);
+  --sidebar-ring: #171717;
+
+  /* Glassmorphism — grayscale, tanpa tint warna (revisi desain #1) */
+  --glass-bg: rgba(255, 255, 255, 0.62);
+  --glass-bg-strong: rgba(255, 255, 255, 0.8);
+  --glass-border: rgba(255, 255, 255, 0.65);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  --glass-blur: 18px;
+}
+
+.dark {
+  /* Dark mode = mode dasar platform; background persis #050505 (revisi desain #1) */
+  --brand-navy: #262626;
+  --brand-blue: #3f3f3f;
+  --brand-sky: #585858;
+
+  --background: #050505;
+  --foreground: #f5f5f5;
+  --card: #0d0d0d;
+  --card-foreground: #f5f5f5;
+  --popover: #101010;
+  --popover-foreground: #f5f5f5;
+  --primary: #f5f5f5;
+  --primary-foreground: #0a0a0a;
+  --secondary: #161616;
+  --secondary-foreground: #e5e5e5;
+  --muted: #141414;
+  --muted-foreground: #a3a3a3;
+  --accent: #1c1c1c;
+  --accent-foreground: #f5f5f5;
+  --destructive: #f87171;
+  --border: rgba(255, 255, 255, 0.1);
+  --input: rgba(255, 255, 255, 0.14);
+  --ring: #e5e5e5;
+  --chart-1: #f5f5f5;
+  --chart-2: #d4d4d4;
+  --chart-3: #a3a3a3;
+  --chart-4: #737373;
+  --chart-5: #525252;
+  --sidebar: #0d0d0d;
+  --sidebar-foreground: #f5f5f5;
+  --sidebar-primary: #f5f5f5;
+  --sidebar-primary-foreground: #0a0a0a;
+  --sidebar-accent: #1c1c1c;
+  --sidebar-accent-foreground: #f5f5f5;
+  --sidebar-border: rgba(255, 255, 255, 0.1);
+  --sidebar-ring: #e5e5e5;
+
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-bg-strong: rgba(12, 12, 12, 0.78);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --glass-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+  --glass-blur: 20px;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-feature-settings: "ss01" on, "cv01" on;
+    text-rendering: optimizeLegibility;
+  }
+  ::selection {
+    background: rgba(23, 23, 23, 0.18);
+  }
+  .dark ::selection {
+    background: rgba(255, 255, 255, 0.26);
+  }
+}
+
+/* ============================= Custom scrollbar ==============================
+   Kriteria wajib #3: WebKit scrollbar kustom dengan transisi halus.
+   Grayscale netral — berlaku konsisten di kedua tema.
+   Fallback Firefox: scrollbar-width + warna. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(140, 140, 140, 0.5) transparent;
+}
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(110, 110, 110, 0.55), rgba(170, 170, 170, 0.55));
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  transition: background 0.25s ease, border-radius 0.25s ease;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, rgba(110, 110, 110, 0.85), rgba(170, 170, 170, 0.85));
+  background-clip: padding-box;
+  border-radius: 999px;
+}
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* ============================= Glassmorphism ================================
+   Kriteria wajib #9: Liquid Glass / Glassmorphism untuk card.
+   Revisi desain #1: TANPA tint warna — hanya hitam/putih/abu-abu + blur +
+   transparansi. */
+.glass {
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  transition: background 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease,
+    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.glass-strong {
+  background: var(--glass-bg-strong);
+  -webkit-backdrop-filter: blur(calc(var(--glass-blur) + 8px));
+  backdrop-filter: blur(calc(var(--glass-blur) + 8px));
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  transition: background 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease,
+    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.glass-card {
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  border-radius: var(--radius-2xl, 1rem);
+  transition: background 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease,
+    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.glass-card-hover {
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  border-radius: var(--radius-2xl, 1rem);
+  transition: background 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease,
+    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.glass-card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.14);
+  border-color: rgba(23, 23, 23, 0.32);
+}
+.dark .glass-card-hover:hover {
+  box-shadow: 0 18px 52px rgba(0, 0, 0, 0.7);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+/* fallback saat backdrop-filter tidak tersedia */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .glass,
+  .glass-strong {
+    background: var(--card);
+  }
+}
+
+/* ============================= Gradasi monokrom =============================
+   Pengganti gradasi brand navy→biru (revisi desain #1): gradasi abu-abu gelap
+   yang menjaga kontras teks putih di kedua tema. */
+.bg-brand-gradient {
+  background: linear-gradient(135deg, var(--brand-navy) 0%, var(--brand-blue) 55%, var(--brand-sky) 100%);
+}
+.bg-brand-gradient-v {
+  background: linear-gradient(180deg, var(--brand-navy) 0%, var(--brand-blue) 60%, var(--brand-sky) 100%);
+}
+.text-gradient-brand {
+  background: linear-gradient(120deg, #171717, #3d3d3d 50%, #6b6b6b);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.dark .text-gradient-brand {
+  background: linear-gradient(120deg, #ffffff, #c9c9c9 45%, #8a8a8a);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ============================= Kontrol form kustom ==========================
+   Kriteria wajib #3: transisi halus untuk kontrol form/dropdown/checkbox. */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="search"],
+input[type="tel"],
+input[type="url"],
+textarea,
+select {
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
+}
+button,
+a,
+[role="button"],
+[role="tab"],
+summary,
+label {
+  transition-property: color, background-color, border-color, opacity, box-shadow, transform;
+  transition-duration: 0.22s;
+  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+/* Checkbox indikator pop halus */
+[data-slot="checkbox-indicator"] {
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.18s ease;
+}
+[data-state="checked"][data-slot="checkbox"] {
+  transition: background-color 0.22s ease, border-color 0.22s ease;
+}
+/* Radio indikator */
+[data-slot="radio-indicator"] {
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+/* Dropdown content animasi halus */
+[data-slot="select-content"],
+[data-slot="dropdown-menu-content"],
+[data-slot="popover-content"] {
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+}
+
+/* ============================= Utility tambahan ============================= */
+.container-page {
+  @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+}
+.section-padding {
+  @apply py-16 md:py-24;
+}
+.text-balance {
+  text-wrap: balance;
+}
+.mask-fade-b {
+  -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+}
+
+/* Timeline stepper connector — grayscale */
+.stepper-line {
+  background: linear-gradient(180deg, var(--primary), var(--muted-foreground));
+}
+
+/* Nav auto-hide transform */
+.nav-auto-hide {
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease,
+    background-color 0.3s ease, border-color 0.3s ease;
+  will-change: transform;
+}
+.nav-hidden {
+  transform: translateY(-110%);
+}
+
+/* Marquee/pulse subtle */
+@keyframes pulse-soft {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
+.animate-pulse-soft {
+  animation: pulse-soft 2.4s ease-in-out infinite;
+}
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.animate-shimmer {
+  background-size: 200% 100%;
+  animation: shimmer 2.2s linear infinite;
+}
+
+/* ============================= Imagery monokrom ==============================
+   Revisi desain #1 — "tidak ada warna di mana pun": seluruh gambar konten
+   (preview produk, banner toko, bukti transfer, QR) ditampilkan grayscale.
+   QR memang hitam-putih; banner toko memakai preset grayscale; preview produk
+   disaring agar tidak menjadi satu-satunya elemen berwarna di platform.
+   Keputusan terdokumentasi di TECHNICAL_DECISIONS.md. */
+img {
+  filter: grayscale(100%);
+}
+
+/* ============================= Reduced motion ===============================
+   WCAG: hormati prefers-reduced-motion di seluruh platform. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Focus visible ring konsisten (WCAG 2.4.7) */
+:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
