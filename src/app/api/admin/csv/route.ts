@@ -1,4 +1,4 @@
-// GET /api/admin/csv?table=transactions|commissions|sellers — Export CSV per tabel
+// GET /api/admin/csv?table=transactions|commissions|sellers - Export CSV per tabel
 // dengan semua filter aktif diterapkan (SPEC-01-04)
 import { NextRequest } from "next/server";
 import { db } from "@/lib/db";
