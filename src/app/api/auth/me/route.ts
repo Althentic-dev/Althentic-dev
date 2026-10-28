@@ -1,4 +1,4 @@
-// GET /api/auth/me — session aktif (dipanggil di dalam route, SPEC-15-04)
+// GET /api/auth/me - session aktif (dipanggil di dalam route, SPEC-15-04)
 import { handle, json } from "@/lib/server/helpers";
 import { getSessionUser } from "@/lib/server/auth";
 
