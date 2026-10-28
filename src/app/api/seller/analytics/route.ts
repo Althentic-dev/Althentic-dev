@@ -1,4 +1,4 @@
-// GET /api/seller/analytics — 4 kartu + grafik 30 hari + 5 produk teratas (SPEC-02-08)
+// GET /api/seller/analytics - 4 kartu + grafik 30 hari + 5 produk teratas (SPEC-02-08)
 import { db } from "@/lib/db";
 import { json, handle, fail } from "@/lib/server/helpers";
 import { requireUser } from "@/lib/server/auth";
