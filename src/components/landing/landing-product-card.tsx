@@ -1,7 +1,7 @@
 "use client";
 
 // =============================================================================
-// Althentic.Dev — Kartu produk landing (section 3: Featured/Trending) + skeleton
+// Althentic.Dev - Kartu produk landing (section 3: Featured/Trending) + skeleton
 // loading animate-pulse. Kartu Liquid Glass (.glass-card-hover) dengan pola
 // "stretched button": satu tombol full-card untuk aksesibilitas & keyboard.
 // =============================================================================
@@ -21,7 +21,7 @@ export function ProductCard({ product }: { product: ProductCardDTO }) {
 
   return (
     <article className="glass-card-hover group relative flex h-full flex-col overflow-hidden text-left">
-      {/* Stretched button — seluruh kartu bisa diklik & focus-visible jelas */}
+      {/* Stretched button - seluruh kartu bisa diklik & focus-visible jelas */}
       <button
         type="button"
         onClick={goToProduct}
@@ -29,12 +29,12 @@ export function ProductCard({ product }: { product: ProductCardDTO }) {
         className="absolute inset-0 z-10 rounded-[inherit] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring"
       />
 
-      {/* Gambar pratinjau (img biasa — URL /api/files dari API) */}
+      {/* Gambar pratinjau (img biasa - URL /api/files dari API) */}
       <div className="relative aspect-[4/3] overflow-hidden bg-muted">
         {product.preview ? (
           <img
             src={product.preview}
-            alt={`Pratinjau produk ${product.title} — ${categoryLabel(product.category)}`}
+            alt={`Pratinjau produk ${product.title} - ${categoryLabel(product.category)}`}
             loading="lazy"
             decoding="async"
             className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
