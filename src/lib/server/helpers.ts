@@ -1,4 +1,4 @@
-// Althentic.Dev — util server (SPEC-15-04: error tanpa stack, Zod di route)
+// Althentic.Dev - util server (SPEC-15-04: error tanpa stack, Zod di route)
 
 import { NextResponse } from "next/server";
 
@@ -18,6 +18,47 @@ export function getClientIp(req: Request): string {
 
 export function getUserAgent(req: Request): string {
   return req.headers.get("user-agent") ?? "";
+}
+
+export type BoundedJsonResult =
+  | { ok: true; value: unknown; text: string }
+  | { ok: false; reason: "too_large" | "invalid_json" | "invalid_utf8" };
+
+export async function readJsonBodyLimited(req: Request, maxBytes: number): Promise<BoundedJsonResult> {
+  if (!req.body) return { ok: false, reason: "invalid_json" };
+  const reader = req.body.getReader();
+  const chunks: Uint8Array[] = [];
+  let size = 0;
+
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    size += value.byteLength;
+    if (size > maxBytes) {
+      await reader.cancel();
+      return { ok: false, reason: "too_large" };
+    }
+    chunks.push(value);
+  }
+
+  const body = new Uint8Array(size);
+  let offset = 0;
+  for (const chunk of chunks) {
+    body.set(chunk, offset);
+    offset += chunk.byteLength;
+  }
+
+  let text: string;
+  try {
+    text = new TextDecoder("utf-8", { fatal: true }).decode(body);
+  } catch {
+    return { ok: false, reason: "invalid_utf8" };
+  }
+  try {
+    return { ok: true, value: JSON.parse(text) as unknown, text };
+  } catch {
+    return { ok: false, reason: "invalid_json" };
+  }
 }
 
 /** Wrapper handler API: tangkap error, log terstruktur (SPEC-15-05), jangan bocorkan stack. */
