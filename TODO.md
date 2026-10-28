@@ -15,6 +15,17 @@
 - [x] Buat Issue dan PR terkait; PR tetap terbuka untuk ditinjau pemilik.
 - [ ] Jalankan lint/build ketika dependency project tersedia dan side effect toolchain dapat diperiksa.
 
+### PR: Neon Object Storage receipt dan audit environment
+
+- [x] Arahkan unggah, baca, cek, dan hapus bukti private `receipts/` ke Neon Object Storage melalui S3-compatible SDK.
+- [x] Gunakan nama env resmi Neon/AWS untuk endpoint, kredensial, dan region serta dokumentasikan setup bucket private.
+- [x] Audit `.env.example` dan `.env` lokal; petakan alias terpakai dan hapus konfigurasi yang terbukti tidak dipakai tanpa menampilkan nilai.
+- [x] Dokumentasikan gap Supabase untuk banner/preview dan backup Actions; jelaskan Secrets GitHub Actions di README.
+- [x] Tampilkan keputusan storage terkini pada arsitektur dan catat deviasi dari SPEC lama.
+- [x] Catat perubahan keputusan storage receipt terhadap SPEC sebelumnya di DEVIATIONS.md.
+- [x] Buat Issue/PR dan review terkonsolidasi sesuai aturan repository.
+- [ ] Jalankan lint/build setelah executable toolchain tersedia; jangan menjalankan test tanpa permintaan.
+
 ## Deferred work
 
 - [ ] Audit dinamis penuh hanya dijalankan setelah tersedia runner OS sandbox yang menegakkan batas jaringan, environment, filesystem, dan sumber daya.

@@ -34,7 +34,8 @@
 | Next.js App Router full-stack di Vercel | Aplikasi web dan API platform.                                                  | Konteks Terkunci                         |
 | NeonDB Postgres                         | Seluruh data relasional.                                                        | SPEC-15-01                               |
 | Prisma                                  | ORM, schema-first, migration, dan type generation.                              | SPEC-15-02                               |
-| Supabase Storage                        | File biner; bucket publik dan private terpisah.                                 | SPEC-15-01                               |
+| Neon Object Storage                    | Bukti transfer private pada bucket `receipts`.                                  | Keputusan implementasi; lihat bagian 5. |
+| Supabase Storage                        | Banner dan preview; integrasi runtime belum tersedia.                            | SPEC-15-01                               |
 | Google Drive                            | File produk ZIP melalui link publik.                                            | Konteks Terkunci; SPEC-11-02             |
 | Penyedia AI dengan BYOK seller          | Pemrosesan bukti pembayaran buyer; primary dan fallback key.                    | Konteks Terkunci; SPEC-07-08             |
 | Upstash Redis REST                      | Sliding-window rate limit per-IP+user pada endpoint sensitif.                   | SPEC-15-03                               |
@@ -53,7 +54,8 @@ flowchart TD
     A --> R["API: Zod, session, ownership"]
     R --> P["Prisma"]
     P --> N["Neon Postgres: data relasional"]
-    R --> S["Supabase Storage: file biner"]
+    R --> S["Neon Object Storage: receipt private"]
+    R --> SS["Supabase Storage: banner/preview (belum terintegrasi)"]
     R --> L["Upstash Redis REST: rate limit"]
     R --> D["Delivery: kontrak belum selaras"]
     D -. "File produk ZIP" .-> G["Google Drive publik"]
@@ -169,7 +171,7 @@ Teknik indeks pencarian, query SQL, cache, strategi rendering, dan invalidasi da
 
 **Keputusan sumber - SPEC-15-01**
 
-> Neon menyimpan semua data relasional (users, products, orders, ledger komisi, metadata bukti); Supabase Storage hanya menyimpan file biner (bukti .webp, banner, preview) dalam bucket publik dan private terpisah.
+> Neon menyimpan semua data relasional (users, products, orders, ledger komisi, metadata bukti); Supabase Storage hanya menyimpan file biner (banner, preview) dalam bucket publik dan private terpisah.
 
 **Keputusan sumber - SPEC-15-02**
 
@@ -177,15 +179,15 @@ Teknik indeks pencarian, query SQL, cache, strategi rendering, dan invalidasi da
 
 **Keputusan sumber - SPEC-07-06**
 
-> Supabase Storage bucket private dengan path receipts/{orderId}/{timestamp}.webp; akses hanya lewat signed URL berumur pendek yang diterbitkan API.
+> Keputusan implementasi diperbarui: bukti `.webp` berada di Neon Object Storage bucket private `receipts`, dengan key `receipts/{orderId}/{timestamp}.webp`; akses tetap melalui signed URL berumur pendek yang diverifikasi API.
 
 ### 5.1. Pemisahan data yang tercatat
 
 | Data                                                                             | Penempatan yang sudah ditetapkan                                                                                    | Referensi        |
 | -------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ---------------- |
 | Data relasional, termasuk users, products, orders, ledger komisi, metadata bukti | Neon Postgres.                                                                                                      | SPEC-15-01       |
-| Bukti lolos berbentuk WebP                                                       | Supabase Storage bucket private; akses signed URL dari API.                                                         | SPEC-07-06       |
-| Banner dan preview                                                               | File biner di Supabase Storage; pembagian bucket per aset belum dirinci.                                            | SPEC-15-01       |
+| Bukti lolos berbentuk WebP                                                       | Neon Object Storage bucket private `receipts`; akses signed URL dari API.                                            | Keputusan implementasi; SPEC-07-06 |
+| Banner dan preview                                                               | Dimaksudkan di Supabase Storage; source saat ini masih memakai filesystem lokal.                                     | SPEC-15-01       |
 | File produk ZIP                                                                  | Google Drive dengan link publik.                                                                                    | Konteks Terkunci |
 | File backup bulanan                                                              | Storage pribadi; penyedianya belum dipilih.                                                                         | SPEC-15-06       |
 | API key BYOK                                                                     | Enkripsi at-rest AES-256-GCM dengan key dari environment Vercel; lokasi/kolom penyimpanan ciphertext belum dirinci. | SPEC-07-08       |
