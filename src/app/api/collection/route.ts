@@ -1,4 +1,4 @@
-// GET /api/collection — Koleksi Saya (SPEC-11-06): order Lunas + tombol unduh,
+// GET /api/collection - Koleksi Saya (SPEC-11-06): order Lunas + tombol unduh,
 // info versi, tanggal beli. Tombol berubah "Sudah diunduh" (disabled) setelah habis.
 import { db } from "@/lib/db";
 import { json, handle } from "@/lib/server/helpers";
