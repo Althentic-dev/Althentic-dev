@@ -1,0 +1,348 @@
+// =============================================================================
+// Althentic.Dev — Order state machine (GAP-01/11, SPEC-02/04/07)
+// pending_payment → payment_submitted → verified/rejected → completed
+// cabang cancelled / expired. "Booked" = label buyer saat jalur manual/AI gagal.
+// Produk TETAP bisa dibeli paralel (bukan exclusive lock).
+// =============================================================================
+
+import { db } from "@/lib/db";
+import { randomCode } from "@/lib/server/helpers";
+import { getSettings } from "@/lib/server/settings";
+import { notifyUser } from "@/lib/server/notifications";
+import {
+  tplOrderCreated,
+  tplReceiptReceived,
+  tplOrderVerified,
+  tplOrderRejected,
+  tplOrderCancelled,
+  tplOrderExpired,
+  tplManualNoResponse,
+  tplSellerNewOrder,
+} from "@/lib/server/email";
+import { recordLedgerAndMaybeInvoice } from "@/lib/server/commission";
+import { ORDER_EXPIRY_HOURS, MANUAL_RESPONSE_HOURS } from "@/lib/constants";
+
+export async function addEvent(
+  orderId: string,
+  status: string,
+  label: string,
+  actor: string,
+  note?: string
+) {
+  await db.orderEvent.create({
+    data: { orderId, status, label, actor, note: note ?? null },
+  });
+}
+
+export async function createOrder(p: {
+  buyerId: string;
+  buyerEmail: string;
+  buyerName: string;
+  buyerIp?: string;
+  productId: string;
+  sellType: string;
+}) {
+  const product = await db.product.findUnique({
+    where: { id: p.productId },
+    include: { store: { include: { owner: true } } },
+  });
+  if (!product || product.status !== "active") {
+    throw Object.assign(new Error("Produk tidak tersedia untuk dibeli."), { status: 400 });
+  }
+  if (product.store.status === "suspended" || product.store.status === "preparing") {
+    throw Object.assign(new Error("Toko sedang tidak menerima order."), { status: 400 });
+  }
+  const sellTypes = JSON.parse(product.sellTypesJson) as {
+    type: string;
+    price: number;
+    driveFileId?: string;
+  }[];
+  const st = sellTypes.find((s) => s.type === p.sellType);
+  if (!st) throw Object.assign(new Error("Tipe jual tidak valid."), { status: 400 });
+
+  const settings = await getSettings();
+  const expiresAt = new Date(Date.now() + ORDER_EXPIRY_HOURS * 3600 * 1000); // GAP-11
+
+  // Deteksi self-buy sinyal IP (SPEC-16-12; fingerprint perangkat di-skip GAP-21)
+  const sellerLastIp = product.store.owner.lastLoginIp ?? null;
+  const selfBuyFlag = !!p.buyerIp && !!sellerLastIp && p.buyerIp === sellerLastIp;
+
+  const order = await db.order.create({
+    data: {
+      code: randomCode("ALT"),
+      buyerId: p.buyerId,
+      storeId: product.storeId,
+      productId: product.id,
+      sellType: p.sellType,
+      price: st.price, // harga terkunci (SPEC-02-10)
+      commissionSnapshot: settings.commissionAmount, // difinalkan saat verified (GAP-16)
+      status: "pending_payment",
+      expiresAt,
+      buyerIp: p.buyerIp ?? null,
+      selfBuyFlag,
+    },
+  });
+  await addEvent(order.id, "pending_payment", "Order dibuat", "buyer", `Order ${order.code} dibuat`);
+
+  // Email + notifikasi buyer (SPEC-04-06 #1) & seller (SPEC-04-07)
+  await notifyUser({
+    userId: p.buyerId,
+    type: "order_update",
+    title: `Order ${order.code} dibuat`,
+    body: `Tekan "Bayar Sekarang" di halaman order, scan QR ${product.store.name}, lalu upload bukti transfer.`,
+    linkQuery: `v=checkout&id=${order.id}`,
+    email: {
+      to: p.buyerEmail,
+      subject: `Order ${order.code} — instruksi pembayaran`,
+      body: tplOrderCreated({
+        buyerName: p.buyerName,
+        orderCode: order.code,
+        productTitle: product.title,
+        price: st.price,
+        storeName: product.store.name,
+        qrNote: st.price === 0 ? "Produk ini gratis — cukup konfirmasi tanpa transfer." : "QR akan tampil setelah kamu menekan Bayar Sekarang.",
+      }),
+      kind: "order_created",
+    },
+  });
+  await notifyUser({
+    userId: product.store.ownerId,
+    type: "order_update",
+    title: `Order baru: ${product.title}`,
+    body: `Order ${order.code} dari ${p.buyerName} senilai Rp${st.price.toLocaleString("id-ID")}.`,
+    linkQuery: `v=dashboard&tab=orders`,
+    email: {
+      to: product.store.owner.email,
+      subject: `Order baru masuk: ${order.code}`,
+      body: tplSellerNewOrder({
+        sellerName: product.store.name,
+        orderCode: order.code,
+        productTitle: product.title,
+        price: st.price,
+      }),
+      kind: "seller_new_order",
+    },
+  });
+  return order;
+}
+
+export async function startPaySession(orderId: string) {
+  const order = await db.order.findUnique({ where: { id: orderId } });
+  if (!order || order.status !== "pending_payment") return order;
+  if (!order.paySessionStartedAt) {
+    await db.order.update({
+      where: { id: orderId },
+      data: { paySessionStartedAt: new Date() },
+    });
+  }
+  return db.order.findUnique({ where: { id: orderId } });
+}
+
+/** Order diverifikasi (AI lolos / seller manual approve). */
+export async function verifyOrder(p: {
+  orderId: string;
+  actor: "ai" | "seller" | "superadmin" | "system";
+  checklist?: boolean[];
+  note?: string;
+}) {
+  const order = await db.order.findUnique({
+    where: { id: p.orderId },
+    include: { product: { include: { store: { include: { owner: true } } } }, buyer: true },
+  });
+  if (!order) throw Object.assign(new Error("Order tidak ditemukan."), { status: 404 });
+  if (order.status !== "payment_submitted") {
+    throw Object.assign(new Error(`Order berstatus ${order.status}, tidak bisa diverifikasi.`), { status: 400 });
+  }
+
+  // Snapshot komisi FINAL saat verified (GAP-16)
+  const settings = await getSettings();
+  const commissionSnapshot = settings.commissionAmount;
+
+  const updated = await db.order.update({
+    where: { id: order.id },
+    data: {
+      status: "verified",
+      verifiedAt: new Date(),
+      commissionSnapshot,
+      manualChecklistJson:
+        p.actor === "seller" && p.checklist ? JSON.stringify(p.checklist) : order.manualChecklistJson,
+    },
+  });
+  await addEvent(
+    order.id,
+    "verified",
+    p.actor === "seller" ? "Diverifikasi manual oleh seller" : p.actor === "ai" ? "Diverifikasi AI Receipt Scanner" : "Diverifikasi",
+    p.actor,
+    p.note
+  );
+
+  // Komisi ledger per event (SPEC-09-05) + invoice threshold
+  await recordLedgerAndMaybeInvoice(order.id);
+
+  // statistik produk
+  await db.product.update({
+    where: { id: order.productId },
+    data: { salesCount: { increment: 1 } },
+  });
+
+  await notifyUser({
+    userId: order.buyerId,
+    type: "order_update",
+    title: `Pembayaran terverifikasi — ${order.product.title}`,
+    body: "Status Lunas. File bisa diunduh dari Koleksi Saya (kuota unduh 1x).",
+    linkQuery: `v=collection`,
+    email: {
+      to: order.buyer.email,
+      subject: `Order ${order.code} lunas — file siap diunduh`,
+      body: tplOrderVerified({
+        buyerName: order.buyer.name,
+        orderCode: order.code,
+        productTitle: order.product.title,
+      }),
+      kind: "order_verified",
+    },
+  });
+  return updated;
+}
+
+export async function rejectOrder(p: { orderId: string; reason: string; actor: "ai" | "seller" | "system"; note?: string }) {
+  const order = await db.order.findUnique({
+    where: { id: p.orderId },
+    include: { buyer: true, product: true },
+  });
+  if (!order) throw Object.assign(new Error("Order tidak ditemukan."), { status: 404 });
+  if (order.status !== "payment_submitted") {
+    throw Object.assign(new Error(`Order berstatus ${order.status}.`), { status: 400 });
+  }
+  await db.order.update({ where: { id: order.id }, data: { status: "rejected" } });
+  await addEvent(order.id, "rejected", "Bukti ditolak", p.actor, p.reason);
+  await notifyUser({
+    userId: order.buyerId,
+    type: "order_update",
+    title: `Bukti transfer ditolak — ${order.code}`,
+    body: `${p.reason} Upload ulang bukti sebelum order kedaluwarsa.`,
+    linkQuery: `v=checkout&id=${order.id}`,
+    email: {
+      to: order.buyer.email,
+      subject: `Verifikasi gagal — ${order.code}`,
+      body: tplOrderRejected({
+        buyerName: order.buyer.name,
+        orderCode: order.code,
+        reason: p.reason,
+      }),
+      kind: "order_rejected",
+    },
+  });
+}
+
+/** Order batal (buyer 1 klik sebelum Lunas — SPEC-04-08 / GAP-01). */
+export async function cancelOrder(orderId: string, reason: string) {
+  const order = await db.order.findUnique({ where: { id: orderId }, include: { buyer: true } });
+  if (!order) throw Object.assign(new Error("Order tidak ditemukan."), { status: 404 });
+  if (!["pending_payment", "payment_submitted", "rejected"].includes(order.status)) {
+    throw Object.assign(new Error("Order sudah Lunas — gunakan jalur dispute."), { status: 400 });
+  }
+  await db.order.update({
+    where: { id: orderId },
+    data: { status: "cancelled", cancelledAt: new Date(), cancelReason: reason },
+  });
+  await addEvent(orderId, "cancelled", "Dibatalkan buyer", "buyer", reason);
+  await notifyUser({
+    userId: order.buyerId,
+    type: "order_update",
+    title: `Order ${order.code} dibatalkan`,
+    body: reason,
+    linkQuery: `v=orders`,
+    email: {
+      to: order.buyer.email,
+      subject: `Order ${order.code} dibatalkan`,
+      body: tplOrderCancelled({ buyerName: order.buyer.name, orderCode: order.code, reason }),
+      kind: "order_cancelled",
+    },
+  });
+}
+
+/** Kedaluwarsa (tanpa progres 24 jam dari checkout — GAP-11). */
+export async function expireOrder(orderId: string) {
+  const order = await db.order.findUnique({
+    where: { id: orderId },
+    include: { buyer: true, product: { select: { slug: true } } },
+  });
+  if (!order || !["pending_payment", "payment_submitted", "rejected"].includes(order.status)) return;
+  await db.order.update({
+    where: { id: orderId },
+    data: { status: "expired", expiredAt: new Date() },
+  });
+  await addEvent(orderId, "expired", "Kedaluwarsa (24 jam tanpa progres)", "system");
+  await notifyUser({
+    userId: order.buyerId,
+    type: "order_update",
+    title: `Order ${order.code} kedaluwarsa`,
+    body: "Tidak ada progres dalam 24 jam. Kamu bisa order ulang kapan saja.",
+    linkQuery: `v=product&id=${order.product.slug}`,
+    email: {
+      to: order.buyer.email,
+      subject: `Order ${order.code} kedaluwarsa`,
+      body: tplOrderExpired({ buyerName: order.buyer.name, orderCode: order.code }),
+      kind: "order_expired",
+    },
+  });
+}
+
+/** Order manual tanpa respons 24 jam → batal otomatis (SPEC-02-07). */
+export async function autoCancelUnresponded(orderId: string) {
+  const order = await db.order.findUnique({
+    where: { id: orderId },
+    include: { buyer: true, product: { include: { store: { include: { owner: true } } } } },
+  });
+  if (!order || order.status !== "payment_submitted" || (order.verifyPath !== "manual" && order.verifyPath !== "wa")) return;
+  await db.order.update({
+    where: { id: orderId },
+    data: { status: "cancelled", cancelledAt: new Date(), cancelReason: "Tidak ada respons seller 24 jam" },
+  });
+  await addEvent(orderId, "cancelled", "Batal otomatis — seller tidak merespons 24 jam", "system");
+  await notifyUser({
+    userId: order.buyerId,
+    type: "order_update",
+    title: `Order ${order.code} dibatalkan otomatis`,
+    body: "Seller tidak merespons dalam 24 jam. Kamu boleh reorder.",
+    linkQuery: `v=product&id=${order.product.slug}`,
+    email: {
+      to: order.buyer.email,
+      subject: `Order ${order.code} dibatalkan otomatis`,
+      body: tplManualNoResponse({ buyerName: order.buyer.name, orderCode: order.code }),
+      kind: "order_manual_cancelled",
+    },
+  });
+  // Peringatan kinerja pertama ke seller
+  await notifyUser({
+    userId: order.product.store.ownerId,
+    type: "system",
+    title: "Peringatan kinerja: order tanpa respons",
+    body: `Order ${order.code} dibatalkan otomatis karena tidak ada respons manual dalam 24 jam.`,
+    linkQuery: `v=dashboard&tab=orders`,
+    email: {
+      to: order.product.store.owner.email,
+      subject: `Peringatan kinerja — order ${order.code} batal otomatis`,
+      body: `Halo ${order.product.store.name}, order ${order.code} batal otomatis karena tidak diverifikasi manual dalam ${MANUAL_RESPONSE_HOURS} jam. Ini peringatan kinerja pertama tokomu.`,
+      kind: "seller_performance_warning",
+    },
+  });
+}
+
+/** Kuota download 1x terpakai saat stream dimulai (GAP-13). */
+export async function markDownloadUsed(orderId: string) {
+  const order = await db.order.findUnique({ where: { id: orderId } });
+  if (!order) return null;
+  if (order.downloadUsedAt) return null; // kuota sudah terpakai
+  await db.order.update({
+    where: { id: orderId },
+    data: {
+      downloadUsedAt: new Date(),
+      status: order.status === "verified" ? "completed" : order.status,
+      completedAt: order.status === "verified" ? new Date() : order.completedAt,
+    },
+  });
+  await addEvent(orderId, "completed", "File diunduh (kuota 1x terpakai)", "buyer");
+  return db.order.findUnique({ where: { id: orderId } });
+}
