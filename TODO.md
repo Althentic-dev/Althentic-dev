@@ -2,6 +2,14 @@
 
 ## Active plans
 
+### PR: Perbaikan build Turbopack untuk view dinamis
+
+- [x] Ganti objek opsi bersama pada pemanggilan `next/dynamic` dengan object literal yang dapat dianalisis Next.js 16.
+- [x] Pertahankan komponen fallback loading yang sama pada seluruh view.
+- [x] Perbarui changelog untuk perubahan ini.
+- [x] Jalankan lint (lulus), build Next.js (kompilasi lulus), pemeriksaan diff, dan validasi encoding. Perintah gabungan berhenti setelahnya pada `cp -r` yang tidak didukung shell Windows lokal.
+- [ ] Buat Issue dan PR terkait; PR tetap terbuka untuk ditinjau pemilik.
+
 ### PR: Hardening pra-deployment dan performa render
 
 - [x] Terapkan secret production fail-closed untuk sesi, file privat, MCP, dan webhook; pertahankan fallback development.
