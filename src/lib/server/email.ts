@@ -1,5 +1,5 @@
 // =============================================================================
-// Althentic.Dev — Email (Nodemailer, SPEC-04-06/07, SPEC-09-03, SPEC-15-05)
+// Althentic.Dev - Email (Nodemailer, SPEC-04-06/07, SPEC-09-03, SPEC-15-05)
 // Sandbox: SMTP tidak dikonfigurasi → email dicatat ke EmailOutbox (status
 // "logged") dan dapat dilihat Super-Admin. Production: set SMTP_* env.
 // =============================================================================
@@ -98,7 +98,7 @@ export function tplOrderVerified(p: { buyerName: string; orderCode: string; prod
 Verifikasi pembayaran order ${p.orderCode} BERHASIL. Status order kamu kini Lunas.
 
 File produk "${p.productTitle}" sudah bisa diunduh dari halaman Koleksi Saya.
-Penting: kuota unduh hanya 1 kali per order — pastikan koneksi stabil sebelum mengunduh.`;
+Penting: kuota unduh hanya 1 kali per order - pastikan koneksi stabil sebelum mengunduh.`;
 }
 
 export function tplOrderRejected(p: { buyerName: string; orderCode: string; reason: string }) {
@@ -138,7 +138,7 @@ export function tplManualNoResponse(p: { buyerName: string; orderCode: string })
   return `Halo ${p.buyerName},
 
 Order ${p.orderCode} dibatalkan otomatis karena tidak mendapat respons manual dari seller dalam 24 jam.
-Kamu boleh melakukan reorder — dan jika berulang, laporkan tokonya ke kami.`;
+Kamu boleh melakukan reorder - dan jika berulang, laporkan tokonya ke kami.`;
 }
 
 export function tplInvoiceIssued(p: { sellerName: string; invoiceCode: string; amount: number; dueDate: string; payNote: string }) {
