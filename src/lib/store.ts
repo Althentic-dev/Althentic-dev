@@ -1,6 +1,6 @@
 "use client";
 
-// Althentic.Dev — Zustand store global (session, notifikasi, dialog auth)
+// Althentic.Dev - Zustand store global (session, notifikasi, dialog auth)
 
 import { create } from "zustand";
 import type { NotificationDTO, SessionUser } from "@/lib/types";
