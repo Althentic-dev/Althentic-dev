@@ -35,7 +35,7 @@
 | NeonDB Postgres                         | Seluruh data relasional.                                                        | SPEC-15-01                               |
 | Prisma                                  | ORM, schema-first, migration, dan type generation.                              | SPEC-15-02                               |
 | Neon Object Storage                    | Bukti transfer private pada bucket `receipts`.                                  | Keputusan implementasi; lihat bagian 5. |
-| Supabase Storage                        | Banner dan preview; integrasi runtime belum tersedia.                            | SPEC-15-01                               |
+| Supabase Storage                        | Bucket publik untuk banner dan QR toko, serta bucket publik untuk preview produk. | SPEC-15-01; keputusan implementasi       |
 | Google Drive                            | File produk ZIP melalui link publik.                                            | Konteks Terkunci; SPEC-11-02             |
 | Penyedia AI dengan BYOK seller          | Pemrosesan bukti pembayaran buyer; primary dan fallback key.                    | Konteks Terkunci; SPEC-07-08             |
 | Upstash Redis REST                      | Sliding-window rate limit per-IP+user pada endpoint sensitif.                   | SPEC-15-03                               |
@@ -55,7 +55,7 @@ flowchart TD
     R --> P["Prisma"]
     P --> N["Neon Postgres: data relasional"]
     R --> S["Neon Object Storage: receipt private"]
-    R --> SS["Supabase Storage: banner/preview (belum terintegrasi)"]
+    R --> SS["Supabase Storage: banner/QR dan preview produk (bucket publik)"]
     R --> L["Upstash Redis REST: rate limit"]
     R --> D["Delivery: kontrak belum selaras"]
     D -. "File produk ZIP" .-> G["Google Drive publik"]
@@ -187,12 +187,12 @@ Teknik indeks pencarian, query SQL, cache, strategi rendering, dan invalidasi da
 | -------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ---------------- |
 | Data relasional, termasuk users, products, orders, ledger komisi, metadata bukti | Neon Postgres.                                                                                                      | SPEC-15-01       |
 | Bukti lolos berbentuk WebP                                                       | Neon Object Storage bucket private `receipts`; akses signed URL dari API.                                            | Keputusan implementasi; SPEC-07-06 |
-| Banner dan preview                                                               | Dimaksudkan di Supabase Storage; source saat ini masih memakai filesystem lokal.                                     | SPEC-15-01       |
+| Banner dan QR toko                                                               | Bucket Supabase publik yang dikonfigurasi oleh `SUPABASE_STORAGE_BUCKET_BANNERS`; development tetap memakai filesystem. | SPEC-15-01; keputusan implementasi |
+| Preview produk                                                                  | Bucket Supabase publik yang dikonfigurasi oleh `SUPABASE_STORAGE_BUCKET_PREVIEWS`; development tetap memakai filesystem. | SPEC-15-01; keputusan implementasi |
 | File produk ZIP                                                                  | Google Drive dengan link publik.                                                                                    | Konteks Terkunci |
 | File backup bulanan                                                              | Storage pribadi; penyedianya belum dipilih.                                                                         | SPEC-15-06       |
 | API key BYOK                                                                     | Enkripsi at-rest AES-256-GCM dengan key dari environment Vercel; lokasi/kolom penyimpanan ciphertext belum dirinci. | SPEC-07-08       |
 | Laporan inspeksi Markdown dan screenshot inspeksi                                | Bentuk hasil sudah ditentukan; lokasi penyimpanannya belum dirinci.                                                 | SPEC-08-01       |
-| Gambar QR seller                                                                 | Upload sudah ditentukan; bucket, path, dan aturan aksesnya belum dirinci.                                           | SPEC-06-02       |
 
 ### 5.2. Inventaris informasi yang harus ditopang
 
@@ -230,6 +230,14 @@ Tipe kolom, enum database, unique constraint, index, foreign key, cascade, schem
 > Order batal/kedaluwarsa tidak pernah masuk “Commission Owed”; komisi hanya dicatat saat transaksi terverifikasi, dalam ledger terpisah per event.
 
 Batas transaksi database untuk perubahan status dan pencatatan ledger, pencegahan pencatatan ganda, idempotensi, konkurensi verifikasi, serta penghitungan kuota download atomik: **[BELUM DIPUTUSKAN - perlu klarifikasi]**. Kebutuhan tersebut tidak dianggap sebagai keputusan desain yang sudah dibuat.
+
+### 5.4. Batas operasional storage
+
+- Production mengirim seluruh object bucket `public` ke Supabase berdasarkan prefix: `banners/` dan `qr/` masuk bucket banner; `products/` masuk bucket preview. Prefix yang tidak dikenal ditolak agar tidak jatuh ke filesystem ephemeral Vercel.
+- Development tetap membaca dan menulis ke `STORAGE_ROOT`; object `private/receipts/` memakai Neon Object Storage di semua environment.
+- Supabase service role hanya digunakan server-side. Kedua bucket aset harus disetel Public; URL internal aplikasi tetap dilayani melalui `/api/files`.
+- `/api/health` menjalankan `HeadBucket` read-only pada bucket private Neon `receipts` dan request `HEAD` tanpa autentikasi ke sentinel publik `banners/althentic-studio.webp`. Kedua probe dibatasi lima detik dan readiness mensyaratkan keduanya tersedia.
+- `scripts/migrate-supabase-public-assets.ts` menyalin file lokal dengan dry-run, pemeriksaan konflik berdasarkan SHA-256, unggah tanpa overwrite, dan verifikasi bytes setelah upload. Script tidak menghapus sumber.
 
 ## 6. Auth, session, dan keamanan API
 

@@ -5,6 +5,10 @@
 
 ### Unreleased Update
 
+- Simpan aset banner dan QR toko serta preview produk di bucket publik Supabase pada production, cek readiness kedua storage, dan sediakan migrasi file lokal tanpa overwrite.
+
+### Unreleased Update
+
 - Catat nama error dan kode Prisma yang sudah disaring saat probe database production gagal, tanpa memasukkan pesan error atau kredensial ke log.
 
 ### Unreleased Update

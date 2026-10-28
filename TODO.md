@@ -52,6 +52,18 @@
 - [x] Buat Issue/PR dan review terkonsolidasi sesuai aturan repository.
 - [ ] Jalankan lint/build setelah executable toolchain tersedia; jangan menjalankan test tanpa permintaan.
 
+### PR: Integrasi Supabase Storage untuk aset publik
+
+- [x] Arahkan banner dan QR toko ke bucket publik Supabase, serta preview produk ke bucket preview Supabase saat production; pertahankan storage filesystem untuk development.
+- [x] Pertahankan receipt `private/receipts/` pada Neon Object Storage dan perilaku URL `/api/files`.
+- [x] Ubah probe readiness agar mengecek private bucket Neon dan object sentinel Supabase melalui request read-only berbatas waktu.
+- [x] Sediakan script migrasi aset `storage/public` dengan dry-run, tanpa overwrite, serta verifikasi SHA-256 dan akses publik setelah salin.
+- [x] Tambahkan environment Supabase yang dibutuhkan ke `.env.example` tanpa nilai rahasia.
+- [x] Perbarui dokumentasi arsitektur, setup bucket, migrasi file, dan changelog.
+- [x] Jalankan lint terarah dan build, periksa diff dan encoding, serta perbarui graph proyek.
+- [x] Setelah PR dibuat, tulis review terkonsolidasi pada `docs/review/CODE_REVIEW.md`.
+- [x] Buat Issue dan PR yang terhubung; biarkan PR terbuka untuk ditinjau pemilik.
+
 ## Deferred work
 
 - [ ] Audit dinamis penuh hanya dijalankan setelah tersedia runner OS sandbox yang menegakkan batas jaringan, environment, filesystem, dan sumber daya.

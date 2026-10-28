@@ -1,6 +1,7 @@
 import {
   DeleteObjectCommand,
   GetObjectCommand,
+  HeadBucketCommand,
   HeadObjectCommand,
   PutObjectCommand,
   S3Client,
@@ -100,5 +101,17 @@ export async function receiptObjectExists(objectPath: string): Promise<boolean> 
   } catch (error) {
     if (isNotFound(error)) return false;
     throw error;
+  }
+}
+
+export async function receiptBucketAvailable(): Promise<boolean> {
+  try {
+    await getClient().send(
+      new HeadBucketCommand({ Bucket: getReceiptsBucket() }),
+      { abortSignal: AbortSignal.timeout(5000) }
+    );
+    return true;
+  } catch {
+    return false;
   }
 }

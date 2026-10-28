@@ -3,6 +3,7 @@
 import { db } from "@/lib/db";
 import { json, handle } from "@/lib/server/helpers";
 import { objectExists } from "@/lib/server/storage";
+import { receiptBucketAvailable } from "@/lib/server/neon-storage";
 
 function safePrismaErrorDetails(error: unknown): { errorName: string; prismaCode?: string } {
   if (!(error instanceof Error)) return { errorName: "UnknownError" };
@@ -32,7 +33,10 @@ export async function GET() {
       dbOk = false;
     }
 
-    const storeOk = await objectExists("public", "banners/althentic-studio.webp").catch(() => false);
+    const [neonStorageOk, supabaseStorageOk] = await Promise.all([
+      receiptBucketAvailable(),
+      objectExists("public", "banners/althentic-studio.webp").catch(() => false),
+    ]);
 
     const services = [
       {
@@ -42,9 +46,14 @@ export async function GET() {
         note: dbOk ? `respons ${dbLatency}ms` : "koneksi gagal - alert email terkirim (SPEC-15-05)",
       },
       {
-        name: "File Storage (bucket publik & private)",
-        status: storeOk ? "operational" : "degraded",
-        note: storeOk ? "bucket terjangkau" : "bucket tidak terjangkau",
+        name: "File Storage (Neon bucket private receipts)",
+        status: neonStorageOk ? "operational" : "degraded",
+        note: neonStorageOk ? "bucket terjangkau" : "bucket tidak terjangkau",
+      },
+      {
+        name: "File Storage (Supabase bucket publik)",
+        status: supabaseStorageOk ? "operational" : "degraded",
+        note: supabaseStorageOk ? "bucket dan file sentinel tersedia" : "bucket atau file sentinel tidak terjangkau",
       },
       {
         name: "API Katalog & Checkout",
@@ -59,7 +68,7 @@ export async function GET() {
     ];
 
     return json({
-      overall: dbOk && storeOk ? "operational" : "degraded",
+      overall: dbOk && neonStorageOk && supabaseStorageOk ? "operational" : "degraded",
       services,
       checkedAt: new Date().toISOString(),
       elapsedMs: Date.now() - started,

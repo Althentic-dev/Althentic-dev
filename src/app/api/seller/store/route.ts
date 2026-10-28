@@ -1,5 +1,5 @@
-// GET/PUT /api/seller/store — branding & settings toko (SPEC-02-02..04, SPEC-07-09)
-// PUT /api/seller/store/key — rotasi API key (key lama langsung nonaktif)
+// GET/PUT /api/seller/store: branding & settings toko (SPEC-02-02..04, SPEC-07-09)
+// PUT /api/seller/store/key: rotasi API key (key lama langsung nonaktif)
 import { NextRequest } from "next/server";
 import { z } from "zod";
 import sharp from "sharp";
@@ -92,17 +92,18 @@ export async function PUT(req: NextRequest) {
     if (parsed.data.bannerBase64) {
       const buf = Buffer.from(parsed.data.bannerBase64, "base64");
       if (buf.length > 2 * 1024 * 1024) return fail("Banner maksimal 2 MB (JPG/PNG).", 422);
+      let resized: Buffer;
       try {
-        const resized = await sharp(buf)
+        resized = await sharp(buf)
           .resize({ width: 1600, height: 400, fit: "cover", position: "centre" })
           .webp({ quality: 82 })
           .toBuffer();
-        const objectPath = `banners/${store.slug}-${Date.now()}.webp`;
-        await putObject("public", objectPath, resized, "image/webp");
-        data.bannerPath = `public/${objectPath}`;
       } catch {
         return fail("File banner tidak valid.", 422);
       }
+      const objectPath = `banners/${store.slug}-${Date.now()}.webp`;
+      await putObject("public", objectPath, resized, "image/webp");
+      data.bannerPath = `public/${objectPath}`;
     }
     if (parsed.data.qrBase64) {
       if (parsed.data.qrVerified !== true) {
@@ -110,15 +111,16 @@ export async function PUT(req: NextRequest) {
       }
       const buf = Buffer.from(parsed.data.qrBase64, "base64");
       if (buf.length > 2 * 1024 * 1024) return fail("QR maksimal 2 MB.", 422);
+      let webp: Buffer;
       try {
-        const webp = await convertToWebp(buf, 800);
-        const objectPath = `qr/${store.slug}-${Date.now()}.webp`;
-        await putObject("public", objectPath, webp, "image/webp");
-        data.qrPath = `public/${objectPath}`;
-        data.qrVerified = true;
+        webp = await convertToWebp(buf, 800);
       } catch {
         return fail("File QR tidak valid.", 422);
       }
+      const objectPath = `qr/${store.slug}-${Date.now()}.webp`;
+      await putObject("public", objectPath, webp, "image/webp");
+      data.qrPath = `public/${objectPath}`;
+      data.qrVerified = true;
     }
 
     const updated = await db.store.update({ where: { id: store.id }, data });
@@ -167,6 +169,6 @@ export async function POST(req: NextRequest) {
       data.aiKeyFallbackMask = maskKey(parsed.data.aiKeyFallback);
     }
     await db.store.update({ where: { id: store.id }, data });
-    return json({ ok: true, message: "Key diperbarui — key lama langsung nonaktif." });
+    return json({ ok: true, message: "Key diperbarui, key lama langsung nonaktif." });
   });
 }

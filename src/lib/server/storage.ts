@@ -16,6 +16,12 @@ import {
   putReceiptObject,
   receiptObjectExists,
 } from "@/lib/server/neon-storage";
+import {
+  deletePublicAsset,
+  getPublicAsset,
+  publicAssetExists,
+  putPublicAsset,
+} from "@/lib/server/supabase-storage";
 
 const ROOT = process.env.STORAGE_ROOT || "/home/z/my-project/storage";
 export const SIGNED_URL_TTL = 3600; // 1 jam (GAP-19)
@@ -42,6 +48,11 @@ export async function putObject(
     return `${bucket}/${objectPath}`;
   }
 
+  if (bucket === "public" && process.env.NODE_ENV === "production") {
+    await putPublicAsset(objectPath, data, _contentType ?? "application/octet-stream");
+    return `${bucket}/${objectPath}`;
+  }
+
   const full = safeJoin(bucket, objectPath);
   await mkdir(path.dirname(full), { recursive: true });
   await writeFile(full, data);
@@ -51,6 +62,10 @@ export async function putObject(
 export async function getObject(bucket: Bucket, objectPath: string): Promise<Buffer | null> {
   if (bucket === "private" && objectPath.startsWith("receipts/")) {
     return getReceiptObject(objectPath);
+  }
+
+  if (bucket === "public" && process.env.NODE_ENV === "production") {
+    return getPublicAsset(objectPath);
   }
 
   try {
@@ -67,6 +82,11 @@ export async function deleteObject(bucket: Bucket, objectPath: string): Promise<
     return;
   }
 
+  if (bucket === "public" && process.env.NODE_ENV === "production") {
+    await deletePublicAsset(objectPath);
+    return;
+  }
+
   try {
     const full = safeJoin(bucket, objectPath);
     await unlink(full);
@@ -78,6 +98,10 @@ export async function deleteObject(bucket: Bucket, objectPath: string): Promise<
 export async function objectExists(bucket: Bucket, objectPath: string): Promise<boolean> {
   if (bucket === "private" && objectPath.startsWith("receipts/")) {
     return receiptObjectExists(objectPath);
+  }
+
+  if (bucket === "public" && process.env.NODE_ENV === "production") {
+    return publicAssetExists(objectPath);
   }
 
   try {

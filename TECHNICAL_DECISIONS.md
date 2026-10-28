@@ -47,6 +47,16 @@ Audit membandingkan template dan nama variabel di file `.env` lokal dengan refer
 
 `SUPABASE_ANON_KEY` tidak diperlukan karena tidak ada akses Supabase client-side. `GOOGLE_DRIVE_API_KEY` tidak diperlukan untuk fetch tautan publik. `SCREENSHOT_API_PROVIDER` juga tidak digunakan. Kesimpulan audit awal bahwa `DIRECT_URL` tidak dibutuhkan berlaku sebelum schema Prisma memakai PostgreSQL dan kini sudah digantikan oleh keputusan di atas.
 
-## Batas integrasi file yang belum tersedia
+## Catatan audit environment sebelum integrasi aset publik
 
-Keputusan operasional menyebut Supabase Storage untuk banner, preview, dan backup. Source saat ini belum memiliki adapter Supabase maupun workflow backup. Implementasi Neon dalam perubahan ini hanya menangani receipt, sesuai scope; penggunaan Supabase untuk aset lain dan backup tetap belum aktif. Jangan menganggap variabel konfigurasi yang tidak dibaca kode sebagai integrasi yang berfungsi.
+Pada saat audit environment dan implementasi receipt Neon, source belum memiliki adapter Supabase untuk aset publik. Oleh sebab itu variabel Supabase untuk banner dan preview dikeluarkan dari `.env.example` pada perubahan terdahulu. Integrasi runtime aset publik kini ditambahkan di bagian berikut; backup GitHub Actions tetap belum tersedia.
+
+## Supabase Storage untuk aset publik
+
+- Production memakai `SUPABASE_URL` dan `SUPABASE_SERVICE_ROLE_KEY` hanya di kode server. Service role tidak boleh diberi prefix `NEXT_PUBLIC_` atau dikirim ke browser.
+- `SUPABASE_STORAGE_BUCKET_BANNERS` menamai bucket public untuk `banners/` dan `qr/`. `SUPABASE_STORAGE_BUCKET_PREVIEWS` menamai bucket public untuk `products/`.
+- Kedua bucket wajib sudah dibuat dan diatur Public pada Supabase. Public visibility mengizinkan pembacaan tanpa autentikasi; operasi tulis dan hapus aplikasi tetap menggunakan service role server.
+- Di production, seluruh path bucket `public` dipetakan ke dua prefix di atas dan prefix tidak dikenal ditolak. Di development, penyimpanan tetap menggunakan `STORAGE_ROOT`. Bukti `private/receipts/` tetap eksklusif di Neon Object Storage.
+- `/api/health` mengecek bucket Neon receipt dengan `HeadBucket` yang dibatasi lima detik, serta mengirim `HEAD` publik ke sentinel `banners/althentic-studio.webp` dengan timeout lima detik. Kedua storage harus tersedia agar readiness menjadi operational.
+- File yang sudah berada pada `storage/public` disalin melalui `scripts/migrate-supabase-public-assets.ts`. Dry-run adalah default. Mode `--apply` menolak target berisi byte berbeda, memakai upload tanpa overwrite, memeriksa SHA-256 setelah upload, dan tidak menghapus sumber lokal.
+- `.env.example` memuat konfigurasi Supabase untuk production. Tidak diperlukan `SUPABASE_ANON_KEY` karena runtime tidak membuat request Supabase dari browser.
