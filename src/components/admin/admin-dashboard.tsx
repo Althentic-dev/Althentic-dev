@@ -1,7 +1,7 @@
 "use client";
 
 // =============================================================================
-// AdminDashboard — Dashboard Super-Admin (Konteks Terkunci):
+// AdminDashboard - Dashboard Super-Admin (Konteks Terkunci):
 // - Overview: metrik ringkas + growth chart (MA7) + kategori terlaris + konsentrasi top-1
 // - Analytics: periode default 7 hari + tab Today/7/30/90/Custom + CSV export (SPEC-01-*)
 // - Seller: tabel lengkap + suspend/unsuspend
@@ -87,7 +87,7 @@ export function AdminDashboard() {
         </span>
         <div>
           <h1 className="text-2xl font-bold tracking-tight md:text-3xl">Dashboard Super Admin</h1>
-          <p className="text-sm text-muted-foreground">Single Super-Admin (hardcoded via environment) — akses penuh semua transaksi (GAP-06).</p>
+          <p className="text-sm text-muted-foreground">Single Super-Admin (hardcoded via environment) - akses penuh semua transaksi (GAP-06).</p>
         </div>
       </div>
 
@@ -436,7 +436,7 @@ function SellersTab() {
               </td>
               <td className="px-3 py-3 text-xs text-muted-foreground">{formatDate(r.store.createdAt)}</td>
               <td className="px-3 py-3">{r.verifiedTx}</td>
-              <td className="px-3 py-3">{r.ratingAvg ? r.ratingAvg.toFixed(1) : "—"}</td>
+              <td className="px-3 py-3">{r.ratingAvg ? r.ratingAvg.toFixed(1) : "-"}</td>
               <td className="px-5 py-3 text-right">
                 {r.store.status === "suspended" ? (
                   <Button variant="outline" size="sm" className="rounded-lg" onClick={() => unsuspend(r.store.id)}>
@@ -622,7 +622,7 @@ function VerificationsTab() {
           </div>
         )
       ) : (
-        /* Riwayat Verifikasi — audit trail global (SPEC-08-06) */
+        /* Riwayat Verifikasi - audit trail global (SPEC-08-06) */
         <div className="glass-card overflow-hidden">
           <div className="max-h-[600px] overflow-y-auto">
             <table className="w-full text-sm">
@@ -648,7 +648,7 @@ function VerificationsTab() {
                     </td>
                     <td className="px-3 py-2.5 font-medium">{a.action}</td>
                     <td className="px-3 py-2.5 text-muted-foreground">{a.productTitle}</td>
-                    <td className="px-5 py-2.5 text-xs">{a.decision ?? "—"} {a.reason ? `· "${a.reason}"` : ""}</td>
+                    <td className="px-5 py-2.5 text-xs">{a.decision ?? "-"} {a.reason ? `· "${a.reason}"` : ""}</td>
                   </tr>
                 ))}
                 {auditTrail && auditTrail.length === 0 && (
@@ -679,7 +679,7 @@ function VerificationsTab() {
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex items-center justify-between">
-                <h2 className="text-lg font-bold">Laporan Inspeksi — {inspectOpen.title}</h2>
+                <h2 className="text-lg font-bold">Laporan Inspeksi - {inspectOpen.title}</h2>
                 <Button variant="ghost" size="icon" onClick={() => setInspectOpen(null)} aria-label="Tutup">
                   <X className="h-4 w-4" />
                 </Button>
@@ -810,9 +810,9 @@ function DisputesTab() {
             <motion.div initial={{ scale: 0.96 }} animate={{ scale: 1 }} className="glass-strong w-full max-w-md rounded-3xl p-6">
               <h2 className="text-lg font-bold">Resolve {resolving.code}</h2>
               <p className="mt-1 text-xs text-muted-foreground">
-                Refund manual dieksekusi di luar sistem — dicatat sebagai status Resolved + catatan teks (GAP-18).
+                Refund manual dieksekusi di luar sistem - dicatat sebagai status Resolved + catatan teks (GAP-18).
               </p>
-              <Textarea className="mt-4 min-h-24" placeholder="mis. Refund Rp59.000 dikirim manual via transfer pada 27 Okt — bukti diterima via email." value={note} onChange={(e) => setNote(e.target.value)} />
+              <Textarea className="mt-4 min-h-24" placeholder="mis. Refund Rp59.000 dikirim manual via transfer pada 27 Okt - bukti diterima via email." value={note} onChange={(e) => setNote(e.target.value)} />
               <div className="mt-4 flex gap-2">
                 <Button className="flex-1 rounded-xl" disabled={note.length < 5} onClick={() => setStatus(resolving.id, "resolved", note)}>
                   Tandai Resolved
@@ -860,7 +860,7 @@ function InvoicesTab() {
           paidReference: f.paidReference || undefined,
         },
       });
-      toast({ title: res.ok ? "Invoice lunas" : "Dicatat — belum lunas", description: res.message });
+      toast({ title: res.ok ? "Invoice lunas" : "Dicatat - belum lunas", description: res.message });
       setVerifying(null);
       load();
     } catch (err) {
@@ -901,7 +901,7 @@ function InvoicesTab() {
                 ) : inv.paidAmount ? (
                   <span className="text-amber-600 dark:text-amber-400">Kurang bayar: {formatRupiah(inv.paidAmount)}</span>
                 ) : (
-                  <span className="text-muted-foreground">—</span>
+                  <span className="text-muted-foreground">-</span>
                 )}
               </td>
               <td className="px-5 py-3 text-right">
@@ -951,7 +951,7 @@ function VerifyInvoiceForm({
       aria-modal
     >
       <motion.div initial={{ scale: 0.96, y: 10 }} animate={{ scale: 1, y: 0 }} className="glass-strong w-full max-w-md rounded-3xl p-6">
-        <h2 className="text-lg font-bold">Verifikasi Pembayaran Komisi — {invoice.code}</h2>
+        <h2 className="text-lg font-bold">Verifikasi Pembayaran Komisi - {invoice.code}</h2>
         <p className="mt-1 text-sm text-muted-foreground">
           Toko {invoice.store?.name} · Nominal invoice {formatRupiah(invoice.amount)} · Verifikasi manual TANPA AI.
         </p>
@@ -1048,7 +1048,7 @@ function SettingsTab() {
               value={String(settings.commissionAmount)}
               onChange={(e) => setSettings({ ...settings, commissionAmount: parseInt(e.target.value.replace(/\D/g, "") || "0", 10) })}
             />
-            <p className="text-[11px] text-muted-foreground">Snapshot tersimpan per order — Commission Owed lama tidak berubah sendiri.</p>
+            <p className="text-[11px] text-muted-foreground">Snapshot tersimpan per order - Commission Owed lama tidak berubah sendiri.</p>
           </div>
           <div className="space-y-1.5">
             <Label htmlFor="set-threshold">Threshold invoice komisi (Rp)</Label>
@@ -1059,7 +1059,7 @@ function SettingsTab() {
               value={String(settings.invoiceThreshold)}
               onChange={(e) => setSettings({ ...settings, invoiceThreshold: parseInt(e.target.value.replace(/\D/g, "") || "0", 10) })}
             />
-            <p className="text-[11px] text-muted-foreground">Default Rp25.000 (25 transaksi) — invoice terbit otomatis saat tercapai.</p>
+            <p className="text-[11px] text-muted-foreground">Default Rp25.000 (25 transaksi) - invoice terbit otomatis saat tercapai.</p>
           </div>
           <div className="space-y-1.5">
             <Label htmlFor="set-suspend">Batas tunggakan sebelum suspend (Rp)</Label>
@@ -1087,7 +1087,7 @@ function SettingsTab() {
           placeholder="Halo {nama_toko}, saya {nama_buyer}. Order {id_order}…"
         />
         <p className="mt-2 text-[11px] text-muted-foreground">
-          Placeholder: {"{nama_buyer}"}, {"{nama_produk}"}, {"{jumlah}"}, {"{slug_toko}"}, {"{id_order}"}, {"{nama_toko}"} — pesan juga memuat ID order &amp; nama produk (SPEC-04-03).
+          Placeholder: {"{nama_buyer}"}, {"{nama_produk}"}, {"{jumlah}"}, {"{slug_toko}"}, {"{id_order}"}, {"{nama_toko}"} - pesan juga memuat ID order &amp; nama produk (SPEC-04-03).
         </p>
         <div className="mt-4 flex gap-2">
           <Button variant="outline" className="rounded-xl" onClick={testPreview}>
@@ -1235,7 +1235,7 @@ function SystemTab() {
                   <KeyRound className="h-4 w-4" /> MCP Server (Streamable HTTP)
                 </h2>
                 <p className="mt-1 text-xs text-muted-foreground">
-                  Endpoint <code className="rounded bg-muted px-1.5 py-0.5 font-mono">/api/mcp</code> — secret token per-session,
+                  Endpoint <code className="rounded bg-muted px-1.5 py-0.5 font-mono">/api/mcp</code> - secret token per-session,
                   expire 24 jam, tidak didaftarkan di direktori MCP publik (GAP-19). AI hanya mengusulkan keputusan.
                 </p>
               </div>
@@ -1268,7 +1268,7 @@ function SystemTab() {
                 {(tokens ?? []).map((t) => (
                   <tr key={t.id} className="border-t border-border/40">
                     <td className="px-5 py-2.5 text-xs text-muted-foreground">{formatDate(t.createdAt, true)}</td>
-                    <td className="px-3 py-2.5">{t.note ?? "—"}</td>
+                    <td className="px-3 py-2.5">{t.note ?? "-"}</td>
                     <td className="px-3 py-2.5 text-xs">{formatDate(t.expiresAt, true)}</td>
                     <td className="px-5 py-2.5">
                       {t.revokedAt ? (
@@ -1307,7 +1307,7 @@ function SystemTab() {
                   <td className="px-5 py-2.5 text-xs text-muted-foreground">{formatDate(r.createdAt, true)}</td>
                   <td className="px-3 py-2.5 font-medium">{r.productTitle}</td>
                   <td className="px-3 py-2.5">{r.category}</td>
-                  <td className="px-5 py-2.5 text-xs text-muted-foreground">{r.detail ?? "—"}</td>
+                  <td className="px-5 py-2.5 text-xs text-muted-foreground">{r.detail ?? "-"}</td>
                 </tr>
               ))}
               {reports && reports.length === 0 && (
