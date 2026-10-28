@@ -1,7 +1,7 @@
 "use client";
 
 // =============================================================================
-// Althentic.Dev — DocsPage (Task B2)
+// Althentic.Dev - DocsPage (Task B2)
 // Halaman dokumentasi 12 section bergaya GitBook/Docusaurus:
 // - Sidebar kiri sticky (desktop) / dropdown + search (mobile)
 // - Section aktif via query param `tab` (default: getting-started)
@@ -47,7 +47,7 @@ import {
   sectionSearchText,
 } from "./docs-content";
 import type { CalloutTone, DocBlock, DocSection, TimelineTone } from "./docs-content";
-/** Tipe ikon generik (komponen ikon Animate UI/lucide — kontrak minimal). */
+/** Tipe ikon generik (komponen ikon Animate UI/lucide - kontrak minimal). */
 type IconComponent = ComponentType<{
   size?: number;
   className?: string;
@@ -543,7 +543,7 @@ function DocsSearch({ onSelect }: { onSelect: (id: string) => void }) {
         <div className="mt-2" aria-live="polite">
           {results.length === 0 ? (
             <p className="rounded-lg border border-dashed border-border px-3 py-3 text-xs leading-5 text-muted-foreground">
-              Tidak ada hasil untuk &ldquo;{q.trim()}&rdquo;. Coba kata kunci lain — misalnya
+              Tidak ada hasil untuk &ldquo;{q.trim()}&rdquo;. Coba kata kunci lain - misalnya
               &ldquo;refund&rdquo;, &ldquo;API key&rdquo;, atau &ldquo;verifikasi&rdquo;.
             </p>
           ) : (
@@ -612,7 +612,7 @@ function MobileSectionPicker({
   return (
     <div ref={rootRef} className="glass-card p-3">
       <p className="px-1 pb-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
-        Dokumentasi — pilih bagian
+        Dokumentasi - pilih bagian
       </p>
       <button
         type="button"
@@ -762,7 +762,7 @@ function PrevNextNav({
         </a>
       ) : (
         <p className="glass-card hidden items-center p-4 text-xs text-muted-foreground sm:flex">
-          Kamu berada di bagian pertama — selamat membaca.
+          Kamu berada di bagian pertama - selamat membaca.
         </p>
       )}
 
