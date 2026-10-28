@@ -2,6 +2,17 @@
 
 ## Active plans
 
+### PR: Migrasi Neon PostgreSQL dan health readiness
+
+- [x] Ubah Prisma ke PostgreSQL dengan `DATABASE_URL` pooled dan `DIRECT_URL` untuk operasi migration.
+- [x] Buat migration awal PostgreSQL dan command deploy yang aman; hilangkan `--accept-data-loss` dari `db:push`.
+- [ ] Migrasikan data `db/custom.db` ke Neon hanya setelah preflight target kosong; pertahankan sumber dan verifikasi jumlah record setiap tabel.
+- [ ] Salin file receipt WebP lokal ke bucket private Neon tanpa menimpa object yang ada; verifikasi hash dan jumlahnya.
+- [x] Tambahkan `GET /api/health` readiness yang merespons 503 saat database atau storage degraded dan 200 saat keduanya operational.
+- [x] Perbarui `.env.example`, dokumentasi, dan changelog untuk konfigurasi serta prosedur migrasi.
+- [ ] Jalankan lint/build, pemeriksaan diff dan encoding; verifikasi status Vercel Preview.
+- [ ] Tautkan Issue 10 dan 11 ke PR; PR tetap terbuka untuk ditinjau pemilik.
+
 ### PR: Perbaikan build Turbopack untuk view dinamis
 
 - [x] Ganti objek opsi bersama pada pemanggilan `next/dynamic` dengan object literal yang dapat dianalisis Next.js 16.
