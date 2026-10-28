@@ -12,7 +12,7 @@
 - [x] Batasi JSON body pada webhook, MCP, dan unggahan bukti.
 - [x] Perbarui changelog di bawah marker yang benar.
 - [x] Jalankan pemeriksaan statis, periksa encoding, diff, dan status Git.
-- [ ] Buat Issue dan PR terkait; PR tetap terbuka untuk ditinjau pemilik.
+- [x] Buat Issue dan PR terkait; PR tetap terbuka untuk ditinjau pemilik.
 - [ ] Jalankan lint/build ketika dependency project tersedia dan side effect toolchain dapat diperiksa.
 
 ## Deferred work
