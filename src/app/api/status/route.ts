@@ -4,6 +4,19 @@ import { db } from "@/lib/db";
 import { json, handle } from "@/lib/server/helpers";
 import { objectExists } from "@/lib/server/storage";
 
+function safePrismaErrorDetails(error: unknown): { errorName: string; prismaCode?: string } {
+  if (!(error instanceof Error)) return { errorName: "UnknownError" };
+
+  const rawName = error.name;
+  const errorName = /^[A-Za-z][A-Za-z0-9]*$/.test(rawName) ? rawName : "UnknownError";
+  const candidate = error as Error & { code?: unknown; errorCode?: unknown };
+  const prismaCode = [candidate.code, candidate.errorCode].find(
+    (code): code is string => typeof code === "string" && /^P\d{4}$/.test(code)
+  );
+
+  return prismaCode ? { errorName, prismaCode } : { errorName };
+}
+
 export async function GET() {
   return handle(async () => {
     const started = Date.now();
@@ -14,7 +27,8 @@ export async function GET() {
       await db.user.count();
       dbLatency = Date.now() - t0;
       dbOk = true;
-    } catch {
+    } catch (error) {
+      console.error("[api/status] database probe failed", safePrismaErrorDetails(error));
       dbOk = false;
     }
 

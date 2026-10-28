@@ -2,6 +2,13 @@
 
 ## Active plans
 
+### PR: Diagnostik aman untuk kegagalan koneksi database production
+
+- [x] Catat nama kelas error dan hanya kode Prisma `Pxxxx` pada log server saat probe database gagal.
+- [x] Pastikan log tidak memuat pesan, URL, kredensial, query, atau data pengguna; response API tetap generik.
+- [x] Jalankan lint terarah, build, pemeriksaan diff, dan validasi encoding.
+- [x] Tautkan Issue 13 ke PR; jangan merge PR.
+
 ### PR: Migrasi Neon PostgreSQL dan health readiness
 
 - [x] Ubah Prisma ke PostgreSQL dengan `DATABASE_URL` pooled dan `DIRECT_URL` untuk operasi migration.
