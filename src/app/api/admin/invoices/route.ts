@@ -1,5 +1,5 @@
-// GET  /api/admin/invoices — daftar invoice komisi semua toko
-// POST — verifikasi pembayaran komisi manual TANPA AI (SPEC-09-06, GAP-16)
+// GET  /api/admin/invoices - daftar invoice komisi semua toko
+// POST - verifikasi pembayaran komisi manual TANPA AI (SPEC-09-06, GAP-16)
 import { NextRequest } from "next/server";
 import { z } from "zod";
 import { db } from "@/lib/db";
