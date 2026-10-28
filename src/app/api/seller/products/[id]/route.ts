@@ -1,4 +1,4 @@
-// PUT /api/seller/products/[id] — edit produk (harga baru hanya order berikutnya — SPEC-02-10;
+// PUT /api/seller/products/[id] - edit produk (harga baru hanya order berikutnya - SPEC-02-10;
 // update ZIP inti → versi naik + notifikasi buyer lama GAP-05)
 import { NextRequest } from "next/server";
 import { z } from "zod";
@@ -32,7 +32,7 @@ export async function PUT(req: NextRequest, ctx: { params: Promise<{ id: string 
     const product = await db.product.findUnique({ where: { id }, include: { store: true } });
     if (!product) return fail("Produk tidak ditemukan.", 404);
     if (product.store.ownerId !== user.id) return fail("Bukan produk tokomu.", 403);
-    if (["archived"].includes(product.status)) return fail("Produk diarsipkan — unarchive dulu.", 400);
+    if (["archived"].includes(product.status)) return fail("Produk diarsipkan - unarchive dulu.", 400);
 
     const parsed = editSchema.safeParse(await req.json().catch(() => null));
     if (!parsed.success) return fail(parsed.error.issues[0]?.message ?? "Input tidak valid.", 422);
@@ -64,7 +64,7 @@ export async function PUT(req: NextRequest, ctx: { params: Promise<{ id: string 
       },
     });
 
-    // Notifikasi informatif ke buyer lama saat ZIP inti berubah (GAP-05) — tanpa re-grant
+    // Notifikasi informatif ke buyer lama saat ZIP inti berubah (GAP-05) - tanpa re-grant
     if (coreChanged) {
       const buyers = await db.order.findMany({
         where: { productId: product.id, status: { in: ["verified", "completed"] } },
@@ -76,7 +76,7 @@ export async function PUT(req: NextRequest, ctx: { params: Promise<{ id: string 
           userId: b.buyerId,
           type: "product_update",
           title: `Produk yang kamu beli diperbarui: ${updated.title}`,
-          body: `File ZIP inti diperbarui ke v${updated.version}. Notifikasi ini informatif — akses unduh tidak di-grant ulang otomatis.`,
+          body: `File ZIP inti diperbarui ke v${updated.version}. Notifikasi ini informatif - akses unduh tidak di-grant ulang otomatis.`,
           linkQuery: `v=collection`,
         });
       }
@@ -86,7 +86,7 @@ export async function PUT(req: NextRequest, ctx: { params: Promise<{ id: string 
       ok: true,
       version: updated.version,
       message: coreChanged
-        ? "Produk diperbarui — file ZIP inti berubah, versi naik & buyer lama diberi tahu."
+        ? "Produk diperbarui - file ZIP inti berubah, versi naik & buyer lama diberi tahu."
         : "Produk diperbarui.",
     });
   });
