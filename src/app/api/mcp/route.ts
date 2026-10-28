@@ -1,11 +1,11 @@
-// POST /api/mcp — MCP Server (Streamable HTTP, SPEC-08-04/05, GAP-19)
+// POST /api/mcp - MCP Server (Streamable HTTP, SPEC-08-04/05, GAP-19)
 // Secret token per-session dari dashboard Super-Admin (expire 24 jam) atau
 // master MCP_SECRET dari environment. Setiap panggilan tercatat di audit log.
 // Tools: list_pending / get_product / get_inspection / propose_decision
 // (AI HANYA mengusulkan; eksekusi final = satu klik Super-Admin).
 import { NextRequest } from "next/server";
 import { db } from "@/lib/db";
-import { json, fail, handle } from "@/lib/server/helpers";
+import { json, fail, handle, readJsonBodyLimited } from "@/lib/server/helpers";
 import { verifyMcpToken, logMcpCall, recordAiProposal } from "@/lib/server/mcp";
 
 interface JsonRpcRequest {
@@ -23,7 +23,13 @@ export async function POST(req: NextRequest) {
       return fail("Unauthorized: MCP secret token tidak valid atau kedaluwarsa.", 401);
     }
 
-    const body = (await req.json().catch(() => null)) as JsonRpcRequest | null;
+    const parsedBody = await readJsonBodyLimited(req, 1024 * 1024);
+    if (!parsedBody.ok) {
+      return parsedBody.reason === "too_large"
+        ? fail("Payload MCP melebihi batas 1 MB.", 413)
+        : fail("Payload JSON MCP tidak valid.", 400);
+    }
+    const body = parsedBody.value as JsonRpcRequest | null;
     if (!body?.method) return fail("JSON-RPC method wajib.", 400);
     const id = body.id ?? null;
 
@@ -62,7 +68,7 @@ export async function POST(req: NextRequest) {
             {
               name: "propose_decision",
               description:
-                "Usulkan keputusan approve/reject beserta alasan. Hanya USULAN — eksekusi final menunggu konfirmasi Super-Admin (SPEC-08-05).",
+                "Usulkan keputusan approve/reject beserta alasan. Hanya USULAN - eksekusi final menunggu konfirmasi Super-Admin (SPEC-08-05).",
               inputSchema: {
                 type: "object",
                 properties: {
@@ -156,12 +162,12 @@ export async function POST(req: NextRequest) {
   });
 }
 
-// GET — health/identify endpoint MCP (tanpa akses data)
+// GET - health/identify endpoint MCP (tanpa akses data)
 export async function GET() {
   return json({
     server: "althentic-mcp",
     transport: "streamable-http",
     auth: "secret-token",
-    note: "Endpoint internal Super-Admin — tidak didaftarkan di direktori MCP publik (GAP-19).",
+    note: "Endpoint internal Super-Admin - tidak didaftarkan di direktori MCP publik (GAP-19).",
   });
 }
