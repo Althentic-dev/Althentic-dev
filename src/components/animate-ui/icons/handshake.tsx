@@ -10,7 +10,7 @@ import {
   type IconProps,
 } from '@animate-ui/react/icons';
 
-// Fallback wrapper (icon tidak tersedia di registry Animate UI — dibuat manual
+// Fallback wrapper (icon tidak tersedia di registry Animate UI - dibuat manual
 // dengan path Lucide asli + pola komponen Animate UI yang identik).
 type HandshakeProps = IconProps<keyof typeof animations>;
 
