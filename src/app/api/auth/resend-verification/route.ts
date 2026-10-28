@@ -1,4 +1,4 @@
-// POST /api/auth/resend-verification — kirim ulang link verifikasi (SPEC-05-02)
+// POST /api/auth/resend-verification - kirim ulang link verifikasi (SPEC-05-02)
 import { handle, fail, json, getClientIp } from "@/lib/server/helpers";
 import { requireUser } from "@/lib/server/auth";
 import { generateToken, hashToken } from "@/lib/server/auth";
