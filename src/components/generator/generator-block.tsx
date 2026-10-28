@@ -1,8 +1,8 @@
 "use client";
 
 // =============================================================================
-// Althentic.Dev — Prompt Generator (Task B3, SPEC-12-01..06)
-// generator-block.tsx — kartu blok sortable (dnd-kit + Framer Motion layout),
+// Althentic.Dev - Prompt Generator (Task B3, SPEC-12-01..06)
+// generator-block.tsx - kartu blok sortable (dnd-kit + Framer Motion layout),
 // meta blok dari GENERATOR_BLOCKS, placeholder contoh, helper animasi FadeIn.
 // =============================================================================
 
@@ -40,7 +40,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-/** Tipe ikon generik (komponen ikon Animate UI/lucide — kontrak minimal). */
+/** Tipe ikon generik (komponen ikon Animate UI/lucide - kontrak minimal). */
 type IconComponent = ComponentType<{
   size?: number;
   className?: string;
@@ -125,8 +125,8 @@ export function FadeIn({
 }
 
 // =============================================================================
-// SortableBlockCard — kartu glass vertikal dengan:
-// - drag handle GripVertical (pointer only, aria-hidden — reorder keyboard
+// SortableBlockCard - kartu glass vertikal dengan:
+// - drag handle GripVertical (pointer only, aria-hidden - reorder keyboard
 //   disediakan lewat tombol ChevronUp/ChevronDown agar WCAG-friendly)
 // - label blok + ikon + counter karakter
 // - Textarea editor dengan placeholder contoh

@@ -1,9 +1,9 @@
 "use client";
 
 // =============================================================================
-// AuthDialog — login/register (SPEC-05-01, SPEC-14-03/05)
+// AuthDialog - login/register (SPEC-05-01, SPEC-14-03/05)
 // Checkbox ToS + Privacy + usia 17+ wajib saat daftar; konteks checkout
-// dipertahankan (dialog, bukan pindah halaman — SPEC-04-01).
+// dipertahankan (dialog, bukan pindah halaman - SPEC-04-01).
 // =============================================================================
 
 import { useEffect, useState } from "react";
@@ -137,7 +137,7 @@ export function AuthDialog() {
             <DialogDescription className="text-white/80">
               {mode === "login"
                 ? "Email + password, atau lanjutkan dengan Google."
-                : "Semua akun otomatis berperan buyer — jadi seller kapan saja tanpa approval."}
+                : "Semua akun otomatis berperan buyer - jadi seller kapan saja tanpa approval."}
             </DialogDescription>
           </DialogHeader>
         </div>
@@ -301,7 +301,7 @@ export function AuthDialog() {
             </Button>
           </form>
 
-          {/* Google OAuth (aktif saat deployment — sandbox tanpa kredensial OAuth) */}
+          {/* Google OAuth (aktif saat deployment - sandbox tanpa kredensial OAuth) */}
           <div className="my-5 flex items-center gap-3">
             <span className="h-px flex-1 bg-border" />
             <span className="text-xs text-muted-foreground">atau</span>

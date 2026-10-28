@@ -1,8 +1,8 @@
 "use client";
 
-// Notification center — ikon lonceng + panel (SPEC-13-02):
+// Notification center - ikon lonceng + panel (SPEC-13-02):
 // update order, hasil verifikasi produk, tagihan komisi/invoice, update produk
-// dibeli (hanya saat ZIP inti berubah — GAP-05). Penanda belum-baca + link objek.
+// dibeli (hanya saat ZIP inti berubah - GAP-05). Penanda belum-baca + link objek.
 
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
@@ -85,7 +85,7 @@ export function NotificationBell() {
       <Button
         variant="ghost"
         size="icon"
-        aria-label={`Notifikasi${unreadCount > 0 ? ` — ${unreadCount} belum dibaca` : ""}`}
+        aria-label={`Notifikasi${unreadCount > 0 ? ` - ${unreadCount} belum dibaca` : ""}`}
         className="relative rounded-full"
         onClick={() => {
           setOpen((v) => !v);

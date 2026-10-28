@@ -1,4 +1,4 @@
-// Althentic.Dev — Notifikasi in-app (SPEC-13-02) + helper kirim email aman
+// Althentic.Dev - Notifikasi in-app (SPEC-13-02) + helper kirim email aman
 
 import { db } from "@/lib/db";
 import { sendEmail } from "@/lib/server/email";
@@ -31,7 +31,7 @@ export async function notifyUser(p: {
   }
 }
 
-/** URL objek gambar dari storage — helper DTO mapper. */
+/** URL objek gambar dari storage - helper DTO mapper. */
 export function publicFileUrl(p?: string | null): string | null {
   if (!p) return null;
   const [bucket, ...rest] = p.split("/");

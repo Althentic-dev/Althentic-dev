@@ -1,6 +1,6 @@
 "use client";
 
-// OrdersView — Pesanan Saya (daftar order buyer semua status)
+// OrdersView - Pesanan Saya (daftar order buyer semua status)
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Clock } from "@/components/animate-ui/icons/clock";
@@ -43,7 +43,7 @@ export function OrdersView() {
     <div className="container-page max-w-4xl py-8 md:py-12">
       <h1 className="text-2xl font-bold tracking-tight md:text-3xl">Pesanan Saya</h1>
       <p className="mt-1 text-sm text-muted-foreground">
-        Semua order kamu — Menunggu Pembayaran, Menunggu Verifikasi, Booked, Lunas, Batal, Kedaluwarsa.
+        Semua order kamu - Menunggu Pembayaran, Menunggu Verifikasi, Booked, Lunas, Batal, Kedaluwarsa.
       </p>
 
       {orders.length === 0 ? (

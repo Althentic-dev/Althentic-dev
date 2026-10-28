@@ -1,6 +1,6 @@
 "use client";
 
-// Althentic.Dev — API client (semua request relatif, credentials include)
+// Althentic.Dev - API client (semua request relatif, credentials include)
 
 export class ApiError extends Error {
   status: number;

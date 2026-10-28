@@ -2,15 +2,15 @@
 @import "tw-animate-css";
 
 /* =============================================================================
-   Althentic.Dev — Design System (REVISI DESAIN — skema monokrom murni)
+   Althentic.Dev - Design System (REVISI DESAIN - skema monokrom murni)
    Skema warna: hitam-putih-grayscale SAJA di seluruh platform (dark/light/system).
    Background dasar platform (dark): #050505. Tidak ada tint warna apa pun pada
-   token dekoratif — card Liquid Glass memakai variasi hitam/putih/abu-abu +
+   token dekoratif - card Liquid Glass memakai variasi hitam/putih/abu-abu +
    blur + transparansi.
    Pengecualian terdokumentasi (konvensi UI fungsional, TECHNICAL_DECISIONS.md):
    - destructive (merah)  → HANYA semantik error/gagal.
    - warning (amber)      → HANYA semantik peringatan (mis. banner tagihan kuning,
-                            DESIGN.md §3.3 — keputusan sumber).
+                            DESIGN.md §3.3 - keputusan sumber).
    - success (emerald)    → HANYA semantik sukses/selesai/Lunas.
    Ketiganya tidak pernah dipakai dekoratif. Status non-e/w/s (mis. "Booked",
    dibatalkan, kedaluwarsa) memakai netral grayscale.
@@ -67,7 +67,7 @@
 :root {
   --radius: 0.875rem;
 
-  /* Token "brand" — kini jangkar grayscale (bukan navy/biru).
+  /* Token "brand" - kini jangkar grayscale (bukan navy/biru).
      Dipakai oleh utilitas gradasi monokrom (lihat .bg-brand-gradient). */
   --brand-navy: #171717;
   --brand-blue: #333333;
@@ -105,7 +105,7 @@
   --sidebar-border: rgba(23, 23, 23, 0.12);
   --sidebar-ring: #171717;
 
-  /* Glassmorphism — grayscale, tanpa tint warna (revisi desain #1) */
+  /* Glassmorphism - grayscale, tanpa tint warna (revisi desain #1) */
   --glass-bg: rgba(255, 255, 255, 0.62);
   --glass-bg-strong: rgba(255, 255, 255, 0.8);
   --glass-border: rgba(255, 255, 255, 0.65);
@@ -180,7 +180,7 @@
 
 /* ============================= Custom scrollbar ==============================
    Kriteria wajib #3: WebKit scrollbar kustom dengan transisi halus.
-   Grayscale netral — berlaku konsisten di kedua tema.
+   Grayscale netral - berlaku konsisten di kedua tema.
    Fallback Firefox: scrollbar-width + warna. */
 * {
   scrollbar-width: thin;
@@ -211,7 +211,7 @@
 
 /* ============================= Glassmorphism ================================
    Kriteria wajib #9: Liquid Glass / Glassmorphism untuk card.
-   Revisi desain #1: TANPA tint warna — hanya hitam/putih/abu-abu + blur +
+   Revisi desain #1: TANPA tint warna - hanya hitam/putih/abu-abu + blur +
    transparansi. */
 .glass {
   background: var(--glass-bg);
@@ -347,7 +347,7 @@ label {
   mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
 }
 
-/* Timeline stepper connector — grayscale */
+/* Timeline stepper connector - grayscale */
 .stepper-line {
   background: linear-gradient(180deg, var(--primary), var(--muted-foreground));
 }
@@ -380,7 +380,7 @@ label {
 }
 
 /* ============================= Imagery monokrom ==============================
-   Revisi desain #1 — "tidak ada warna di mana pun": seluruh gambar konten
+   Revisi desain #1 - "tidak ada warna di mana pun": seluruh gambar konten
    (preview produk, banner toko, bukti transfer, QR) ditampilkan grayscale.
    QR memang hitam-putih; banner toko memakai preset grayscale; preview produk
    disaring agar tidak menjadi satu-satunya elemen berwarna di platform.

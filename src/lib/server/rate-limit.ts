@@ -1,5 +1,5 @@
 // =============================================================================
-// Althentic.Dev — Rate limiting (SPEC-15-03, GAP-19: 10 req/menit per IP+user)
+// Althentic.Dev - Rate limiting (SPEC-15-03, GAP-19: 10 req/menit per IP+user)
 // Sliding window. Sandbox: backend in-memory (per-proses).
 // Production: ganti ke Upstash Redis REST dengan kontrak sama (1 file, SPEC-16-04).
 // =============================================================================

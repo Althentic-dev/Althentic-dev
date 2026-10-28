@@ -1,7 +1,7 @@
 "use client";
 
 // =============================================================================
-// ProductView — detail produk (SPEC-03-06 urutan blok):
+// ProductView - detail produk (SPEC-03-06 urutan blok):
 // preview besar (lightbox) → judul/toko/rating → tipe jual + harga → deskripsi
 // → info file → review → produk serupa (GAP-14). + Beli (checkout SPEC-04-01),
 // Coba di Generator (SPEC-12-06), Laporkan (SPEC-10-03), Review (SPEC-10-05).
@@ -79,9 +79,9 @@ export function ProductView({ slug }: { slug?: string }) {
 
   const buy = async () => {
     if (!product) return;
-    // Wajib akun sebelum checkout — registrasi tanpa kehilangan konteks (SPEC-04-01)
+    // Wajib akun sebelum checkout - registrasi tanpa kehilangan konteks (SPEC-04-01)
     if (!user) {
-      openAuthDialog("register", "Buat akun dulu untuk melanjutkan checkout — konteks produkmu tetap di sini.");
+      openAuthDialog("register", "Buat akun dulu untuk melanjutkan checkout - konteks produkmu tetap di sini.");
       return;
     }
     if (!user.emailVerified) {
@@ -298,12 +298,12 @@ export function ProductView({ slug }: { slug?: string }) {
                 className="h-13 w-full rounded-2xl bg-emerald-600 text-base font-semibold hover:bg-emerald-700"
                 onClick={() => navigate({ v: "collection" }, { reset: true })}
               >
-                <ShoppingBag className="h-5 w-5" /> Kamu sudah punya — Buka Koleksi
+                <ShoppingBag className="h-5 w-5" /> Kamu sudah punya - Buka Koleksi
               </Button>
             ) : (
               <Button className="h-13 w-full rounded-2xl text-base font-semibold" onClick={buy} disabled={buying}>
                 {buying ? <Loader2 className="h-5 w-5 animate-spin" /> : <Zap className="h-5 w-5" />}
-                Beli Sekarang — {formatRupiah(st?.price ?? 0)}
+                Beli Sekarang - {formatRupiah(st?.price ?? 0)}
               </Button>
             )}
             {isPromptOnly && (
@@ -338,7 +338,7 @@ export function ProductView({ slug }: { slug?: string }) {
             </div>
             <div className="flex items-center gap-2 text-muted-foreground">
               <Hash className="h-4 w-4 shrink-0" /> Versi v{product.version}
-              {product.versionNote ? ` — ${product.versionNote}` : ""}
+              {product.versionNote ? ` - ${product.versionNote}` : ""}
             </div>
             <div className="flex items-center gap-2 text-muted-foreground">
               <Package className="h-4 w-4 shrink-0" /> {formatBytes(product.zipSize)} · {product.previews.length} gambar preview
@@ -361,7 +361,7 @@ export function ProductView({ slug }: { slug?: string }) {
           Review <span className="text-sm font-normal text-muted-foreground">({product.ratingCount})</span>
         </h2>
 
-        {/* Form review — hanya buyer order Lunas (SPEC-10-05) */}
+        {/* Form review - hanya buyer order Lunas (SPEC-10-05) */}
         {product.canReview ? (
           <div className="glass-card mt-4 p-5">
             <p className="text-sm font-medium">Tulis review kamu</p>
@@ -406,7 +406,7 @@ export function ProductView({ slug }: { slug?: string }) {
           {product.reviews.length === 0 && (
             <div className="glass-card p-6 text-center text-sm text-muted-foreground">
               <MessageSquare className="mx-auto mb-2 h-8 w-8 opacity-50" aria-hidden />
-              Belum ada review — jadi yang pertama setelah membeli.
+              Belum ada review - jadi yang pertama setelah membeli.
             </div>
           )}
           {product.reviews.map((r, i) => (
@@ -415,7 +415,7 @@ export function ProductView({ slug }: { slug?: string }) {
         </div>
       </section>
 
-      {/* ==== Produk serupa (blok 7 — kategori sama ±30% harga, GAP-14) ==== */}
+      {/* ==== Produk serupa (blok 7 - kategori sama ±30% harga, GAP-14) ==== */}
       {product.similar.length > 0 && (
         <section className="mt-12" aria-labelledby="serupa">
           <h2 id="serupa" className="text-lg font-bold">Produk Serupa</h2>
@@ -588,7 +588,7 @@ function ReportButton({ onReport }: { onReport: (category: string, detail: strin
             <Textarea
               value={detail}
               onChange={(e) => setDetail(e.target.value)}
-              placeholder="Detail (opsional) — bantu moderasi memahami masalahnya"
+              placeholder="Detail (opsional) - bantu moderasi memahami masalahnya"
               maxLength={600}
               className="min-h-20"
             />

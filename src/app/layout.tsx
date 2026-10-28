@@ -4,12 +4,12 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 
-// Font: Plus Jakarta Sans di seluruh platform — kriteria wajib DESIGN.md #1.
+// Font: Plus Jakarta Sans di seluruh platform - kriteria wajib DESIGN.md #1.
 // Dimuat self-hosted via @fontsource (offline-safe, tanpa CDN eksternal).
 
 export const metadata: Metadata = {
   title: {
-    default: "Althentic.Dev — Marketplace Prompt Serbaguna",
+    default: "Althentic.Dev - Marketplace Prompt Serbaguna",
     template: "%s · Althentic.Dev",
   },
   description:
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   authors: [{ name: "Althentic.Dev" }],
   icons: { icon: "/assets/logo.svg" },
   openGraph: {
-    title: "Althentic.Dev — Marketplace Prompt Serbaguna",
+    title: "Althentic.Dev - Marketplace Prompt Serbaguna",
     description:
       "Dapatkan hasil lebih cepat lewat prompt siap pakai. Pembayaran QR lokal, harga Rupiah.",
     siteName: "Althentic.Dev",

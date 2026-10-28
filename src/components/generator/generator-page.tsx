@@ -1,7 +1,7 @@
 "use client";
 
 // =============================================================================
-// Althentic.Dev — Prompt Generator (Task B3 — SPEC-12-01..06 + resolusi GAP-15)
+// Althentic.Dev - Prompt Generator (Task B3 - SPEC-12-01..06 + resolusi GAP-15)
 // Canvas 7 blok gaya M3E: drag-and-reorder (dnd-kit) + tombol naik/turun
 // (WCAG), preview langsung, ekspor Markdown/Plain Text/JSON, riwayat (login),
 // mode template produk read-only dengan isi tersembunyi sampai pembelian.
@@ -100,7 +100,7 @@ function makeBlocks(types: string[]): CanvasBlock[] {
     .map((t) => ({ uid: t, type: t, content: "" }));
 }
 
-/** Blok contoh mode template produk (SPEC-12-06) — 5 blok read-only. */
+/** Blok contoh mode template produk (SPEC-12-06) - 5 blok read-only. */
 function templateBlocksFor(product: ProductDetailDTO): CanvasBlock[] {
   const cat = categoryLabel(product.category).toLowerCase();
   const desc = product.description.replace(/\s+/g, " ").trim();
@@ -132,7 +132,7 @@ function templateBlocksFor(product: ProductDetailDTO): CanvasBlock[] {
       uid: "constraints",
       type: "constraints",
       content:
-        "Maksimal 800 kata, bahasa Indonesia yang lugas, hindari teori panjang — langsung ke langkah praktis yang bisa dijalankan hari ini.",
+        "Maksimal 800 kata, bahasa Indonesia yang lugas, hindari teori panjang - langsung ke langkah praktis yang bisa dijalankan hari ini.",
     },
   ];
 }
@@ -389,7 +389,7 @@ export function GeneratorPage() {
       }
       setExportError(null);
       setExportStatus(
-        `Kanvas "${canvas.title || "tanpa judul"}" dimuat dari riwayat — siap diedit atau diekspor ulang.`
+        `Kanvas "${canvas.title || "tanpa judul"}" dimuat dari riwayat - siap diedit atau diekspor ulang.`
       );
       setTab("editor");
     },
@@ -401,7 +401,7 @@ export function GeneratorPage() {
     setTitle("");
     setFormat("markdown");
     setExportError(null);
-    setExportStatus("Kanvas dikosongkan — siap mulai dari awal.");
+    setExportStatus("Kanvas dikosongkan - siap mulai dari awal.");
     setAnnounce("Kanvas dimulai dari awal.");
   }, []);
 
@@ -417,7 +417,7 @@ export function GeneratorPage() {
       copyTimeoutRef.current = setTimeout(() => setCopied(false), 2000);
     } catch {
       setCopyStatus(
-        "Gagal menyalin otomatis — seleksi teks pratinjau lalu salin manual."
+        "Gagal menyalin otomatis - seleksi teks pratinjau lalu salin manual."
       );
     }
   }, [assembled, templateLocked]);
@@ -469,7 +469,7 @@ export function GeneratorPage() {
         );
       } else if (typeof data.remainingGuestExports === "number") {
         setExportStatus(
-          `Prompt diekspor sebagai prompt-althentic.${ext} — sisa ${data.remainingGuestExports} ekspor gratis hari ini.`
+          `Prompt diekspor sebagai prompt-althentic.${ext} - sisa ${data.remainingGuestExports} ekspor gratis hari ini.`
         );
       } else {
         setExportStatus(`Prompt diekspor sebagai prompt-althentic.${ext}.`);
@@ -576,7 +576,7 @@ export function GeneratorPage() {
               <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
                 {tplProduct
                   ? tplProduct.owned
-                    ? "Kamu pemilik produk ini — seluruh isi contoh terbuka."
+                    ? "Kamu pemilik produk ini - seluruh isi contoh terbuka."
                     : "Kanvas menampilkan blok contoh mode baca-saja. Isi tersembunyi sampai pembelian selesai."
                   : "Mode template menampilkan blok contoh baca-saja dari produk."}
               </p>
@@ -693,7 +693,7 @@ export function GeneratorPage() {
                       Kanvas Prompt
                     </h2>
                     <p className="text-xs text-muted-foreground">
-                      {blocks.length} blok aktif — atur urutan dengan menyeret
+                      {blocks.length} blok aktif - atur urutan dengan menyeret
                       handle atau tombol naik/turun.
                     </p>
                   </div>
@@ -736,7 +736,7 @@ export function GeneratorPage() {
                 </section>
               </FadeIn>
 
-              {/* Riwayat ekspor — hanya user login (GAP-15) */}
+              {/* Riwayat ekspor - hanya user login (GAP-15) */}
               {user && (
                 <FadeIn delay={0.15}>
                   <section
@@ -852,7 +852,7 @@ export function GeneratorPage() {
                     )}
                   >
                     {assembled ||
-                      "Belum ada isi. Tulis di blok editor — pratinjau prompt akan tersusun otomatis di sini."}
+                      "Belum ada isi. Tulis di blok editor - pratinjau prompt akan tersusun otomatis di sini."}
                   </pre>
                   {templateLocked && (
                     <div className="pointer-events-none absolute inset-0 grid place-items-center bg-background/30">
@@ -901,7 +901,7 @@ export function GeneratorPage() {
                   {templateLocked && (
                     <p className="flex items-center gap-2 rounded-lg border border-border/60 bg-muted/40 px-3 py-2.5 text-xs leading-relaxed text-muted-foreground">
                       <Lock className="size-3.5 shrink-0" aria-hidden="true" />
-                      Isi contoh terkunci — beli produknya untuk membuka, atau
+                      Isi contoh terkunci - beli produknya untuk membuka, atau
                       keluar dari mode template untuk merakit prompt sendiri.
                     </p>
                   )}

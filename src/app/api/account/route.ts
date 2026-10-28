@@ -1,5 +1,5 @@
-// PUT  /api/account — ubah nama & preferensi (SPEC-05-06, SPEC-13-03)
-// DELETE — soft-delete 30 hari (GAP-17)
+// PUT  /api/account - ubah nama & preferensi (SPEC-05-06, SPEC-13-03)
+// DELETE - soft-delete 30 hari (GAP-17)
 import { NextRequest } from "next/server";
 import { z } from "zod";
 import { db } from "@/lib/db";
@@ -28,6 +28,6 @@ export async function DELETE(req: Request) {
     const user = await requireUser(req);
     await db.user.update({ where: { id: user.id }, data: { softDeletedAt: new Date() } });
     await destroyAllSessions(user.id);
-    return json({ ok: true, message: "Akun dinonaktifkan — masuk dalam 30 hari untuk membatalkan." });
+    return json({ ok: true, message: "Akun dinonaktifkan - masuk dalam 30 hari untuk membatalkan." });
   });
 }

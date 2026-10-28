@@ -1,4 +1,4 @@
-// PUT /api/account/password — ganti password (session lain diturunkan, SPEC-05-03 pattern)
+// PUT /api/account/password - ganti password (session lain diturunkan, SPEC-05-03 pattern)
 import { NextRequest } from "next/server";
 import { z } from "zod";
 import { db } from "@/lib/db";

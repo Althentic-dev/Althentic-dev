@@ -1,6 +1,6 @@
 "use client";
 
-// StatusView — halaman status sederhana (SPEC-13-05)
+// StatusView - halaman status sederhana (SPEC-13-05)
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Activity } from "@/components/animate-ui/icons/activity";
@@ -45,7 +45,7 @@ export function StatusView() {
             <Activity className="h-7 w-7 text-primary" /> Status Layanan
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Kesehatan database, storage, dan endpoint kritis — diperbarui manual saat insiden.
+            Kesehatan database, storage, dan endpoint kritis - diperbarui manual saat insiden.
           </p>
         </div>
         <Button variant="outline" size="sm" className="rounded-full" onClick={load} disabled={loading}>

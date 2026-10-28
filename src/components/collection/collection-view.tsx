@@ -1,7 +1,7 @@
 "use client";
 
-// CollectionView — Koleksi Saya (SPEC-11-06): order Lunas permanen, tombol unduh,
-// info versi, tanggal beli. Tombol berubah "Sudah diunduh" (disabled) — GAP-13.
+// CollectionView - Koleksi Saya (SPEC-11-06): order Lunas permanen, tombol unduh,
+// info versi, tanggal beli. Tombol berubah "Sudah diunduh" (disabled) - GAP-13.
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Download } from "@/components/animate-ui/icons/download";
@@ -89,7 +89,7 @@ export function CollectionView() {
     <div className="container-page max-w-5xl py-8 md:py-12">
       <h1 className="text-2xl font-bold tracking-tight md:text-3xl">Koleksi Saya</h1>
       <p className="mt-1 text-sm text-muted-foreground">
-        Bukti kepemilikan permanen atas semua produk yang kamu beli. Kuota unduh 1x per order —
+        Bukti kepemilikan permanen atas semua produk yang kamu beli. Kuota unduh 1x per order -
         tombol berubah otomatis setelah dipakai.
       </p>
 
@@ -137,7 +137,7 @@ export function CollectionView() {
                 </p>
                 <p className="mt-1 flex items-center gap-1 text-[11px] text-muted-foreground">
                   <ShieldCheck className="h-3 w-3" />
-                  Lisensi personal &amp; komersial atas output — dilarang menjual ulang file mentah.
+                  Lisensi personal &amp; komersial atas output - dilarang menjual ulang file mentah.
                 </p>
               </div>
               <div className="shrink-0">

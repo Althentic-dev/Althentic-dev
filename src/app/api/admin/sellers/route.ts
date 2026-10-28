@@ -1,4 +1,4 @@
-// GET /api/admin/sellers — tabel seller (Konteks Terkunci): nama toko, slug,
+// GET /api/admin/sellers - tabel seller (Konteks Terkunci): nama toko, slug,
 // jumlah produk, commission owed, status, tanggal join, total transaksi
 // terverifikasi, rating. + aksi suspend/unsuspend manual.
 import { NextRequest } from "next/server";
@@ -40,7 +40,7 @@ export async function GET(req: Request) {
   });
 }
 
-// POST — suspend/unsuspend manual oleh Super-Admin (alasan terstruktur)
+// POST - suspend/unsuspend manual oleh Super-Admin (alasan terstruktur)
 export async function POST(req: NextRequest) {
   return handle(async () => {
     await requireSuperAdmin(req);

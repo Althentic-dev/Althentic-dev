@@ -1,5 +1,5 @@
-// POST /api/seller/onboarding — 4 langkah, draft tersimpan otomatis (SPEC-06-01/05)
-// GET  — status onboarding toko (checklist "Toko Anda X% siap")
+// POST /api/seller/onboarding - 4 langkah, draft tersimpan otomatis (SPEC-06-01/05)
+// GET  - status onboarding toko (checklist "Toko Anda X% siap")
 import { NextRequest } from "next/server";
 import { z } from "zod";
 import { db } from "@/lib/db";
@@ -44,7 +44,7 @@ export async function POST(req: NextRequest) {
 
     // ---------- Langkah 1: profil toko (nama, slug permanen, deskripsi, WA) ----------
     if (step === 1) {
-      if (store) return fail("Toko sudah dibuat — slug bersifat permanen (SPEC-02-01).", 409);
+      if (store) return fail("Toko sudah dibuat - slug bersifat permanen (SPEC-02-01).", 409);
       const slugCheck = validateSlug(parsed.data.slug ?? "");
       if (!slugCheck.ok) return fail(slugCheck.error, 422);
       const waCheck = validateWhatsApp(parsed.data.whatsapp ?? "");
@@ -132,7 +132,7 @@ export async function POST(req: NextRequest) {
         }
       }
       if (parsed.data.skipKey) {
-        // Lewati diperbolehkan — konsekuensi: semua order approve manual
+        // Lewati diperbolehkan - konsekuensi: semua order approve manual
         data.aiProvider = parsed.data.aiProvider ?? store.aiProvider;
       }
       steps[2] = true;
@@ -147,7 +147,7 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    // ---------- Langkah 4: produk pertama opsional (GAP-08) — CTA dari layar selesai ----------
+    // ---------- Langkah 4: produk pertama opsional (GAP-08) - CTA dari layar selesai ----------
     if (step === 4) {
       steps[3] = true;
       store = await db.store.update({

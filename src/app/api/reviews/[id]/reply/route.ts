@@ -1,4 +1,4 @@
-// POST /api/reviews/[id]/reply — balasan seller satu kali, publik (SPEC-10-06)
+// POST /api/reviews/[id]/reply - balasan seller satu kali, publik (SPEC-10-06)
 import { NextRequest } from "next/server";
 import { z } from "zod";
 import { db } from "@/lib/db";

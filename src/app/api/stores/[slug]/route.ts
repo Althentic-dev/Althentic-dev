@@ -1,4 +1,4 @@
-// GET /api/stores/[slug] — profil publik toko (SPEC-13-01)
+// GET /api/stores/[slug] - profil publik toko (SPEC-13-01)
 import { NextRequest } from "next/server";
 import { db } from "@/lib/db";
 import { json, fail, handle } from "@/lib/server/helpers";

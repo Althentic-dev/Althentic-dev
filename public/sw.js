@@ -1,4 +1,4 @@
-// Althentic.Dev Service Worker — PWA offline support
+// Althentic.Dev Service Worker - PWA offline support
 // Cache static assets + fallback offline page
 
 // Bump this when changing URL canonicalization so stale HTML/assets are evicted.
@@ -8,7 +8,7 @@ const OFFLINE_URL = "/offline";
 // Assets to pre-cache on install
 const PRECACHE_URLS = ["/", "/offline", "/logo.png"];
 
-// Install — pre-cache critical assets
+// Install - pre-cache critical assets
 self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => cache.addAll(PRECACHE_URLS)).catch(() => {})
@@ -16,7 +16,7 @@ self.addEventListener("install", (event) => {
   self.skipWaiting();
 });
 
-// Activate — clean old caches
+// Activate - clean old caches
 self.addEventListener("activate", (event) => {
   event.waitUntil(
     caches.keys().then((keys) =>
@@ -28,7 +28,7 @@ self.addEventListener("activate", (event) => {
   self.clients.claim();
 });
 
-// Fetch — stale-while-revalidate for assets, network-first for pages
+// Fetch - stale-while-revalidate for assets, network-first for pages
 self.addEventListener("fetch", (event) => {
   const { request } = event;
   if (request.method !== "GET") return;

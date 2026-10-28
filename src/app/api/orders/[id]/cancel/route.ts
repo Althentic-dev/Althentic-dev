@@ -1,4 +1,4 @@
-// POST /api/orders/[id]/cancel — buyer batalkan 1 klik sebelum Lunas (SPEC-04-08, GAP-01)
+// POST /api/orders/[id]/cancel - buyer batalkan 1 klik sebelum Lunas (SPEC-04-08, GAP-01)
 import { NextRequest } from "next/server";
 import { db } from "@/lib/db";
 import { json, fail, handle } from "@/lib/server/helpers";

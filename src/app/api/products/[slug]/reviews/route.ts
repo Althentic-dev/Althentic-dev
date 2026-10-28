@@ -1,5 +1,5 @@
-// POST /api/products/[slug]/reviews — review buyer order Lunas (SPEC-10-05)
-// PUT — edit dalam 7 hari pertama.
+// POST /api/products/[slug]/reviews - review buyer order Lunas (SPEC-10-05)
+// PUT - edit dalam 7 hari pertama.
 import { NextRequest } from "next/server";
 import { z } from "zod";
 import { db } from "@/lib/db";

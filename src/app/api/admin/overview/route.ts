@@ -1,4 +1,4 @@
-// GET /api/admin/overview — Overview lengkap (Konteks Terkunci):
+// GET /api/admin/overview - Overview lengkap (Konteks Terkunci):
 // metrik ringkas + growth chart + kategori terlaris + konsentrasi top-1 seller
 import { db } from "@/lib/db";
 import { json, handle } from "@/lib/server/helpers";

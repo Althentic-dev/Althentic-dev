@@ -5,6 +5,10 @@
 
 ### Unreleased Update
 
+- Ganti karakter U+2014 dengan tanda hubung biasa pada file teks proyek dan database SQLite lokal; struktur serta jumlah record database tetap terjaga.
+
+### Unreleased Update
+
 - Simpan aset banner dan QR toko serta preview produk di bucket publik Supabase pada production, cek readiness kedua storage, dan sediakan migrasi file lokal tanpa overwrite.
 
 ### Unreleased Update

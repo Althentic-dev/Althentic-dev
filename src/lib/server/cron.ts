@@ -1,13 +1,13 @@
 // =============================================================================
-// Althentic.Dev — Maintenance / cron (Vercel Cron Jobs pattern, GAP-19)
+// Althentic.Dev - Maintenance / cron (Vercel Cron Jobs pattern, GAP-19)
 // Endpoint /api/cron/maintenance dengan CRON_SECRET. Super-Admin juga bisa
 // menjalankan manual dari dashboard. Job:
 // - Expire order tanpa progres 24 jam (GAP-11)
 // - Auto-cancel order manual tanpa respons 24 jam (SPEC-02-07)
 // - Reminder invoice hari 1/3/5 + suspend hari ke-8 (GAP-03, SPEC-09-02)
 // - Pengingat produk ditolak hari ke-7 + arsip otomatis hari ke-14 (SPEC-08-03)
-// - Penghapusan fisik file bukti setelah 30 hari (GAP-04) — metadata 90 hari
-// - Notifikasi update ZIP inti ke buyer lama (GAP-05) — dipicu saat update, bukan cron
+// - Penghapusan fisik file bukti setelah 30 hari (GAP-04) - metadata 90 hari
+// - Notifikasi update ZIP inti ke buyer lama (GAP-05) - dipicu saat update, bukan cron
 // =============================================================================
 
 import { db } from "@/lib/db";
@@ -41,7 +41,7 @@ export async function runMaintenance(): Promise<MaintenanceReport> {
     ranAt: now.toISOString(),
   };
 
-  // 1. Expire order tanpa progres (semua jalur) — 24 jam dari checkout
+  // 1. Expire order tanpa progres (semua jalur) - 24 jam dari checkout
   const stale = await db.order.findMany({
     where: {
       status: { in: ["pending_payment", "payment_submitted", "rejected"] },
@@ -99,7 +99,7 @@ export async function runMaintenance(): Promise<MaintenanceReport> {
         await notifyUser({
           userId: p.store.ownerId,
           type: "verification_result",
-          title: `Pengingat perbaikan:${p.id} — ${p.title}`,
+          title: `Pengingat perbaikan:${p.id} - ${p.title}`,
           body: "Produk ditolak 7 hari lalu dan belum diperbaiki. Arsip otomatis pada hari ke-14.",
           linkQuery: `v=dashboard&tab=products`,
           email: {
@@ -114,7 +114,7 @@ export async function runMaintenance(): Promise<MaintenanceReport> {
     }
   }
 
-  // 6. Penghapusan fisik file bukti > 30 hari (GAP-04) — metadata tetap
+  // 6. Penghapusan fisik file bukti > 30 hari (GAP-04) - metadata tetap
   const oldReceipts = await db.receipt.findMany({
     where: { filePath: { not: null }, deletedAt: null, createdAt: { lte: new Date(now.getTime() - RETENTION_RECEIPT_DAYS * 24 * 3600 * 1000) } },
   });

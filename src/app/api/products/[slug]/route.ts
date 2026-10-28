@@ -1,4 +1,4 @@
-// GET /api/products/[slug] — detail produk (SPEC-03-06, GAP-14 produk serupa)
+// GET /api/products/[slug] - detail produk (SPEC-03-06, GAP-14 produk serupa)
 import { NextRequest } from "next/server";
 import { db } from "@/lib/db";
 import { json, fail, handle } from "@/lib/server/helpers";

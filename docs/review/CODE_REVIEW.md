@@ -1,15 +1,13 @@
-PR: #16
+PR: #18
 Repo: Althentic-dev/Althentic-dev
 Status: [ ] dicopas
 
-Review PR #16
+Review PR #18
 
 ```md
-Adapter memetakan `banners/` dan `qr/` ke bucket banner serta `products/` ke bucket preview. Validasi prefix, HTTPS, timeout, dan penggunaan service role di server menjaga jalur publik/private tetap terpisah. Receipt tetap memakai Neon; readiness memeriksa bucket Neon tanpa menulis data dan object publik Supabase tanpa mengambil bytes.
+Perubahan 1.173 karakter em dash menjadi tanda hubung biasa tersebar di 133 file teks, termasuk copy UI dan pesan API. Pemeriksaan menunjukkan perubahan source hanya mengganti karakter tersebut, dan lint serta build lulus. Mohon tinjau beberapa contoh copy UI dan dokumentasi untuk memastikan tanda hubung ASCII tetap terbaca sesuai konteks.
 
-Script migrasi melakukan preflight untuk seluruh target sebelum upload, menolak hash yang berbeda, memakai `upsert: false`, lalu memeriksa hash dan akses publik. Catatan hasil 36 file sesuai dengan verifikasi yang dijalankan. Route upload kini meneruskan kegagalan storage sebagai error provider, terpisah dari validasi gambar.
+`db/custom.db` juga berubah secara biner. Laporan menyatakan 43 penggantian dalam 38 nilai teks, jumlah record tetap, integrity check lulus, dan tidak ada em dash tersisa. Diff Git biasa tidak memperlihatkan nilai database yang berubah; mohon pastikan file ini memang fixture lokal yang seharusnya di-commit dan perubahan SQL-level tidak menyentuh nilai lain.
 
-Pertanyaan deployment: adapter memakai `NODE_ENV === "production"`. Jika Vercel Preview dipakai untuk menguji upload, pastikan environment Preview juga mendapat konfigurasi Supabase yang sesuai. Pertimbangkan project atau bucket Preview terpisah agar pengujian tidak menulis ke aset Production.
-
-`package.json` dan `bun.lock` menambahkan versi SDK yang sama; `.env.example` hanya mencantumkan nama konfigurasi tanpa nilai rahasia. README, `TECHNICAL_DECISIONS.md`, dan `docs/ARCHITECTURE.md` menjelaskan pemetaan bucket, secret server-side, dan migrasi sumber. Changelog mencatat perubahan readiness kedua storage. `TODO.md` mencatat implementasi, validasi, Issue, dan PR; status review tetap `[ ] dicopas` untuk menunggu tindakan pemilik.
+Graphify memperbarui graph code, tetapi melaporkan parser SQL opsional tidak tersedia. Ini tidak tampak memengaruhi build aplikasi, namun graph tidak mencakup isi SQL tersebut.
 ```

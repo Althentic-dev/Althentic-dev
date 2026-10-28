@@ -1,5 +1,5 @@
 // =============================================================================
-// Althentic.Dev — Enkripsi at-rest untuk API key BYOK (SPEC-07-08)
+// Althentic.Dev - Enkripsi at-rest untuk API key BYOK (SPEC-07-08)
 // AES-256-GCM dengan key dari environment (CRYPTO_KEY).
 // =============================================================================
 

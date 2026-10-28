@@ -1,5 +1,5 @@
-// GET  /api/admin/disputes — inbox sederhana Open/Investigating/Resolved (Konteks Terkunci)
-// POST — ubah status + catatan; refund manual dicatat sebagai Resolved + teks (GAP-18)
+// GET  /api/admin/disputes - inbox sederhana Open/Investigating/Resolved (Konteks Terkunci)
+// POST - ubah status + catatan; refund manual dicatat sebagai Resolved + teks (GAP-18)
 import { NextRequest } from "next/server";
 import { z } from "zod";
 import { db } from "@/lib/db";
@@ -53,7 +53,7 @@ export async function POST(req: NextRequest) {
     const dispute = await db.dispute.findUnique({ where: { id: disputeId } });
     if (!dispute) return fail("Dispute tidak ditemukan.", 404);
     if (status === "resolved" && !note) {
-      return fail("Catatan resolusi wajib saat menutup dispute (refund manual dicatat sebagai teks — GAP-18).", 422);
+      return fail("Catatan resolusi wajib saat menutup dispute (refund manual dicatat sebagai teks - GAP-18).", 422);
     }
     await db.dispute.update({
       where: { id: disputeId },

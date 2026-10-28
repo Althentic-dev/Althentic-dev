@@ -1,9 +1,9 @@
 "use client";
 
 // =============================================================================
-// Althentic.Dev — Landing shared helpers (Task B1).
+// Althentic.Dev - Landing shared helpers (Task B1).
 // Varian motion entrance (opacity + translateY, ease [0.22,1,0.36,1], stagger
-// 0.08 — hormati useReducedMotion), SectionHeading semantik, pemetaan ikon
+// 0.08 - hormati useReducedMotion), SectionHeading semantik, pemetaan ikon
 // kategori (string → komponen ikon Animate UI/lucide), dan baris bintang rating.
 // =============================================================================
 
@@ -19,7 +19,7 @@ import { Star } from "@/components/animate-ui/icons/star";
 import { cn } from "@/lib/utils";
 
 /**
- * Tipe ikon generik — komponen ikon Animate UI (lucide) dipakai di seluruh
+ * Tipe ikon generik - komponen ikon Animate UI (lucide) dipakai di seluruh
  * platform; kontrak minimal yang dipakai seluruh pemanggilan ikon.
  */
 export type IconComponent = ComponentType<{
@@ -45,7 +45,7 @@ export const fadeUpItem: Variants = {
 };
 
 // -----------------------------------------------------------------------------
-// Reveal — wrapper entrance saat elemen masuk viewport (sekali saja).
+// Reveal - wrapper entrance saat elemen masuk viewport (sekali saja).
 // -----------------------------------------------------------------------------
 export function Reveal({
   children,
@@ -71,7 +71,7 @@ export function Reveal({
 }
 
 // -----------------------------------------------------------------------------
-// useStaggerProps — properti stagger untuk disebar ke motion.<tag> apa pun
+// useStaggerProps - properti stagger untuk disebar ke motion.<tag> apa pun
 // (mis. motion.dl) sehingga struktur HTML semantik tetap valid.
 // -----------------------------------------------------------------------------
 export function useStaggerProps() {
@@ -85,7 +85,7 @@ export function useStaggerProps() {
 }
 
 // -----------------------------------------------------------------------------
-// StaggerGroup — container grid yang memicu fadeUpItem pada anak-anaknya.
+// StaggerGroup - container grid yang memicu fadeUpItem pada anak-anaknya.
 // Anak harus berupa <motion.div variants={fadeUpItem}>.
 // -----------------------------------------------------------------------------
 export function StaggerGroup({
@@ -104,7 +104,7 @@ export function StaggerGroup({
 }
 
 // -----------------------------------------------------------------------------
-// EyebrowPill — label kecil di atas judul section.
+// EyebrowPill - label kecil di atas judul section.
 // -----------------------------------------------------------------------------
 export function EyebrowPill({
   children,
@@ -126,7 +126,7 @@ export function EyebrowPill({
 }
 
 // -----------------------------------------------------------------------------
-// SectionHeading — judul h2 + eyebrow + deskripsi (id dipakai aria-labelledby).
+// SectionHeading - judul h2 + eyebrow + deskripsi (id dipakai aria-labelledby).
 // -----------------------------------------------------------------------------
 export function SectionHeading({
   id,
@@ -168,9 +168,9 @@ export function SectionHeading({
 }
 
 // -----------------------------------------------------------------------------
-// IconTile — ubin ikon Lucide dengan gradasi brand (kontras aman kedua tema:
+// IconTile - ubin ikon Lucide dengan gradasi brand (kontras aman kedua tema:
 // light #17368f→#1d4ed8 + teks #f4f8ff ≈ 6.3:1; dark #4f8dff→#3b82f6 + teks
-// #06102a ≈ 5.2:1 — memenuhi WCAG AA).
+// #06102a ≈ 5.2:1 - memenuhi WCAG AA).
 // -----------------------------------------------------------------------------
 export function IconTile({
   icon: Icon,
@@ -209,7 +209,7 @@ export function categoryIcon(icon: string): IconComponent {
 }
 
 // -----------------------------------------------------------------------------
-// StarRow — 5 bintang dengan isian fraksional (dekoratif; teks aksesibel
+// StarRow - 5 bintang dengan isian fraksional (dekoratif; teks aksesibel
 // disediakan lewat prop `label` / teks rating di sebelahnya).
 // -----------------------------------------------------------------------------
 export function StarRow({

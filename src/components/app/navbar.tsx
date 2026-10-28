@@ -1,7 +1,7 @@
 "use client";
 
 // =============================================================================
-// Navbar — desktop auto-hide saat scroll down / muncul saat scroll up;
+// Navbar - desktop auto-hide saat scroll down / muncul saat scroll up;
 // mobile TIDAK auto-hide (sticky + hamburger). Konteks Terkunci DESIGN.
 // =============================================================================
 
@@ -50,7 +50,7 @@ function ThemeToggle() {
       onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
       className="rounded-full"
     >
-      {/* Ikon dikendalikan CSS tema — tanpa state mounting (hindari mismatch) */}
+      {/* Ikon dikendalikan CSS tema - tanpa state mounting (hindari mismatch) */}
       <Sun className="hidden h-[18px] w-[18px] dark:block" />
       <Moon className="h-[18px] w-[18px] dark:hidden" />
     </Button>
@@ -100,7 +100,7 @@ export function Navbar({ activeView }: { activeView: string }) {
             navigateTo({ v: "home" }, { reset: true });
           }}
           className="flex items-center gap-2.5 font-semibold tracking-tight"
-          aria-label="Althentic.Dev — beranda"
+          aria-label="Althentic.Dev - beranda"
         >
           <span className="bg-brand-gradient flex h-9 w-9 items-center justify-center rounded-xl text-white shadow-lg shadow-black/25">
             <Hexagon className="h-5 w-5" strokeWidth={2.4} />
