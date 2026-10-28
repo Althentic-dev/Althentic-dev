@@ -34,6 +34,12 @@ logs/
 
 # env files (can opt-in for committing if needed)
 .env*
+!/.env.example
+
+# local data
+/storage/
+*.db
+*.sqlite
 
 # vercel
 .vercel
