@@ -1,4 +1,4 @@
-// GET  /api/orders/[id] — detail + timeline stepper (SPEC-04-05) + QR + WA
+// GET  /api/orders/[id] - detail + timeline stepper (SPEC-04-05) + QR + WA
 import { NextRequest } from "next/server";
 import { db } from "@/lib/db";
 import { json, fail, handle } from "@/lib/server/helpers";
