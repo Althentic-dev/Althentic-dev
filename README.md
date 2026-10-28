@@ -13,7 +13,7 @@ Althentic is a multi-tenant marketplace for ready-to-use prompts and digital pro
 - Bun for package management
 - Local file storage in `storage/`
 
-Production deployment targets Vercel and Neon. Receipt files use Neon Object Storage; Supabase Storage is the intended target for banners and previews, but its runtime adapter is not implemented yet. Review `AGENTS.md` and the documents in `docs/` before changing product behavior or deployment configuration.
+Production deployment targets Vercel and Neon. Receipt files use the private Neon Object Storage bucket `receipts`. Production banners and store QR images use the public Supabase bucket named by `SUPABASE_STORAGE_BUCKET_BANNERS`; product previews use the public bucket named by `SUPABASE_STORAGE_BUCKET_PREVIEWS`. Local development continues to use `storage/`.
 
 ## Local development
 
@@ -24,6 +24,21 @@ Production deployment targets Vercel and Neon. Receipt files use Neon Object Sto
 
 Prisma uses PostgreSQL. `DATABASE_URL` is the pooled runtime connection and `DIRECT_URL` is used by Prisma migration commands. `bun run db:deploy` applies committed migrations; `bun run db:push` is for controlled development only and does not enable automatic data loss. Do not point local development at production data.
 Receipt uploads require a configured Neon Object Storage endpoint, credentials, and private `receipts` bucket; the application does not silently store receipts in Supabase or local storage when that configuration is missing.
+
+## Supabase Storage production setup
+
+Create two Supabase Storage buckets before deploying: the bucket configured by `SUPABASE_STORAGE_BUCKET_BANNERS` for store banners and QR images, and the bucket configured by `SUPABASE_STORAGE_BUCKET_PREVIEWS` for product previews. Set both buckets to **Public** so public asset URLs and the storage readiness probe work without authentication. Uploads and deletes run only on the server with `SUPABASE_SERVICE_ROLE_KEY`; never expose this key in a `NEXT_PUBLIC_` variable or browser code. Production also requires `SUPABASE_URL`. Local development does not use these variables for file writes.
+
+`/api/health` checks PostgreSQL, the private Neon `receipts` bucket, and a public Supabase banner object. It returns HTTP 200 only when all three checks are reachable, and HTTP 503 otherwise.
+
+To copy existing files from `storage/public` after configuring `.env`, first run a dry-run, then add `--apply` to upload. The script checks every existing target object before uploading, refuses to overwrite objects whose SHA-256 differs, verifies uploaded bytes, and leaves all source files in place:
+
+```powershell
+bun --env-file=.env scripts/migrate-supabase-public-assets.ts --source .\storage\public
+bun --env-file=.env scripts/migrate-supabase-public-assets.ts --source .\storage\public --apply
+```
+
+Run the migration from the repository root. It maps `banners/` and `qr/` to the banners bucket, and `products/` to the previews bucket. The migration reports counts and byte totals only, not environment values or file contents. Do not remove the local source until you have confirmed the public files load in production.
 
 The one-time `bun run scripts/migrate-sqlite-to-neon.ts` utility imports relational rows from `db/custom.db` and linked private receipt WebP files. It refuses to run when destination application tables are non-empty, verifies row counts and receipt bytes, and never deletes the source database or files. Run it only after `bun run db:deploy` and after confirming the Neon target branch is the intended production database.
 
