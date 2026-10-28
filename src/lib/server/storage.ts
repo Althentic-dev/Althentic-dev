@@ -1,5 +1,5 @@
 // =============================================================================
-// Althentic.Dev — Storage abstraction (SPEC-15-01, SPEC-07-06, SPEC-16-04)
+// Althentic.Dev - Storage abstraction (SPEC-15-01, SPEC-07-06, SPEC-16-04)
 // Interface tunggal bucket publik/private. Sandbox: filesystem lokal.
 // Production: implementasi Supabase Storage dengan kontrak sama (ganti 1 file).
 // Signed URL: HMAC-SHA256, durasi default 1 jam (GAP-19).
@@ -9,9 +9,9 @@ import { createHmac, timingSafeEqual } from "crypto";
 import { mkdir, readFile, writeFile, unlink, stat } from "fs/promises";
 import path from "path";
 import sharp from "sharp";
+import { getServerSecret } from "@/lib/server/secrets";
 
 const ROOT = process.env.STORAGE_ROOT || "/home/z/my-project/storage";
-const AUTH_SECRET = process.env.AUTH_SECRET || "dev-secret";
 export const SIGNED_URL_TTL = 3600; // 1 jam (GAP-19)
 
 type Bucket = "public" | "private";
@@ -72,10 +72,10 @@ export async function convertToWebp(input: Buffer, maxWidth?: number): Promise<B
 }
 
 function sign(payload: string): string {
-  return createHmac("sha256", AUTH_SECRET).update(payload).digest("hex");
+  return createHmac("sha256", getServerSecret("AUTH_SECRET", "dev-secret")).update(payload).digest("hex");
 }
 
-/** URL objek — bucket public tanpa signature; private wajib signature berumur pendek. */
+/** URL objek - bucket public tanpa signature; private wajib signature berumur pendek. */
 export function fileUrl(bucket: Bucket, objectPath: string, ttlSec = SIGNED_URL_TTL): string {
   const q = new URLSearchParams({ bucket, path: objectPath });
   if (bucket === "private") {
