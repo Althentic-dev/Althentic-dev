@@ -5,6 +5,10 @@
 
 ### Unreleased Update
 
+- Catat nama error dan kode Prisma yang sudah disaring saat probe database production gagal, tanpa memasukkan pesan error atau kredensial ke log.
+
+### Unreleased Update
+
 - Migrasikan database Prisma ke Neon PostgreSQL dengan migration deploy yang aman, sediakan utilitas impor data SQLite dan receipt lama tanpa menghapus sumber, serta sediakan `/api/health` yang memakai status readiness HTTP 200/503. Build standalone kini menyalin aset lewat Node.js agar kompatibel dengan Windows dan Linux.
 
 ### Unreleased Update
