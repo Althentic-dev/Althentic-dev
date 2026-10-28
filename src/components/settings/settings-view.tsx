@@ -1,6 +1,6 @@
 "use client";
 
-// SettingsView — pengaturan akun (SPEC-05-06, SPEC-13-03):
+// SettingsView - pengaturan akun (SPEC-05-06, SPEC-13-03):
 // ubah nama, ganti password, ganti email (re-verifikasi), preferensi notifikasi,
 // tema Dark/Light/System, bahasa email ID/EN, hapus akun (soft-delete 30 hari).
 import { useEffect, useState } from "react";
@@ -228,7 +228,7 @@ export function SettingsView() {
               <div>
                 <p className="text-sm font-medium">Email promosi</p>
                 <p className="text-xs text-muted-foreground">
-                  Bisa dimatikan — email transaksi tetap terkirim.
+                  Bisa dimatikan - email transaksi tetap terkirim.
                 </p>
               </div>
               <Switch defaultChecked onCheckedChange={(v) => savePrefs({ promoEmails: v })} aria-label="Email promosi" />
@@ -236,7 +236,7 @@ export function SettingsView() {
           </div>
         </section>
 
-        {/* Hapus akun (soft-delete 30 hari — GAP-17) */}
+        {/* Hapus akun (soft-delete 30 hari - GAP-17) */}
         <section className="glass-card border-destructive/30 p-5" aria-labelledby="set-hapus">
           <h2 id="set-hapus" className="flex items-center gap-2 text-sm font-bold text-destructive">
             <Trash2 className="h-4 w-4" /> Hapus Akun
