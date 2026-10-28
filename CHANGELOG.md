@@ -5,6 +5,10 @@
 
 ### Unreleased Update
 
+- Migrasikan database Prisma ke Neon PostgreSQL dengan migration deploy yang aman, sediakan utilitas impor data SQLite dan receipt lama tanpa menghapus sumber, serta sediakan `/api/health` yang memakai status readiness HTTP 200/503. Build standalone kini menyalin aset lewat Node.js agar kompatibel dengan Windows dan Linux.
+
+### Unreleased Update
+
 - Perbaiki opsi `next/dynamic` agar setiap view dapat dikompilasi oleh Turbopack di Next.js 16.
 
 ### Unreleased Update
