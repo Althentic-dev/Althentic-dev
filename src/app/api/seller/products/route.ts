@@ -1,4 +1,4 @@
-// GET/POST /api/seller/products — daftar & buat produk (draft)
+// GET/POST /api/seller/products: daftar & buat produk (draft)
 // PUT/DELETE via /api/seller/products/[id]
 import { NextRequest } from "next/server";
 import { z } from "zod";
@@ -90,7 +90,7 @@ export async function POST(req: NextRequest) {
   return handle(async () => {
     const user = await requireUser(req);
     const store = await myStore(user.id);
-    if (store.status === "suspended") return fail("Toko suspended — tidak bisa menambah produk.", 403);
+    if (store.status === "suspended") return fail("Toko suspended: tidak bisa menambah produk.", 403);
 
     const parsed = productSchema.safeParse(await req.json().catch(() => null));
     if (!parsed.success) return fail(parsed.error.issues[0]?.message ?? "Input tidak valid.", 422);
@@ -111,12 +111,13 @@ export async function POST(req: NextRequest) {
     for (const b64 of previewBase64) {
       const buf = Buffer.from(b64, "base64");
       if (buf.length > 5 * 1024 * 1024) return fail("Preview maksimal 5 MB per gambar.", 422);
+      let webp: Buffer;
       try {
-        const webp = await convertToWebp(buf, 1200);
-        previewPaths.push(await putObject("public", `products/${Date.now()}-${Math.random().toString(36).slice(2, 8)}/preview-${previewPaths.length + 1}.webp`, webp, "image/webp"));
+        webp = await convertToWebp(buf, 1200);
       } catch {
         return fail("Ada file preview yang bukan gambar valid.", 422);
       }
+      previewPaths.push(await putObject("public", `products/${Date.now()}-${Math.random().toString(36).slice(2, 8)}/preview-${previewPaths.length + 1}.webp`, webp, "image/webp"));
     }
 
     // Slug unik
