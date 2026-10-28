@@ -1,7 +1,7 @@
 "use client";
 
-// LegalView — ToS / Privacy Policy (GAP-18: naskah lengkap di-draft TERPISAH
-// sebagai dokumen legal yang butuh review manual — halaman ini menampilkan
+// LegalView - ToS / Privacy Policy (GAP-18: naskah lengkap di-draft TERPISAH
+// sebagai dokumen legal yang butuh review manual - halaman ini menampilkan
 // ringkasan klausul yang SUDAH diputuskan + status drafting, bukan naskah final).
 import { FileText } from "@/components/animate-ui/icons/file-text";
 import { Scale } from "@/components/animate-ui/icons/scale";
@@ -32,7 +32,7 @@ const TOS_CLAUSES: { title: string; body: string }[] = [
   },
   {
     title: "6. Refund & Dispute (GAP-18)",
-    body: "Batas pengajuan dispute 7 hari setelah transaksi selesai. Refund didukung bila file tidak bisa diakses, isi berbeda drastis dari deskripsi, atau seller tidak merespons 48 jam; 'tidak cocok selera' bukan dasar refund. Eksekusi refund 100% manual di luar sistem — Althentic berperan sebagai mediator.",
+    body: "Batas pengajuan dispute 7 hari setelah transaksi selesai. Refund didukung bila file tidak bisa diakses, isi berbeda drastis dari deskripsi, atau seller tidak merespons 48 jam; 'tidak cocok selera' bukan dasar refund. Eksekusi refund 100% manual di luar sistem - Althentic berperan sebagai mediator.",
   },
   {
     title: "7. Pajak (SPEC-14-04)",
@@ -51,7 +51,7 @@ const PRIVACY_CLAUSES: { title: string; body: string }[] = [
   },
   {
     title: "2. Pemrosesan Bukti Transfer oleh AI (SPEC-14-01, GAP-12)",
-    body: "Gambar bukti transfer diproses oleh layanan AI pihak ketiga yang dipilih seller (memakai API key milik seller — BYOK). Data dikirim langsung ke penyedia tersebut. Althentic TIDAK menyimpan salinan hasil proses AI (hanya data terstruktur: nominal, tanggal, nama pengirim, status match). File bukti dihapus fisik setelah 30 hari; metadata transaksi disimpan maksimal 90 hari untuk audit.",
+    body: "Gambar bukti transfer diproses oleh layanan AI pihak ketiga yang dipilih seller (memakai API key milik seller - BYOK). Data dikirim langsung ke penyedia tersebut. Althentic TIDAK menyimpan salinan hasil proses AI (hanya data terstruktur: nominal, tanggal, nama pengirim, status match). File bukti dihapus fisik setelah 30 hari; metadata transaksi disimpan maksimal 90 hari untuk audit.",
   },
   {
     title: "3. Data Finansial (SPEC-14-02)",
@@ -103,7 +103,7 @@ export function LegalView({ doc }: { doc: string }) {
         <p className="text-xs leading-relaxed text-muted-foreground">
           <b>Status drafting:</b> naskah lengkap ToS &amp; Privacy Policy di-draft terpisah sebagai dokumen legal
           dan memerlukan review manual sebelum final (GAP-18). Halaman ini menampilkan ringkasan klausul yang
-          sudah diputuskan. Versi dokumen: 2026-10-27 — persetujuanmu dicatat per versi.
+          sudah diputuskan. Versi dokumen: 2026-10-27 - persetujuanmu dicatat per versi.
         </p>
       </div>
 
@@ -128,7 +128,7 @@ export function LegalView({ doc }: { doc: string }) {
         <div className="glass-card mt-10 p-5">
           <p className="text-sm">
             Punya pertanyaan tentang dokumen legal ini? Kirim email ke{" "}
-            <span className="font-semibold text-primary">legal@althentic.dev</span> — tim kami akan merespons
+            <span className="font-semibold text-primary">legal@althentic.dev</span> - tim kami akan merespons
             dalam 2×24 jam.
           </p>
         </div>
