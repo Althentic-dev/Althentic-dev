@@ -1,4 +1,4 @@
-// GET /api/catalog — katalog dengan filter URL, pencarian, sort, pagination
+// GET /api/catalog - katalog dengan filter URL, pencarian, sort, pagination
 // (SPEC-03-01..05, GAP-14). Grid 3/2/1 kolom ditangani frontend.
 import { NextRequest } from "next/server";
 import { db } from "@/lib/db";
