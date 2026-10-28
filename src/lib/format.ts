@@ -1,4 +1,4 @@
-// Althentic.Dev — util format (Rupiah, waktu relatif Indonesia)
+// Althentic.Dev - util format (Rupiah, waktu relatif Indonesia)
 
 export function formatRupiah(value: number): string {
   if (value === 0) return "Gratis";
@@ -44,7 +44,7 @@ export function formatDate(date: string | Date, withTime = false): string {
 }
 
 export function formatBytes(bytes?: number | null): string {
-  if (!bytes && bytes !== 0) return "—";
+  if (!bytes && bytes !== 0) return "-";
   if (bytes < 1024) return `${bytes} B`;
   if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
