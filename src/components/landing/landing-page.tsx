@@ -1,17 +1,17 @@
 "use client";
 
 // =============================================================================
-// Althentic.Dev — Landing Page (Task B1, resolusi GAP-10 + Konteks Terkunci).
+// Althentic.Dev - Landing Page (Task B1, resolusi GAP-10 + Konteks Terkunci).
 // 9 section: (1) Hero, (2) Value Proposition/How It Works, (3) Featured/
 // Trending, (4) Kategori, (5) Social Proof, (6) Seller CTA sekunder, (7) FAQ,
-// (8) placeholder pre-footer, (9) Footer — footer TIDAK dirender di sini
+// (8) placeholder pre-footer, (9) Footer - footer TIDAK dirender di sini
 // (sudah global di app shell, lihat app/footer.tsx).
-// REVISI DESAIN: (a) skema monokrom murni — hitam/putih/grayscale tanpa warna;
-// (b) Hero TANPA background animasi — latar polos mengikuti warna dasar
+// REVISI DESAIN: (a) skema monokrom murni - hitam/putih/grayscale tanpa warna;
+// (b) Hero TANPA background animasi - latar polos mengikuti warna dasar
 // platform (#050505 dark); GradientASCII dihapus dari scope (background hero
 // ditangani terpisah di luar sesi ini); (c) aset pre-footer belum tersedia →
 // placeholder abu-abu solid; (d) ikon via Animate UI (lucide).
-// Task R5: integrasi komponen Animate UI tambahan — CountingNumber untuk
+// Task R5: integrasi komponen Animate UI tambahan - CountingNumber untuk
 // statistik Social Proof (S5) dan RippleButton untuk CTA utama hero (S1) +
 // CTA "Buka Toko Gratis" (S6). Ripple memakai currentColor (grayscale,
 // adaptif dua tema); scale hover/tap subtle (1.02/0.98) sesuai aturan premium.
@@ -89,7 +89,7 @@ const HOW_IT_WORKS = [
   {
     icon: MousePointerClick,
     title: "Pilih Produk",
-    desc: "Jelajahi katalog dengan filter kategori, harga, dan rating — lalu checkout dalam hitungan detik, tanpa kartu kredit.",
+    desc: "Jelajahi katalog dengan filter kategori, harga, dan rating - lalu checkout dalam hitungan detik, tanpa kartu kredit.",
   },
   {
     icon: PackageCheck,
@@ -99,7 +99,7 @@ const HOW_IT_WORKS = [
   {
     icon: Rocket,
     title: "Eksekusi & Bangun Sendiri",
-    desc: "Tempel prompt ke AI tool favoritmu atau jalankan templatenya — hasil akhir sepenuhnya jadi kendali kamu.",
+    desc: "Tempel prompt ke AI tool favoritmu atau jalankan templatenya - hasil akhir sepenuhnya jadi kendali kamu.",
   },
 ] as const;
 
@@ -107,7 +107,7 @@ const SELLER_BENEFITS = [
   {
     icon: QrCode,
     title: "QR Pembayaran Milik Sendiri",
-    desc: "Dana pembeli masuk langsung ke rekeningmu — bukan saldo platform.",
+    desc: "Dana pembeli masuk langsung ke rekeningmu - bukan saldo platform.",
   },
   {
     icon: BadgePercent,
@@ -117,18 +117,18 @@ const SELLER_BENEFITS = [
   {
     icon: ListChecks,
     title: "Onboarding 4 Langkah",
-    desc: "Daftar, atur toko & QR, unggah produk pertama, lolos verifikasi — toko langsung Live.",
+    desc: "Daftar, atur toko & QR, unggah produk pertama, lolos verifikasi - toko langsung Live.",
   },
 ] as const;
 
 const FAQ_ITEMS = [
   {
     q: "Bagaimana cara membayar di Althentic?",
-    a: "Pilih produk, buat pesanan, lalu transfer ke QR atau rekening pembayaran milik seller. Unggah bukti transfernya — verifikasi AI dan tim kami berjalan paralel, dan begitu statusnya Lunas, file langsung tersedia untuk diunduh.",
+    a: "Pilih produk, buat pesanan, lalu transfer ke QR atau rekening pembayaran milik seller. Unggah bukti transfernya - verifikasi AI dan tim kami berjalan paralel, dan begitu statusnya Lunas, file langsung tersedia untuk diunduh.",
   },
   {
     q: "Apakah perlu kartu kredit?",
-    a: "Tidak. Seluruh pembayaran memakai kanal lokal — transfer bank atau QRIS. Kamu hanya perlu memverifikasi email sekali sebelum checkout pertamamu.",
+    a: "Tidak. Seluruh pembayaran memakai kanal lokal - transfer bank atau QRIS. Kamu hanya perlu memverifikasi email sekali sebelum checkout pertamamu.",
   },
   {
     q: "Format file apa yang saya dapatkan?",
@@ -144,7 +144,7 @@ const FAQ_ITEMS = [
   },
   {
     q: "Bagaimana cara menjadi seller?",
-    a: "Daftar akun gratis, jalani onboarding 4 langkah (profil toko, QR pembayaran, produk pertama, verifikasi), tunggu inspeksi otomatis lolos — dan tokomu langsung tampil di katalog.",
+    a: "Daftar akun gratis, jalani onboarding 4 langkah (profil toko, QR pembayaran, produk pertama, verifikasi), tunggu inspeksi otomatis lolos - dan tokomu langsung tampil di katalog.",
   },
   {
     q: "Apakah promptnya bisa dipakai di AI tool apa saja?",
@@ -241,7 +241,7 @@ function useLandingStats() {
 }
 
 // -----------------------------------------------------------------------------
-// Section 1 — Hero (latar polos #050505 — revisi desain #3, tanpa background animasi)
+// Section 1 - Hero (latar polos #050505 - revisi desain #3, tanpa background animasi)
 // -----------------------------------------------------------------------------
 
 function HeroSection() {
@@ -255,7 +255,7 @@ function HeroSection() {
       aria-labelledby="hero-heading"
       className="relative flex min-h-[88vh] items-center overflow-hidden bg-background"
     >
-      {/* REVISI DESAIN #3: Hero tanpa background animasi — latar polos
+      {/* REVISI DESAIN #3: Hero tanpa background animasi - latar polos
           mengikuti warna dasar platform (#050505 dark). Tidak ada alternatif
           background apa pun; dekorasi hero ditangani terpisah di luar sesi ini. */}
 
@@ -278,12 +278,12 @@ function HeroSection() {
 
         <p className="mx-auto mt-5 max-w-2xl text-balance text-base leading-relaxed text-muted-foreground sm:text-lg">
           Pilih prompt siap pakai dari seller terverifikasi, terima file
-          lengkapnya, dan langsung eksekusi di AI tool favoritmu — tanpa kartu
+          lengkapnya, dan langsung eksekusi di AI tool favoritmu - tanpa kartu
           kredit.
         </p>
 
         <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4">
-          {/* CTA utama → katalog (RippleButton Animate UI — Task R5).
+          {/* CTA utama → katalog (RippleButton Animate UI - Task R5).
               Ripple = currentColor (grayscale, kontras di dua tema: gelap di
               tombol terang dark-mode, terang di tombol gelap light-mode).
               transition dibatasi ke translate/box-shadow agar tidak melawan
@@ -335,7 +335,7 @@ function HeroSection() {
 }
 
 // -----------------------------------------------------------------------------
-// Section 2 — Value Proposition / How It Works (3 langkah, glass + stagger)
+// Section 2 - Value Proposition / How It Works (3 langkah, glass + stagger)
 // -----------------------------------------------------------------------------
 
 function HowItWorksSection() {
@@ -346,7 +346,7 @@ function HowItWorksSection() {
           id="cara-kerja-title"
           eyebrow="Cara Kerja"
           title="Dari Prompt ke Hasil dalam 3 Langkah"
-          description="Tanpa langganan, tanpa ribet — kamu pegang kendali penuh atas eksekusinya."
+          description="Tanpa langganan, tanpa ribet - kamu pegang kendali penuh atas eksekusinya."
         />
 
         <StaggerGroup className="mt-10 grid gap-5 md:mt-12 md:gap-6 lg:grid-cols-3">
@@ -376,7 +376,7 @@ function HowItWorksSection() {
 }
 
 // -----------------------------------------------------------------------------
-// Section 3 — Featured / Trending Products (fetch /api/catalog?sort=weekly)
+// Section 3 - Featured / Trending Products (fetch /api/catalog?sort=weekly)
 // -----------------------------------------------------------------------------
 
 function TrendingSection() {
@@ -396,7 +396,7 @@ function TrendingSection() {
             align="left"
             eyebrow="Terlaris Minggu Ini"
             title="Sedang Naik Daun"
-            description="Delapan produk paling banyak terverifikasi tujuh hari terakhir — dari template website sampai prompt riset."
+            description="Delapan produk paling banyak terverifikasi tujuh hari terakhir - dari template website sampai prompt riset."
           />
           <button
             type="button"
@@ -434,7 +434,7 @@ function TrendingSection() {
             <div className="glass-card col-span-full flex flex-col items-center gap-3 px-6 py-10 text-center">
               <PackageOpen className="size-6 text-muted-foreground" aria-hidden="true" />
               <p className="text-sm text-muted-foreground">
-                Belum ada produk terlaris minggu ini — jadilah seller pertama
+                Belum ada produk terlaris minggu ini - jadilah seller pertama
                 yang mengisinya.
               </p>
             </div>
@@ -454,7 +454,7 @@ function TrendingSection() {
 }
 
 // -----------------------------------------------------------------------------
-// Section 4 — Kategori Produk (entry ke katalog per kategori)
+// Section 4 - Kategori Produk (entry ke katalog per kategori)
 // -----------------------------------------------------------------------------
 
 function CategoriesSection() {
@@ -465,7 +465,7 @@ function CategoriesSection() {
           id="kategori-title"
           eyebrow="Kategori"
           title="Temukan Prompt untuk Setiap Kebutuhan"
-          description="Enam kategori, satu standar kualitas — pilih titik mulaimu."
+          description="Enam kategori, satu standar kualitas - pilih titik mulaimu."
         />
 
         <StaggerGroup className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 md:gap-6 lg:grid-cols-3">
@@ -502,7 +502,7 @@ function CategoriesSection() {
 }
 
 // -----------------------------------------------------------------------------
-// Section 5 — Social Proof (statistik + testimoni dari /api/stats)
+// Section 5 - Social Proof (statistik + testimoni dari /api/stats)
 // -----------------------------------------------------------------------------
 
 function SocialProofSection() {
@@ -513,7 +513,7 @@ function SocialProofSection() {
   // dianimasikan count-up saat kartu masuk viewport (sekali saja). Format
   // Indonesia: thousandSeparator=".", rating "4,9" (decimalSeparator=",").
   // Reduced motion: CountingNumber otomatis melompat ke angka final
-  // (value.jump) — tetap terbaca tanpa animasi.
+  // (value.jump) - tetap terbaca tanpa animasi.
   interface StatItem {
     icon: IconComponent;
     label: string;
@@ -523,7 +523,7 @@ function SocialProofSection() {
     thousandSeparator?: string;
     /** Teks biasa di luar CountingNumber (mis. " / 5"). */
     suffix?: string;
-    /** false → nilai belum tersedia (mis. belum ada review) → tampil "—". */
+    /** false → nilai belum tersedia (mis. belum ada review) → tampil "-". */
     hasValue?: boolean;
   }
 
@@ -570,7 +570,7 @@ function SocialProofSection() {
           id="social-proof-title"
           eyebrow="Bukti Nyata"
           title="Dipercaya Pekerja AI di Indonesia"
-          description="Setiap angka berasal dari transaksi nyata yang terverifikasi — bukan estimasi pemasaran."
+          description="Setiap angka berasal dari transaksi nyata yang terverifikasi - bukan estimasi pemasaran."
         />
 
         {loading ? (
@@ -610,7 +610,7 @@ function SocialProofSection() {
           </div>
         ) : (
           <>
-            {/* Angka besar (dl semantik: dt label, dd nilai) — CountingNumber
+            {/* Angka besar (dl semantik: dt label, dd nilai) - CountingNumber
                 Animate UI: count-up saat in-view (margin -64px konsisten dengan
                 Reveal), delay mengikuti stagger kartu 80 ms; sr-only final
                 number sudah disediakan komponen untuk pembaca layar. */}
@@ -632,7 +632,7 @@ function SocialProofSection() {
                   </dt>
                   <dd className="order-1 text-3xl font-extrabold tracking-tight text-primary sm:text-4xl">
                     {s.hasValue === false ? (
-                      "—"
+                      "-"
                     ) : (
                       <>
                         <CountingNumber
@@ -699,7 +699,7 @@ function SocialProofSection() {
 }
 
 // -----------------------------------------------------------------------------
-// Section 6 — Seller CTA (sekunder, panel glass + 3 benefit)
+// Section 6 - Seller CTA (sekunder, panel glass + 3 benefit)
 // -----------------------------------------------------------------------------
 
 function SellerCtaSection() {
@@ -728,12 +728,12 @@ function SellerCtaSection() {
                   Punya Prompt Andalan? Jual di Althentic.
                 </h2>
                 <p className="mt-3 max-w-xl text-balance leading-relaxed text-muted-foreground">
-                  Kamu fokus meracik prompt terbaik — verifikasi pembayaran,
+                  Kamu fokus meracik prompt terbaik - verifikasi pembayaran,
                   distribusi file, dan peninjauan kualitas biar kami yang urus.
                 </p>
 
                 <div className="mt-7 flex flex-wrap items-center gap-3">
-                  {/* RippleButton Animate UI (Task R5) — ripple currentColor
+                  {/* RippleButton Animate UI (Task R5) - ripple currentColor
                       grayscale, hover/tap scale subtle 1.02/0.98. */}
                   <RippleButton
                     type="button"
@@ -785,7 +785,7 @@ function SellerCtaSection() {
 }
 
 // -----------------------------------------------------------------------------
-// Section 7 — FAQ (Accordion shadcn, 8 pertanyaan sales-oriented)
+// Section 7 - FAQ (Accordion shadcn, 8 pertanyaan sales-oriented)
 // -----------------------------------------------------------------------------
 
 function FaqSection() {
@@ -796,7 +796,7 @@ function FaqSection() {
           id="faq-title"
           eyebrow="FAQ"
           title="Masih Ada yang Ingin Ditanyakan?"
-          description="Jawaban singkat untuk pertanyaan yang paling sering masuk — sisanya ada di Dokumentasi."
+          description="Jawaban singkat untuk pertanyaan yang paling sering masuk - sisanya ada di Dokumentasi."
         />
 
         <Reveal className="mt-10 md:mt-12">
@@ -821,13 +821,13 @@ function FaqSection() {
 }
 
 // -----------------------------------------------------------------------------
-// Section 8 — Pre-footer (placeholder abu-abu solid — revisi desain #4, aset
+// Section 8 - Pre-footer (placeholder abu-abu solid - revisi desain #4, aset
 // isometrik grayscale belum tersedia; jangan digenerate/diasumsikan di sini).
 // Section 9 (footer) dirender global app shell.
 // -----------------------------------------------------------------------------
 
 function IsometricSection() {
-  // REVISI DESAIN #4: aset isometrik grayscale belum tersedia — placeholder
+  // REVISI DESAIN #4: aset isometrik grayscale belum tersedia - placeholder
   // sederhana (area abu-abu solid) di posisi yang sama, tanpa mengasumsikan
   // desain aset pengganti. Rasio 16:9 mengikuti spesifikasi aset (Lampiran B).
   return (
@@ -841,7 +841,7 @@ function IsometricSection() {
 }
 
 // -----------------------------------------------------------------------------
-// LandingPage — komposisi 9 section (footer global, tidak dirender ulang)
+// LandingPage - komposisi 9 section (footer global, tidak dirender ulang)
 // -----------------------------------------------------------------------------
 
 export function LandingPage() {
@@ -855,7 +855,7 @@ export function LandingPage() {
       <SellerCtaSection />
       <FaqSection />
       <IsometricSection />
-      {/* Section 9 — Footer: sudah dirender global oleh app shell
+      {/* Section 9 - Footer: sudah dirender global oleh app shell
           (src/components/app/footer.tsx). Tidak diduplikasi di sini. */}
     </>
   );
