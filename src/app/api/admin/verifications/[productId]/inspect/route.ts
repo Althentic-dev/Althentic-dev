@@ -1,4 +1,4 @@
-// POST /api/admin/verifications/[productId]/inspect — jalankan inspeksi ulang
+// POST /api/admin/verifications/[productId]/inspect - jalankan inspeksi ulang
 // (re-inspeksi mingguan SPEC-11-01 / link_change SPEC-11-05)
 import { NextRequest } from "next/server";
 import { db } from "@/lib/db";
