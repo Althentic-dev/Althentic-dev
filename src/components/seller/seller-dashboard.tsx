@@ -1,7 +1,7 @@
 "use client";
 
 // =============================================================================
-// SellerDashboard — dashboard seller:
+// SellerDashboard - dashboard seller:
 // - Overview: 4 kartu analytics + grafik 30 hari + 5 produk teratas (SPEC-02-08)
 // - Produk: CRUD + kirim verifikasi + arsip/unarchive + laporan inspeksi (SPEC-02-09, SPEC-08-03)
 // - Order: filter default Menunggu Verifikasi + Booked; badge Perlu Tindakan;
@@ -181,7 +181,7 @@ function OverviewTab() {
     { label: "Transaksi Terverifikasi", value: String(stats.verifiedTx), icon: BadgeCheck, tint: "text-emerald-500" },
     { label: "Revenue Kotor", value: formatRupiah(stats.grossRevenue), icon: TrendingUp, tint: "text-primary" },
     { label: "Commission Owed Berjalan", value: formatRupiah(stats.commissionOwed), icon: Coins, tint: "text-amber-500" },
-    { label: "Produk Terlaris", value: stats.topProduct?.title ?? "—", icon: Package, tint: "text-primary", small: true },
+    { label: "Produk Terlaris", value: stats.topProduct?.title ?? "-", icon: Package, tint: "text-primary", small: true },
   ];
 
   return (
@@ -322,7 +322,7 @@ function ProductsTab() {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <p className="text-sm text-muted-foreground">
-          Verifikasi produk menilai legalitas &amp; keamanan (link hidup, deskripsi tidak menipu) — bukan kualitas isi prompt (GAP-07).
+          Verifikasi produk menilai legalitas &amp; keamanan (link hidup, deskripsi tidak menipu) - bukan kualitas isi prompt (GAP-07).
         </p>
         <Button className="rounded-full" onClick={() => setCreating(true)}>
           <PackagePlus className="h-4 w-4" /> Produk Baru
@@ -373,7 +373,7 @@ function ProductsTab() {
                 </p>
                 {p.status === "rejected" && p.rejectedReason && (
                   <p className="mt-1.5 rounded-lg bg-red-500/10 px-2.5 py-1.5 text-xs text-red-600 dark:text-red-400">
-                    Ditolak: {p.rejectedReason} — perbaiki &amp; kirim ulang (tenggat 14 hari).
+                    Ditolak: {p.rejectedReason} - perbaiki &amp; kirim ulang (tenggat 14 hari).
                   </p>
                 )}
               </div>
@@ -436,7 +436,7 @@ function ProductsTab() {
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex items-center justify-between">
-                <h2 className="text-lg font-bold">Laporan Inspeksi — {inspectOpen.title}</h2>
+                <h2 className="text-lg font-bold">Laporan Inspeksi - {inspectOpen.title}</h2>
                 <Button variant="ghost" size="icon" onClick={() => setInspectOpen(null)} aria-label="Tutup">
                   <X className="h-4 w-4" />
                 </Button>
@@ -608,7 +608,7 @@ function ProductForm({
             <Textarea id="pf-desc" className="min-h-28" value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Jelaskan isi, cara pakai, dan hasil yang buyer dapatkan…" />
           </div>
 
-          {/* Tipe jual (hanya kategori website yang bisa >1 — GAP-14) */}
+          {/* Tipe jual (hanya kategori website yang bisa >1 - GAP-14) */}
           <div>
             <Label>Tipe jual &amp; harga</Label>
             {category !== "website" && !isEdit && (
@@ -691,7 +691,7 @@ function ProductForm({
             <p className="text-xs text-muted-foreground">Wajib hanya untuk tipe yang menyertakan template jadi.</p>
           </div>
 
-          {/* Preview (maks 5 — GAP-14) */}
+          {/* Preview (maks 5 - GAP-14) */}
           {!isEdit && (
             <div>
               <Label>Preview gambar (maks 5, JPG/PNG/WEBP, 5MB)</Label>
@@ -728,7 +728,7 @@ function ProductForm({
               <Label htmlFor="pf-vnote">Catatan versi (opsional)</Label>
               <Input id="pf-vnote" className="h-11 rounded-xl" value={versionNote} onChange={(e) => setVersionNote(e.target.value)} placeholder="mis. Revisi ZIP inti v2" />
               <p className="text-xs text-muted-foreground">
-                Perubahan ID file Drive menaikkan versi &amp; memberi tahu buyer lama (hanya saat ZIP inti berubah — GAP-05).
+                Perubahan ID file Drive menaikkan versi &amp; memberi tahu buyer lama (hanya saat ZIP inti berubah - GAP-05).
               </p>
             </div>
           )}
@@ -802,7 +802,7 @@ function OrdersTab() {
 
   const { toast } = useToast();
   const toast2 = (action: "approve" | "reject") =>
-    toast({ title: action === "approve" ? "Order disetujui — buyer dapat mengakses file" : "Order ditolak" });
+    toast({ title: action === "approve" ? "Order disetujui - buyer dapat mengakses file" : "Order ditolak" });
   const toast3 = (err: Error) => toast({ title: "Gagal", description: err.message, variant: "destructive" });
 
   const viewReceipt = async (orderId: string) => {
@@ -835,7 +835,7 @@ function OrdersTab() {
           </span>
           <div>
             <p className="text-sm font-bold">{actionCount} order menunggu aksi manual kamu</p>
-            <p className="text-xs text-muted-foreground">Batas respons 24 jam — tanpa respons, order batal otomatis (SPEC-02-07).</p>
+            <p className="text-xs text-muted-foreground">Batas respons 24 jam - tanpa respons, order batal otomatis (SPEC-02-07).</p>
           </div>
         </div>
       )}
@@ -901,13 +901,13 @@ function OrdersTab() {
                 {o.latestReceipt && (
                   <div className="mt-3 flex flex-wrap items-center gap-2 text-xs">
                     <span className="rounded-lg bg-muted px-2.5 py-1">
-                      Nominal: <b>{o.latestReceipt.amount != null ? formatRupiah(o.latestReceipt.amount) : "—"}</b>
+                      Nominal: <b>{o.latestReceipt.amount != null ? formatRupiah(o.latestReceipt.amount) : "-"}</b>
                     </span>
                     <span className="rounded-lg bg-muted px-2.5 py-1">
-                      Pengirim: <b>{o.latestReceipt.senderName ?? "—"}</b>
+                      Pengirim: <b>{o.latestReceipt.senderName ?? "-"}</b>
                     </span>
                     <span className="rounded-lg bg-muted px-2.5 py-1">
-                      Waktu: <b>{o.latestReceipt.transferAt ? formatDate(o.latestReceipt.transferAt, true) : "—"}</b>
+                      Waktu: <b>{o.latestReceipt.transferAt ? formatDate(o.latestReceipt.transferAt, true) : "-"}</b>
                     </span>
                     {o.latestReceipt.receiptUrl && (
                       <button className="rounded-lg bg-primary/10 px-2.5 py-1 font-semibold text-primary hover:bg-primary/20" onClick={() => viewReceipt(o.id)}>
@@ -1074,7 +1074,7 @@ function CommissionsTab() {
       <div className="glass-card overflow-hidden">
         <h2 className="p-5 pb-3 text-sm font-bold">Invoice Komisi</h2>
         {data.invoices.length === 0 ? (
-          <p className="px-5 pb-6 text-sm text-muted-foreground">Belum ada invoice — terbit otomatis saat Commission Owed mencapai threshold.</p>
+          <p className="px-5 pb-6 text-sm text-muted-foreground">Belum ada invoice - terbit otomatis saat Commission Owed mencapai threshold.</p>
         ) : (
           <table className="w-full text-sm">
             <thead>
@@ -1146,7 +1146,7 @@ function CommissionsTab() {
               {data.ledger.length === 0 && (
                 <tr>
                   <td colSpan={4} className="px-5 py-8 text-center text-muted-foreground">
-                    Belum ada komisi tercatat — komisi hanya dicatat saat transaksi terverifikasi.
+                    Belum ada komisi tercatat - komisi hanya dicatat saat transaksi terverifikasi.
                   </td>
                 </tr>
               )}
