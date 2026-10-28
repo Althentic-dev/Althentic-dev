@@ -1,6 +1,6 @@
 // =============================================================================
-// Althentic.Dev — Konstanta domain (GAP-14: kategori, tipe jual, chip harga,
-// filter rating; GAP-23: 8 preset aksen — nilai "default diusulkan")
+// Althentic.Dev - Konstanta domain (GAP-14: kategori, tipe jual, chip harga,
+// filter rating; GAP-23: 8 preset aksen - nilai "default diusulkan")
 // =============================================================================
 
 // --- Kategori produk (GAP-14) ---
@@ -55,7 +55,7 @@ export const SELL_TYPES = [
     id: "template",
     label: "Template Jadi",
     short: "Template",
-    desc: "File siap pakai tinggal eksekusi — wajib live demo.",
+    desc: "File siap pakai tinggal eksekusi - wajib live demo.",
     requiresDemo: true,
   },
   {
@@ -129,7 +129,7 @@ export const ORDER_STATUS = {
 
 export type OrderStatus = string;
 
-// Label buyer-facing (SPEC-04-05 — 6 status + Booked)
+// Label buyer-facing (SPEC-04-05 - 6 status + Booked)
 export function orderStatusLabel(status: string, verifyPath?: string | null): string {
   switch (status) {
     case "pending_payment":
