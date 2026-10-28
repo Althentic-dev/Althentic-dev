@@ -64,6 +64,14 @@
 - [x] Setelah PR dibuat, tulis review terkonsolidasi pada `docs/review/CODE_REVIEW.md`.
 - [x] Buat Issue dan PR yang terhubung; biarkan PR terbuka untuk ditinjau pemilik.
 
+### PR: Normalisasi em dash pada file proyek
+
+- [ ] Ganti seluruh karakter em dash pada file teks tracked dengan tanda hubung biasa, tanpa mengubah makna teks.
+- [ ] Ganti em dash pada nilai teks database lokal SQLite dengan transaksi; pastikan integritas database dan tidak ada U+2014 tersisa.
+- [ ] Perbarui changelog dan graph proyek sesuai konvensi repository.
+- [ ] Jalankan pemeriksaan diff, encoding, dan pemindaian menyeluruh; jalankan lint/build yang relevan jika perubahan mendukungnya.
+- [ ] Buat Issue dan PR terkait, tulis review PR pada file CODE_REVIEW di worktree, dan biarkan PR terbuka untuk ditinjau pemilik.
+
 ## Deferred work
 
 - [ ] Audit dinamis penuh hanya dijalankan setelah tersedia runner OS sandbox yang menegakkan batas jaringan, environment, filesystem, dan sumber daya.
