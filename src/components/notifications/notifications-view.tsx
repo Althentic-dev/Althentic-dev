@@ -1,6 +1,6 @@
 "use client";
 
-// NotificationsView — halaman penuh notifikasi (SPEC-13-02)
+// NotificationsView - halaman penuh notifikasi (SPEC-13-02)
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Bell } from "@/components/animate-ui/icons/bell";
