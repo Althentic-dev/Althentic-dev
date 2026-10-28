@@ -1,5 +1,5 @@
-// POST /api/reports — laporkan produk (SPEC-10-03: 5 kategori + detail opsional)
-// POST /api/reports?dispute=1 — ajukan dispute (GAP-18: batas 7 hari setelah completed)
+// POST /api/reports - laporkan produk (SPEC-10-03: 5 kategori + detail opsional)
+// POST /api/reports?dispute=1 - ajukan dispute (GAP-18: batas 7 hari setelah completed)
 import { NextRequest } from "next/server";
 import { z } from "zod";
 import { db } from "@/lib/db";
@@ -46,7 +46,7 @@ export async function POST(req: NextRequest) {
           detail: parsed.data.detail ?? null,
         },
       });
-      return json({ ok: true, message: "Laporan terkirim — tim moderasi akan meninjau." }, 201);
+      return json({ ok: true, message: "Laporan terkirim - tim moderasi akan meninjau." }, 201);
     }
 
     // ---- Dispute (GAP-18) ----
