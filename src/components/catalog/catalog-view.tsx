@@ -1,7 +1,7 @@
 "use client";
 
 // =============================================================================
-// CatalogView — katalog utama (SPEC-03-01..05, GAP-14)
+// CatalogView - katalog utama (SPEC-03-01..05, GAP-14)
 // Filter tersimpan di URL (shareable + back browser), search debounce 300ms,
 // grid 3 kolom desktop / 2 tablet / 1 mobile, pagination 24/halaman.
 // =============================================================================
@@ -125,17 +125,17 @@ export function CatalogView() {
         <div>
           <h1 className="text-2xl font-bold tracking-tight md:text-3xl">Katalog Prompt</h1>
           {/* SlidingNumber Animate UI (Task R5): jumlah produk aktif bergulir
-              (odometer) saat filter/search mengubah total — feedback halus bahwa
+              (odometer) saat filter/search mengubah total - feedback halus bahwa
               hasil diperbarui. initiallyStable → tidak menggulung saat mount,
               hanya saat nilai berubah. Reduced motion → digit melompat instan. */}
           <p className="mt-1 text-sm text-muted-foreground">
             {data ? (
               <>
                 <SlidingNumber number={data.total} initiallyStable thousandSeparator="." />
-                {" produk aktif — "}
+                {" produk aktif - "}
               </>
             ) : (
-              "Memuat… — "
+              "Memuat… - "
             )}
             pembayaran QR lokal, harga Rupiah.
           </p>
@@ -193,7 +193,7 @@ export function CatalogView() {
         ))}
       </div>
 
-      {/* Filter chips: tipe jual (hanya relevan kategori website — GAP-14) */}
+      {/* Filter chips: tipe jual (hanya relevan kategori website - GAP-14) */}
       <div className="mb-3 flex flex-wrap items-center gap-2" role="group" aria-label="Filter tipe jual">
         <span className="mr-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Tipe</span>
         <FilterChip active={!activeType} onClick={() => setParam("type", null)}>
