@@ -1,4 +1,4 @@
-# PRD.md — Product Requirements Document Althentic.Dev
+# PRD.md - Product Requirements Document Althentic.Dev
 
 **Tanggal penyusunan:** 27 Oktober 2026.
 **Sumber keputusan utama:** `althentic-brainstorm-result-final.md`, ekspor 2026-10-27 09:49 WIB; Konteks Terkunci dan 120 Q&A.
@@ -13,7 +13,7 @@ PRD ini menghubungkan arah produk, pengguna, cakupan, kebutuhan fungsional/nonfu
 2. ID `PRD-xx-yy` memetakan langsung ke `SPEC-xx-yy`: section `xx`, pertanyaan ke-`yy` pada brainstorming. ID tersebut hanya penanda dokumentasi.
 3. Kriteria penerimaan merupakan cara memeriksa keputusan sumber, bukan penambahan fitur, target angka, ataupun pilihan implementasi.
 4. Jawaban yang belum selaras dicatat bersama. PRD tidak menetapkan prioritas antarjawaban untuk menyelesaikan konflik secara sepihak.
-5. Rincian yang belum tersedia diberi tanda **[BELUM DIPUTUSKAN — perlu klarifikasi]**.
+5. Rincian yang belum tersedia diberi tanda **[BELUM DIPUTUSKAN - perlu klarifikasi]**.
 6. Lampiran GradientASCII dan isometric block cluster hanya menjadi referensi DESIGN.md; keduanya tidak digunakan untuk menurunkan kebutuhan baru dalam PRD ini.
 7. Bagian strategi/fase kedua tetap mengikuti konteks fasenya. Pencantumannya dalam daftar kebutuhan tidak otomatis menjadikannya fitur peluncuran awal.
 
@@ -25,19 +25,19 @@ Althentic.Dev adalah marketplace prompt serbaguna dan multi-tenant. Setiap selle
 
 Althentic tidak memegang uang transaksi buyer. Seller menggunakan QR bisnisnya sendiri; platform mencatat komisi atas transaksi terverifikasi dan menagihnya kepada seller sesuai aturan threshold.
 
-Pernyataan ini mengikuti Konteks Terkunci pada bagian 3. Riset masalah pengguna, estimasi ukuran pasar, persona demografis, dan validasi permintaan tidak tersedia dalam sumber: **[BELUM DIPUTUSKAN — perlu klarifikasi]**. PRD tidak mengarang hasil riset tersebut.
+Pernyataan ini mengikuti Konteks Terkunci pada bagian 3. Riset masalah pengguna, estimasi ukuran pasar, persona demografis, dan validasi permintaan tidak tersedia dalam sumber: **[BELUM DIPUTUSKAN - perlu klarifikasi]**. PRD tidak mengarang hasil riset tersebut.
 
 ### 2.2. Diferensiasi dan ukuran keberhasilan
 
-**Keputusan sumber — SPEC-16-11:**
+**Keputusan sumber - SPEC-16-11:**
 
 > Lokalisasi penuh: pembayaran QR lokal tanpa kartu internasional, kurasi dan komunitas berbahasa Indonesia, harga Rupiah.
 
-**Keputusan sumber — SPEC-16-15; metrik utama enam bulan pertama:**
+**Keputusan sumber - SPEC-16-15; metrik utama enam bulan pertama:**
 
 > Jumlah transaksi terverifikasi per bulan.
 
-Target numerik, baseline, rumus periode bulanan, dan nilai ambang keberhasilan: **[BELUM DIPUTUSKAN — perlu klarifikasi]**. GMV, komisi, rasio seller aktif/suspend, produk terlaris dan konsentrasi top-1 seller tetap merupakan metrik yang tercatat, tetapi tidak menggantikan metrik utama tersebut.
+Target numerik, baseline, rumus periode bulanan, dan nilai ambang keberhasilan: **[BELUM DIPUTUSKAN - perlu klarifikasi]**. GMV, komisi, rasio seller aktif/suspend, produk terlaris dan konsentrasi top-1 seller tetap merupakan metrik yang tercatat, tetapi tidak menggantikan metrik utama tersebut.
 
 ### 2.3. Akuisisi dan fase lanjutan
 
@@ -50,7 +50,7 @@ Target numerik, baseline, rumus periode bulanan, dan nilai ambang keberhasilan: 
 | Featured listing | Posisi teratas katalog/beranda selama 7 hari, harga tetap.                                                   | Monetisasi fase kedua; SPEC-16-06.                  |
 | Multi-toko       | Satu akun satu toko; multi-toko ditunda sampai ada seller nyata yang meminta.                                | Batas fase awal; SPEC-05-04.                        |
 
-Teks keputusan lengkap ada pada bagian 6. Harga featured listing, hubungan promosi gratis 30 hari dengan fase kedua, alur prompt gratis, target tanggal rilis, dan prioritas implementasi antarfitur: **[BELUM DIPUTUSKAN — perlu klarifikasi]**.
+Teks keputusan lengkap ada pada bagian 6. Harga featured listing, hubungan promosi gratis 30 hari dengan fase kedua, alur prompt gratis, target tanggal rilis, dan prioritas implementasi antarfitur: **[BELUM DIPUTUSKAN - perlu klarifikasi]**.
 
 ## 3. Konteks Terkunci
 
@@ -126,9 +126,9 @@ Tidak ditambahkan pemotongan scope MVP, prioritas P0/P1, target sprint, payment 
 
 Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong. Urutan kelompok mengikuti sumber dan bukan urutan pembangunan. Aturan pada bagian 3 dan sembilan kriteria tambahan pada bagian 7 tetap berlaku di luar 120 jawaban tersebut.
 
-### 6.1. Dashboard Super-Admin — Analytics Platform & Settings
+### 6.1. Dashboard Super-Admin - Analytics Platform & Settings
 
-#### PRD-01-01 — Periode default Analytics
+#### PRD-01-01 - Periode default Analytics
 
 **Referensi:** SPEC-01-01.
 
@@ -136,15 +136,15 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** “7 hari terakhir” sebagai periode default, dengan tab cepat: Hari ini / 7 hari / 30 hari / 90 hari / Custom.
 
-#### PRD-01-02 — Metrik 4 kartu Analytics
+#### PRD-01-02 - Metrik 4 kartu Analytics
 
 **Referensi:** SPEC-01-02.
 
 **Konteks keputusan:** Empat kartu metrik teratas Analytics Platform (di luar Overview yang sudah ada) harus menampilkan apa?
 
-**Keputusan:** GMV estimasi (nilai transaksi terverifikasi), jumlah transaksi terverifikasi, komisi tertagih vs outstanding, dan rasio seller aktif vs suspend — satu layar langsung menjawab “sehat atau tidaknya marketplace”.
+**Keputusan:** GMV estimasi (nilai transaksi terverifikasi), jumlah transaksi terverifikasi, komisi tertagih vs outstanding, dan rasio seller aktif vs suspend - satu layar langsung menjawab “sehat atau tidaknya marketplace”.
 
-#### PRD-01-03 — Grafik saat data harian kecil
+#### PRD-01-03 - Grafik saat data harian kecil
 
 **Referensi:** SPEC-01-03.
 
@@ -152,7 +152,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Line chart harian tetap ditampilkan, ditambah garis kedua berupa moving average 7 hari sebagai baseline tren.
 
-#### PRD-01-04 — Ekspor data Analytics
+#### PRD-01-04 - Ekspor data Analytics
 
 **Referensi:** SPEC-01-04.
 
@@ -160,7 +160,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Export CSV per-tabel (transaksi, komisi, seller) dengan semua filter aktif diterapkan ke file yang diunduh.
 
-#### PRD-01-05 — Komisi bisa diubah di Settings
+#### PRD-01-05 - Komisi bisa diubah di Settings
 
 **Referensi:** SPEC-01-05.
 
@@ -168,7 +168,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Field “Nominal komisi per transaksi” bisa diedit dari Settings, hanya berlaku untuk transaksi baru; setiap baris order menyimpan snapshot nominal komisi saat transaksi terjadi sehingga “Commission Owed” lama tidak berubah sendiri.
 
-#### PRD-01-06 — Threshold suspend menunggak
+#### PRD-01-06 - Threshold suspend menunggak
 
 **Referensi:** SPEC-01-06.
 
@@ -176,7 +176,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Setting “Batas tunggakan sebelum suspend” default Rp25.000 (setara 25 transaksi); saat terlewati toko di-suspend otomatis, dengan email peringatan otomatis saat saldo menyentuh 50% dan 80% dari batas.
 
-#### PRD-01-07 — Template WhatsApp fallback
+#### PRD-01-07 - Template WhatsApp fallback
 
 **Referensi:** SPEC-01-07.
 
@@ -186,7 +186,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 ### 6.2. Dashboard Admin/Seller
 
-#### PRD-02-01 — Aturan ubah slug toko
+#### PRD-02-01 - Aturan ubah slug toko
 
 **Referensi:** SPEC-02-01.
 
@@ -194,15 +194,15 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Slug bersifat permanen dan tidak pernah bisa diubah setelah toko dibuat.
 
-#### PRD-02-02 — Warna aksen branding toko
+#### PRD-02-02 - Warna aksen branding toko
 
 **Referensi:** SPEC-02-02.
 
 **Konteks keputusan:** Untuk branding toko, seberapa jauh seller boleh mengkustomisasi warna halaman tokonya?
 
-**Keputusan:** Seller memilih 1 warna aksen dari 8 preset terkurasi yang hanya diterapkan pada banner, badge, dan tombol CTA tokonya — tidak menyentuh kerangka UI platform.
+**Keputusan:** Seller memilih 1 warna aksen dari 8 preset terkurasi yang hanya diterapkan pada banner, badge, dan tombol CTA tokonya - tidak menyentuh kerangka UI platform.
 
-#### PRD-02-03 — Spesifikasi banner toko
+#### PRD-02-03 - Spesifikasi banner toko
 
 **Referensi:** SPEC-02-03.
 
@@ -210,7 +210,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Satu banner 1600x400 px (rasio 4:1), JPG/PNG maksimal 2 MB, dikonversi otomatis ke .webp, dengan preview tampilan desktop dan mobile sebelum disimpan.
 
-#### PRD-02-04 — Batas & struktur deskripsi toko
+#### PRD-02-04 - Batas & struktur deskripsi toko
 
 **Referensi:** SPEC-02-04.
 
@@ -218,7 +218,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Deskripsi maksimal 500 karakter plain-text, ditambah field terpisah untuk maksimal 3 link sosial media (Instagram, X, TikTok) yang dirender sebagai ikon resmi.
 
-#### PRD-02-05 — Filter default daftar order
+#### PRD-02-05 - Filter default daftar order
 
 **Referensi:** SPEC-02-05.
 
@@ -226,7 +226,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Tabel dengan kolom ID order, produk, harga, status (Menunggu Verifikasi / Booked / Lunas / Dibatalkan / Kedaluwarsa), waktu relatif (“2 jam lalu”); filter default “Menunggu Verifikasi + Booked” agar aksi menunggu selalu di atas.
 
-#### PRD-02-06 — Checklist approve manual
+#### PRD-02-06 - Checklist approve manual
 
 **Referensi:** SPEC-02-06.
 
@@ -234,7 +234,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Checklist 3 item wajib dicentang: nominal terlihat sesuai, nama/nomor pengirim terbaca di bukti, dan waktu transfer masuk akal dengan rentang order.
 
-#### PRD-02-07 — Batas respons order manual
+#### PRD-02-07 - Batas respons order manual
 
 **Referensi:** SPEC-02-07.
 
@@ -242,15 +242,15 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** 24 jam tanpa respons: order otomatis batal, buyer menerima email penjelasan dan boleh reorder, seller menerima peringatan kinerja pertama.
 
-#### PRD-02-08 — Metrik utama analytics toko
+#### PRD-02-08 - Metrik utama analytics toko
 
 **Referensi:** SPEC-02-08.
 
 **Konteks keputusan:** Analytics penjualan toko: metrik utama apa yang ditampilkan di halaman tersebut?
 
-**Keputusan:** Empat kartu: transaksi terverifikasi, revenue kotor, Commission Owed berjalan, dan produk terlaris — dilengkapi grafik 30 hari dan tabel 5 produk teratas.
+**Keputusan:** Empat kartu: transaksi terverifikasi, revenue kotor, Commission Owed berjalan, dan produk terlaris - dilengkapi grafik 30 hari dan tabel 5 produk teratas.
 
-#### PRD-02-09 — Perilaku arsip produk
+#### PRD-02-09 - Perilaku arsip produk
 
 **Referensi:** SPEC-02-09.
 
@@ -258,7 +258,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Produk hilang dari katalog dan pencarian, order dan statistik lama tetap tersedia di dashboard, dan produk bisa di-unarchive kapan saja ke status draft.
 
-#### PRD-02-10 — Ubah harga vs order berjalan
+#### PRD-02-10 - Ubah harga vs order berjalan
 
 **Referensi:** SPEC-02-10.
 
@@ -268,7 +268,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 ### 6.3. Katalog & Detail Produk
 
-#### PRD-03-01 — Struktur listing katalog
+#### PRD-03-01 - Struktur listing katalog
 
 **Referensi:** SPEC-03-01.
 
@@ -276,15 +276,15 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Grid kartu 3 kolom di desktop (2 tablet, 1 mobile): preview gambar, judul, harga termurah dari tipe jual yang tersedia, badge kategori, rating, dan nama toko.
 
-#### PRD-03-02 — Set & perilaku filter
+#### PRD-03-02 - Set & perilaku filter
 
 **Referensi:** SPEC-03-02.
 
 **Konteks keputusan:** Set filter katalog: filter apa saja yang ada dan bagaimana perilakunya?
 
-**Keputusan:** Filter Kategori, Tipe Jual (Template Jadi / Prompt saja / Bundle), Rentang Harga (chip preset), dan Rating Minimum — semuanya tersimpan sebagai URL query sehingga hasil filter bisa di-share dan tombol back browser berfungsi.
+**Keputusan:** Filter Kategori, Tipe Jual (Template Jadi / Prompt saja / Bundle), Rentang Harga (chip preset), dan Rating Minimum - semuanya tersimpan sebagai URL query sehingga hasil filter bisa di-share dan tombol back browser berfungsi.
 
-#### PRD-03-03 — Sort default katalog
+#### PRD-03-03 - Sort default katalog
 
 **Referensi:** SPEC-03-03.
 
@@ -292,7 +292,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Default “Terlaris minggu ini”, dengan opsi: Terbaru, Termurah, Termahal, Rating tertinggi.
 
-#### PRD-03-04 — Perilaku pencarian
+#### PRD-03-04 - Perilaku pencarian
 
 **Referensi:** SPEC-03-04.
 
@@ -300,7 +300,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Mencari di judul produk, deskripsi, dan nama toko; debounce 300ms; state “tidak ada hasil” menampilkan 3 chip kategori populer sebagai saran.
 
-#### PRD-03-05 — Pagination vs infinite scroll
+#### PRD-03-05 - Pagination vs infinite scroll
 
 **Referensi:** SPEC-03-05.
 
@@ -308,7 +308,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Pagination klasik 24 produk per halaman dengan nomor halaman dan URL yang ikut berganti.
 
-#### PRD-03-06 — Urutan blok halaman detail
+#### PRD-03-06 - Urutan blok halaman detail
 
 **Referensi:** SPEC-03-06.
 
@@ -316,7 +316,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Preview besar (klik untuk lightbox) → judul, nama toko, rating → pilihan tipe jual A/B/C dengan harga → deskripsi lengkap → info file (ukuran .zip, isi) → review → produk serupa.
 
-#### PRD-03-07 — Tampilan produk Booked
+#### PRD-03-07 - Tampilan produk Booked
 
 **Referensi:** SPEC-03-07.
 
@@ -324,17 +324,17 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Produk tetap bisa dibeli buyer lain secara paralel tanpa antrian.
 
-#### PRD-03-08 — Rating di kartu katalog
+#### PRD-03-08 - Rating di kartu katalog
 
 **Referensi:** SPEC-03-08.
 
 **Konteks keputusan:** Elemen rating seperti apa yang ditampilkan di kartu katalog?
 
-**Keputusan:** Bintang + jumlah review ringkas, contoh “4.8 (23)” — detail ulasan tetap di halaman detail.
+**Keputusan:** Bintang + jumlah review ringkas, contoh “4.8 (23)” - detail ulasan tetap di halaman detail.
 
 ### 6.4. Alur Checkout & Pembayaran
 
-#### PRD-04-01 — Guest checkout vs wajib akun
+#### PRD-04-01 - Guest checkout vs wajib akun
 
 **Referensi:** SPEC-04-01.
 
@@ -342,7 +342,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Wajib punya akun (email + password atau Google) sebelum masuk halaman checkout; registrasi bisa diselesaikan dari halaman produk tanpa kehilangan konteks.
 
-#### PRD-04-02 — Batas waktu Booked
+#### PRD-04-02 - Batas waktu Booked
 
 **Referensi:** SPEC-04-02.
 
@@ -350,7 +350,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** (Ketik sendiri) Booked disini seperti "Tambahkan ke keranjang" di Shoopee. jadi, buyer bisa mengeluarkan sendiri produk booked kapan saja dari keranjang.
 
-#### PRD-04-03 — Sumber nomor WhatsApp fallback
+#### PRD-04-03 - Sumber nomor WhatsApp fallback
 
 **Referensi:** SPEC-04-03.
 
@@ -358,7 +358,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Nomor WA diambil dari field wajib saat onboarding seller (divalidasi format Indonesia), dirender sebagai tombol “Hubungi via WhatsApp” dengan pesan template berisi ID order dan nama produk.
 
-#### PRD-04-04 — Spesifikasi upload bukti
+#### PRD-04-04 - Spesifikasi upload bukti
 
 **Referensi:** SPEC-04-04.
 
@@ -366,7 +366,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Satu gambar per percobaan, format JPG/PNG/HEIC maksimal 5 MB, wajib melalui layar preview sebelum submit, ditolak di sisi client jika bukan gambar valid.
 
-#### PRD-04-05 — Set status order buyer
+#### PRD-04-05 - Set status order buyer
 
 **Referensi:** SPEC-04-05.
 
@@ -374,7 +374,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** (Ketik sendiri) Enam status: Menunggu Pembayaran → Menunggu Verifikasi → Booked (jalur manual) → Lunas (file terbuka) → Dibatalkan → Kedaluwarsa, ditampilkan sebagai timeline stepper dengan timestamp tiap perubahan. seperti yang sudah saya bilang, jangan pernah menampilkan link google drive nya. jadi, link tersebut berada didalam button yang mana button tersebut ketika diklik, file .zip nya akan terdownload tanpa redirect ke google drive
 
-#### PRD-04-06 — Notifikasi email buyer
+#### PRD-04-06 - Notifikasi email buyer
 
 **Referensi:** SPEC-04-06.
 
@@ -382,7 +382,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Empat email: order dibuat (berisi instruksi bayar + QR), bukti diterima dan sedang diverifikasi, verifikasi berhasil (berisi akses file), verifikasi gagal (berisi alasan dan cara upload ulang).
 
-#### PRD-04-07 — Notifikasi seller
+#### PRD-04-07 - Notifikasi seller
 
 **Referensi:** SPEC-04-07.
 
@@ -390,7 +390,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Email untuk semua event order, ditambah badge counter menonjol di dashboard seller untuk order yang menunggu aksi manual.
 
-#### PRD-04-08 — Hak batalkan order
+#### PRD-04-08 - Hak batalkan order
 
 **Referensi:** SPEC-04-08.
 
@@ -400,7 +400,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 ### 6.5. Auth & Akun
 
-#### PRD-05-01 — Metode login utama
+#### PRD-05-01 - Metode login utama
 
 **Referensi:** SPEC-05-01.
 
@@ -408,7 +408,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Email + password sebagai jalur utama, dengan tombol “Lanjutkan dengan Google” sebagai alternatif yang setara.
 
-#### PRD-05-02 — Kewajiban verifikasi email
+#### PRD-05-02 - Kewajiban verifikasi email
 
 **Referensi:** SPEC-05-02.
 
@@ -416,7 +416,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Wajib verifikasi sebelum checkout pertama, bukan sebelum bisa melihat-lihat katalog; link verifikasi kedaluwarsa dalam 24 jam dan bisa dikirim ulang.
 
-#### PRD-05-03 — Mekanisme reset password
+#### PRD-05-03 - Mekanisme reset password
 
 **Referensi:** SPEC-05-03.
 
@@ -424,7 +424,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Email berisi link reset sekali-pakai yang kedaluwarsa dalam 1 jam; token disimpan ter-hash di database; setelah reset, semua session lama diturunkan.
 
-#### PRD-05-04 — Satu akun banyak toko
+#### PRD-05-04 - Satu akun banyak toko
 
 **Referensi:** SPEC-05-04.
 
@@ -432,7 +432,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Satu akun = satu toko untuk fase awal; kebutuhan multi-toko ditunda sampai ada seller nyata yang memintanya.
 
-#### PRD-05-05 — Naik role jadi seller
+#### PRD-05-05 - Naik role jadi seller
 
 **Referensi:** SPEC-05-05.
 
@@ -440,7 +440,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Semua akun otomatis berperan buyer; menjadi seller dilakukan lewat onboarding khusus (data toko + QR + API key semi-optional) tanpa approval manusia; kontrol kualitas dilakukan di verifikasi produk.
 
-#### PRD-05-06 — Cakupan settings akun
+#### PRD-05-06 - Cakupan settings akun
 
 **Referensi:** SPEC-05-06.
 
@@ -448,7 +448,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Ubah nama, ganti password, ganti email (wajib re-verifikasi), preferensi email notifikasi, dan hapus akun (soft-delete dengan masa tenggang 30 hari).
 
-#### PRD-05-07 — Durasi session login
+#### PRD-05-07 - Durasi session login
 
 **Referensi:** SPEC-05-07.
 
@@ -458,7 +458,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 ### 6.6. Onboarding Seller
 
-#### PRD-06-01 — Urutan langkah onboarding
+#### PRD-06-01 - Urutan langkah onboarding
 
 **Referensi:** SPEC-06-01.
 
@@ -466,7 +466,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Empat langkah berurutan: (1) profil toko (nama, slug, deskripsi), (2) unggah QR pembayaran, (3) API key AI semi-optional dengan penjelasan konsekuensi, (4) tambah produk pertama dan kirim verifikasi.
 
-#### PRD-06-02 — Validasi setup QR
+#### PRD-06-02 - Validasi setup QR
 
 **Referensi:** SPEC-06-02.
 
@@ -474,7 +474,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Wajib gambar JPG/PNG maksimal 2 MB dengan preview besar, plus checkbox pernyataan “Saya sudah menguji scan QR ini dan nominalnya masuk ke rekening saya”.
 
-#### PRD-06-03 — Seller skip API key
+#### PRD-06-03 - Seller skip API key
 
 **Referensi:** SPEC-06-03.
 
@@ -482,7 +482,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Lewati diperbolehkan dengan konsekuensi yang ditulis eksplisit di layar (“Semua order harus Anda approve manual”), dan langkah ini bisa diisi belakangan di Settings toko.
 
-#### PRD-06-04 — Minimum sebelum toko live
+#### PRD-06-04 - Minimum sebelum toko live
 
 **Referensi:** SPEC-06-04.
 
@@ -490,7 +490,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Setelah memiliki minimal 1 produk berstatus terverifikasi (lolos inspeksi); sebelum itu toko berstatus “Disiapkan” yang hanya terlihat oleh pemiliknya.
 
-#### PRD-06-05 — Draft onboarding tersimpan
+#### PRD-06-05 - Draft onboarding tersimpan
 
 **Referensi:** SPEC-06-05.
 
@@ -498,17 +498,17 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Setiap langkah tersimpan otomatis sebagai draft; dashboard menampilkan checklist “Toko Anda X% siap” dengan tombol langsung ke langkah yang belum selesai.
 
-#### PRD-06-06 — Layar sukses onboarding
+#### PRD-06-06 - Layar sukses onboarding
 
 **Referensi:** SPEC-06-06.
 
 **Konteks keputusan:** Apa yang seller lihat tepat setelah menyelesaikan seluruh onboarding?
 
-**Keputusan:** Halaman “Toko Anda siap” berisi 3 langkah berikutnya: bagikan link toko, kirim produk pertama untuk verifikasi, dan kenali halaman Komisi & Tagihan — dengan status verifikasi yang terlihat realtime.
+**Keputusan:** Halaman “Toko Anda siap” berisi 3 langkah berikutnya: bagikan link toko, kirim produk pertama untuk verifikasi, dan kenali halaman Komisi & Tagihan - dengan status verifikasi yang terlihat realtime.
 
 ### 6.7. AI Receipt Scanner
 
-#### PRD-07-01 — Toleransi nominal pencocokan
+#### PRD-07-01 - Toleransi nominal pencocokan
 
 **Referensi:** SPEC-07-01.
 
@@ -516,7 +516,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** (Ketik sendiri) nominal di bukti harus persis sama; kurang dari itu ditolak otomatis sebagai kurang bayar, lebih dari itu ditandai untuk review manual dan menghubungi seller untuk melaporkan.
 
-#### PRD-07-02 — Toleransi waktu transfer
+#### PRD-07-02 - Toleransi waktu transfer
 
 **Referensi:** SPEC-07-02.
 
@@ -524,7 +524,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Bukti harus dibuat dalam jendela sesi order: sejak buyer menekan “Bayar Sekarang” hingga batas kedaluwarsa order; timestamp lebih lama dari itu ditolak.
 
-#### PRD-07-03 — Peran nama pengirim
+#### PRD-07-03 - Peran nama pengirim
 
 **Referensi:** SPEC-07-03.
 
@@ -532,7 +532,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Nama pengirim dibaca AI dan ditampilkan sebagai informasi pendukung di UI, tapi bukan syarat lolos-gagal yang keras.
 
-#### PRD-07-04 — Deteksi bukti dipakai ulang
+#### PRD-07-04 - Deteksi bukti dipakai ulang
 
 **Referensi:** SPEC-07-04.
 
@@ -540,7 +540,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Setiap bukti yang lolos disimpan perceptual hash + file hash-nya; bukti baru yang hash-nya cocok dengan riwayat ditolak otomatis dengan alasan “bukti duplikat”.
 
-#### PRD-07-05 — Deteksi bukti dimanipulasi
+#### PRD-07-05 - Deteksi bukti dimanipulasi
 
 **Referensi:** SPEC-07-05.
 
@@ -548,7 +548,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Dua lapis: AI diminta menilai indikasi manipulasi (font tidak konsisten, artefak edit, metadata), dan cross-check logika nominal-format; hasil “curiga” masuk antrian review manual dengan area yang dicurigai ditandai.
 
-#### PRD-07-06 — Lokasi penyimpanan bukti .webp
+#### PRD-07-06 - Lokasi penyimpanan bukti .webp
 
 **Referensi:** SPEC-07-06.
 
@@ -556,7 +556,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Supabase Storage bucket private dengan path receipts/{orderId}/{timestamp}.webp; akses hanya lewat signed URL berumur pendek yang diterbitkan API.
 
-#### PRD-07-07 — Retensi & penghapusan bukti
+#### PRD-07-07 - Retensi & penghapusan bukti
 
 **Referensi:** SPEC-07-07.
 
@@ -564,7 +564,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** (Ketik sendiri) 30 hari untuk kebutuhan dispute; setelah itu job terjadwal menghapus file fisiknya sementara metadata transaksi tetap di database.
 
-#### PRD-07-08 — Enkripsi & validasi API key
+#### PRD-07-08 - Enkripsi & validasi API key
 
 **Referensi:** SPEC-07-08.
 
@@ -572,7 +572,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Dienkripsi at-rest dengan AES-256-GCM memakai key dari environment Vercel, divalidasi dengan satu panggilan test murah saat disimpan, dan hanya pernah ditampilkan ter-mask (mis. AIza...9f2c) setelahnya.
 
-#### PRD-07-09 — Rotasi API key
+#### PRD-07-09 - Rotasi API key
 
 **Referensi:** SPEC-07-09.
 
@@ -580,7 +580,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Seller bisa menekan “Ganti key” kapan saja di Settings toko; key lama langsung nonaktif; jika key gagal 3 kali berturut-turut, sistem mengirim email pengingat untuk rotasi.
 
-#### PRD-07-10 — Prosedur kedua key gagal
+#### PRD-07-10 - Prosedur kedua key gagal
 
 **Referensi:** SPEC-07-10.
 
@@ -590,7 +590,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 ### 6.8. Verifikasi Produk & MCP
 
-#### PRD-08-01 — Struktur laporan inspeksi
+#### PRD-08-01 - Struktur laporan inspeksi
 
 **Referensi:** SPEC-08-01.
 
@@ -598,7 +598,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Struktur tetap: status link Drive (OK / 404 / private), status HTTP live demo + screenshot desktop, ukuran file .zip, hash file, dan timestamp inspeksi.
 
-#### PRD-08-02 — Aturan reject otomatis
+#### PRD-08-02 - Aturan reject otomatis
 
 **Referensi:** SPEC-08-02.
 
@@ -606,7 +606,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Link Drive mati (404 atau private) ATAU live demo merespons HTTP 500 ke atas: langsung direject dengan email alasan ke seller dan tombol “Perbaiki & Kirim Ulang”.
 
-#### PRD-08-03 — Batas perbaikan produk reject
+#### PRD-08-03 - Batas perbaikan produk reject
 
 **Referensi:** SPEC-08-03.
 
@@ -614,7 +614,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** 14 hari sebelum produk otomatis masuk arsip, dengan email pengingat otomatis di hari ke-7.
 
-#### PRD-08-04 — Otorisasi MCP server
+#### PRD-08-04 - Otorisasi MCP server
 
 **Referensi:** SPEC-08-04.
 
@@ -622,7 +622,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Endpoint MCP hanya menerima request dengan secret token dari environment, tidak diekspos publik, dan setiap pemanggilan tercatat di log audit.
 
-#### PRD-08-05 — Batasan aksi AI via MCP
+#### PRD-08-05 - Batasan aksi AI via MCP
 
 **Referensi:** SPEC-08-05.
 
@@ -630,7 +630,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** AI boleh membaca laporan inspeksi dan data produk, lalu mengusulkan keputusan (approve/reject beserta alasan); eksekusi final tetap menunggu satu klik konfirmasi Super-Admin.
 
-#### PRD-08-06 — Isi audit trail verifikasi
+#### PRD-08-06 - Isi audit trail verifikasi
 
 **Referensi:** SPEC-08-06.
 
@@ -640,7 +640,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 ### 6.9. Komisi & Penagihan
 
-#### PRD-09-01 — Suspend: nasib produk & order
+#### PRD-09-01 - Suspend: nasib produk & order
 
 **Referensi:** SPEC-09-01.
 
@@ -648,7 +648,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Produk disembunyikan dari katalog; order berstatus Lunas tetap bisa mengakses filenya; order Menunggu Verifikasi/Booked diberi tenggat 24 jam untuk diselesaikan manual oleh seller.
 
-#### PRD-09-02 — Grace period penagihan
+#### PRD-09-02 - Grace period penagihan
 
 **Referensi:** SPEC-09-02.
 
@@ -656,7 +656,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** 7 hari setelah invoice terbit: email reminder di hari ke-1, ke-3, dan ke-5; suspend otomatis di hari ke-8 bila belum dibayar.
 
-#### PRD-09-03 — Bentuk reminder penagihan
+#### PRD-09-03 - Bentuk reminder penagihan
 
 **Referensi:** SPEC-09-03.
 
@@ -664,7 +664,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Email otomatis (Nodemailer) berisi jumlah tunggakan, cara bayar, batas tanggal suspend, ditambah banner kuning di dashboard seller saat tersisa 3 hari sebelum suspend.
 
-#### PRD-09-04 — Nilai threshold invoice
+#### PRD-09-04 - Nilai threshold invoice
 
 **Referensi:** SPEC-09-04.
 
@@ -672,7 +672,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Rp25.000 (setara 25 transaksi terverifikasi), dapat diubah Super-Admin di Settings.
 
-#### PRD-09-05 — Pencatatan order batal
+#### PRD-09-05 - Pencatatan order batal
 
 **Referensi:** SPEC-09-05.
 
@@ -680,7 +680,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Order batal/kedaluwarsa tidak pernah masuk “Commission Owed”; komisi hanya dicatat saat transaksi terverifikasi, dalam ledger terpisah per event.
 
-#### PRD-09-06 — Data verifikasi bukti komisi
+#### PRD-09-06 - Data verifikasi bukti komisi
 
 **Referensi:** SPEC-09-06.
 
@@ -690,7 +690,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 ### 6.10. Trust & Safety
 
-#### PRD-10-01 — Moderasi pra-publikasi
+#### PRD-10-01 - Moderasi pra-publikasi
 
 **Referensi:** SPEC-10-01.
 
@@ -698,7 +698,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Dua lapis: verifikasi teknis otomatis (link Drive, live demo) lewat skrip inspeksi, ditambah review singkat Super-Admin atas deskripsi, preview, dan harga untuk menangkap konten ilegal atau menyesatkan.
 
-#### PRD-10-02 — Alur takedown
+#### PRD-10-02 - Alur takedown
 
 **Referensi:** SPEC-10-02.
 
@@ -706,15 +706,15 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Super-Admin bisa takedown kapan saja namun wajib mengisi alasan terstruktur; seller menerima email alasan tersebut dan bisa mengajukan banding lewat jalur dispute.
 
-#### PRD-10-03 — Kategori laporan abuse
+#### PRD-10-03 - Kategori laporan abuse
 
 **Referensi:** SPEC-10-03.
 
 **Konteks keputusan:** Tombol laporkan produk: kategori laporan apa yang dipilih pelapor?
 
-**Keputusan:** Lima kategori tetap: Konten ilegal, Plagiarisme, Isi tidak sesuai deskripsi, Penipuan pembayaran, Lainnya — plus field detail opsional.
+**Keputusan:** Lima kategori tetap: Konten ilegal, Plagiarisme, Isi tidak sesuai deskripsi, Penipuan pembayaran, Lainnya - plus field detail opsional.
 
-#### PRD-10-04 — Kriteria refund buyer
+#### PRD-10-04 - Kriteria refund buyer
 
 **Referensi:** SPEC-10-04.
 
@@ -722,7 +722,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Refund didukung bila: file tidak bisa diakses, isi berbeda drastis dari deskripsi, atau seller tidak merespons 48 jam; “tidak cocok selera” bukan dasar refund.
 
-#### PRD-10-05 — Aturan penulisan review
+#### PRD-10-05 - Aturan penulisan review
 
 **Referensi:** SPEC-10-05.
 
@@ -730,7 +730,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Hanya buyer dengan order Lunas pada produk tersebut, satu review per pembelian, berisi rating + teks, dan boleh diedit sendiri dalam 7 hari pertama.
 
-#### PRD-10-06 — Penghapusan review
+#### PRD-10-06 - Penghapusan review
 
 **Referensi:** SPEC-10-06.
 
@@ -738,7 +738,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Seller tidak bisa menghapus review, hanya bisa membalas satu kali secara publik; review yang melanggar (hujatan, doxing, spam) hanya bisa dihapus Super-Admin dengan alasan tercatat.
 
-#### PRD-10-07 — Tangga sanksi seller
+#### PRD-10-07 - Tangga sanksi seller
 
 **Referensi:** SPEC-10-07.
 
@@ -748,7 +748,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 ### 6.11. Delivery File
 
-#### PRD-11-01 — Link Drive mati pasca-jual
+#### PRD-11-01 - Link Drive mati pasca-jual
 
 **Referensi:** SPEC-11-01.
 
@@ -756,7 +756,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Re-inspeksi berkala mingguan untuk semua produk aktif; saat link mati, produk otomatis di-unlist, seller diberi tenggat 72 jam untuk memperbaiki sebelum listing disuspend.
 
-#### PRD-11-02 — Perlindungan link delivery
+#### PRD-11-02 - Perlindungan link delivery
 
 **Referensi:** SPEC-11-02.
 
@@ -764,7 +764,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Link Drive tidak pernah tampil mentah; buyer mengakses via endpoint redirect /api/download/[orderId] yang memvalidasi session dan status Lunas, baru 302 ke link Drive; setiap akses tercatat di log.
 
-#### PRD-11-03 — Batas jumlah download
+#### PRD-11-03 - Batas jumlah download
 
 **Referensi:** SPEC-11-03.
 
@@ -772,7 +772,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Hanya 1 kali download, tanpa kecuali dan tanpa reset.
 
-#### PRD-11-04 — Update produk untuk buyer lama
+#### PRD-11-04 - Update produk untuk buyer lama
 
 **Referensi:** SPEC-11-04.
 
@@ -780,7 +780,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** File lama langsung ditimpa tanpa notifikasi ke buyer yang sudah membeli.
 
-#### PRD-11-05 — Ganti link Drive produk
+#### PRD-11-05 - Ganti link Drive produk
 
 **Referensi:** SPEC-11-05.
 
@@ -788,7 +788,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Penggantian link memicu verifikasi ulang singkat (cek link baru hidup dan publik) sebelum produk aktif kembali; hash file dihitung ulang untuk mendeteksi perubahan isi.
 
-#### PRD-11-06 — Bukti kepemilikan buyer
+#### PRD-11-06 - Bukti kepemilikan buyer
 
 **Referensi:** SPEC-11-06.
 
@@ -798,7 +798,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 ### 6.12. Prompt Generator (Gaya M3E Canvas)
 
-#### PRD-12-01 — Target pengguna generator
+#### PRD-12-01 - Target pengguna generator
 
 **Referensi:** SPEC-12-01.
 
@@ -806,7 +806,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Publik tanpa login untuk mencoba, dengan ekspor terbatas; akun terdaftar membuka ekspor penuh dan integrasi marketplace.
 
-#### PRD-12-02 — Model harga generator
+#### PRD-12-02 - Model harga generator
 
 **Referensi:** SPEC-12-02.
 
@@ -814,7 +814,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Gratis penuh di fase awal sebagai alat akuisisi dan demo kualitas prompt; monetisasi nanti lewat template prompt premium di marketplace.
 
-#### PRD-12-03 — Set komponen blok prompt
+#### PRD-12-03 - Set komponen blok prompt
 
 **Referensi:** SPEC-12-03.
 
@@ -822,7 +822,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Tujuh blok inti: Peran (Role), Tugas (Task), Konteks, Format Output, Batasan (Constraints), Contoh (Examples), dan Tone/Gaya.
 
-#### PRD-12-04 — Interaksi canvas drag-drop
+#### PRD-12-04 - Interaksi canvas drag-drop
 
 **Referensi:** SPEC-12-04.
 
@@ -830,7 +830,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Kolom vertikal drag-and-reorder dengan drag handle per blok; urutan blok menentukan urutan struktur prompt akhir.
 
-#### PRD-12-05 — Format ekspor prompt
+#### PRD-12-05 - Format ekspor prompt
 
 **Referensi:** SPEC-12-05.
 
@@ -838,7 +838,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Tiga format: Markdown terstruktur, plain text siap-tempel ke chat AI, dan JSON dengan tiap blok sebagai key.
 
-#### PRD-12-06 — Integrasi dengan marketplace
+#### PRD-12-06 - Integrasi dengan marketplace
 
 **Referensi:** SPEC-12-06.
 
@@ -848,7 +848,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 ### 6.13. Halaman Tambahan
 
-#### PRD-13-01 — Isi profil publik toko
+#### PRD-13-01 - Isi profil publik toko
 
 **Referensi:** SPEC-13-01.
 
@@ -856,15 +856,15 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** URL /toko/{slug} menampilkan branding, warna aksen, deskripsi, ikon sosial media, statistik publik (jumlah produk, rating rata-rata, tahun bergabung), dan grid produknya.
 
-#### PRD-13-02 — Cakupan notification center
+#### PRD-13-02 - Cakupan notification center
 
 **Referensi:** SPEC-13-02.
 
 **Konteks keputusan:** Notification center in-app mencakup notifikasi apa saja?
 
-**Keputusan:** Ikon lonceng dengan panel berisi: update order, hasil verifikasi produk, tagihan komisi/invoice, dan update produk yang dibeli — lengkap dengan penanda belum-baca dan link ke objek terkait.
+**Keputusan:** Ikon lonceng dengan panel berisi: update order, hasil verifikasi produk, tagihan komisi/invoice, dan update produk yang dibeli - lengkap dengan penanda belum-baca dan link ke objek terkait.
 
-#### PRD-13-03 — Isi halaman settings user
+#### PRD-13-03 - Isi halaman settings user
 
 **Referensi:** SPEC-13-03.
 
@@ -872,7 +872,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Tema tampilan (Dark/Light/System), bahasa email notifikasi (ID/EN), dan preferensi email promosi yang bisa dimatikan.
 
-#### PRD-13-04 — Gaya halaman 404/error
+#### PRD-13-04 - Gaya halaman 404/error
 
 **Referensi:** SPEC-13-04.
 
@@ -880,7 +880,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Mengikuti bahasa visual landing page: hero Gradient ASCII, pesan singkat, dan tiga tautan pemulihan (katalog, produk terlaris, halaman sebelumnya); varian 500 menampilkan “tim sudah diberi tahu”.
 
-#### PRD-13-05 — Perlunya halaman status
+#### PRD-13-05 - Perlunya halaman status
 
 **Referensi:** SPEC-13-05.
 
@@ -890,7 +890,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 ### 6.14. Legal
 
-#### PRD-14-01 — Klausul AI pihak ketiga
+#### PRD-14-01 - Klausul AI pihak ketiga
 
 **Referensi:** SPEC-14-01.
 
@@ -898,7 +898,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Klausul eksplisit: gambar bukti diproses oleh layanan AI pihak ketiga yang dipilih seller (memakai API key milik seller); data dikirim langsung ke penyedia tersebut; Althentic tidak menyimpan salinan hasil proses; gambar disimpan maksimal 90 hari lalu dihapus.
 
-#### PRD-14-02 — Perlakuan data finansial
+#### PRD-14-02 - Perlakuan data finansial
 
 **Referensi:** SPEC-14-02.
 
@@ -906,7 +906,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Digolongkan sebagai “data transaksi”: disimpan selama akun aktif ditambah 5 tahun mengikuti kebiasaan pembukuan, dengan akses terbatas hanya Super-Admin.
 
-#### PRD-14-03 — Mekanisme persetujuan ToS
+#### PRD-14-03 - Mekanisme persetujuan ToS
 
 **Referensi:** SPEC-14-03.
 
@@ -914,7 +914,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Checkbox wajib saat pendaftaran + banner re-consent saat ada perubahan material (menampilkan ringkasan perubahan); versi dokumen dan tanggal persetujuan dicatat per akun.
 
-#### PRD-14-04 — Posisi pajak platform
+#### PRD-14-04 - Posisi pajak platform
 
 **Referensi:** SPEC-14-04.
 
@@ -922,7 +922,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Dinyatakan eksplisit: Althentic hanya menarik komisi layanan; seluruh kewajiban pajak atas penjualan menjadi tanggung jawab seller; platform menyediakan ringkasan transaksi tahunan untuk membantu pembukuan.
 
-#### PRD-14-05 — Usia minimum pengguna
+#### PRD-14-05 - Usia minimum pengguna
 
 **Referensi:** SPEC-14-05.
 
@@ -930,7 +930,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Minimal 17 tahun, dinyatakan di ToS dan dikonfirmasi lewat checkbox pernyataan usia saat pendaftaran.
 
-#### PRD-14-06 — Yurisdiksi & hukum
+#### PRD-14-06 - Yurisdiksi & hukum
 
 **Referensi:** SPEC-14-06.
 
@@ -940,7 +940,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 ### 6.15. Teknis & Infrastruktur
 
-#### PRD-15-01 — Pembagian Neon vs Supabase
+#### PRD-15-01 - Pembagian Neon vs Supabase
 
 **Referensi:** SPEC-15-01.
 
@@ -948,15 +948,15 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Neon menyimpan semua data relasional (users, products, orders, ledger komisi, metadata bukti); Supabase Storage hanya menyimpan file biner (bukti .webp, banner, preview) dalam bucket publik dan private terpisah.
 
-#### PRD-15-02 — Pilihan ORM
+#### PRD-15-02 - Pilihan ORM
 
 **Referensi:** SPEC-15-02.
 
 **Konteks keputusan:** ORM mana yang dipilih untuk berinteraksi dengan Neon Postgres, dan mengapa?
 
-**Keputusan:** Prisma: schema-first, migration tool matang, type generation kuat, dan dokumentasi melimpah — cocok untuk pengembang solo yang harus cepat jalan dengan aman.
+**Keputusan:** Prisma: schema-first, migration tool matang, type generation kuat, dan dokumentasi melimpah - cocok untuk pengembang solo yang harus cepat jalan dengan aman.
 
-#### PRD-15-03 — Strategi rate limiting
+#### PRD-15-03 - Strategi rate limiting
 
 **Referensi:** SPEC-15-03.
 
@@ -964,7 +964,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Rate limit berbasis Upstash Redis REST (free tier) dengan sliding window per-IP+user pada endpoint sensitif: login, upload bukti, dan submit order.
 
-#### PRD-15-04 — Keamanan API route
+#### PRD-15-04 - Keamanan API route
 
 **Referensi:** SPEC-15-04.
 
@@ -972,7 +972,7 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Validasi input dengan Zod di setiap route, cek session di dalam route (tidak percaya middleware semata), otorisasi per-ownership (buyer hanya menyentuh order miliknya), dan error response yang tidak membocorkan stack.
 
-#### PRD-15-05 — Logging & monitoring
+#### PRD-15-05 - Logging & monitoring
 
 **Referensi:** SPEC-15-05.
 
@@ -980,15 +980,15 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Structured logging JSON konsisten dilihat lewat Vercel Logs, plus alert email via Nodemailer untuk error kritis (verifikasi gagal massal, koneksi DB gagal).
 
-#### PRD-15-06 — Strategi backup Neon
+#### PRD-15-06 - Strategi backup Neon
 
 **Referensi:** SPEC-15-06.
 
 **Konteks keputusan:** Strategi backup untuk database Neon seperti apa?
 
-**Keputusan:** Mengandalkan point-in-time restore bawaan Neon, ditambah pg_dump otomatis bulanan via GitHub Actions terjadwal yang disimpan di storage pribadi — dengan uji restore berkala.
+**Keputusan:** Mengandalkan point-in-time restore bawaan Neon, ditambah pg_dump otomatis bulanan via GitHub Actions terjadwal yang disimpan di storage pribadi - dengan uji restore berkala.
 
-#### PRD-15-07 — Inspeksi Puppeteer di Vercel
+#### PRD-15-07 - Inspeksi Puppeteer di Vercel
 
 **Referensi:** SPEC-15-07.
 
@@ -996,11 +996,11 @@ Seluruh 120 jawaban dipertahankan pada bagian ini agar kebutuhan tidak terpotong
 
 **Keputusan:** Jangan jalankan browser penuh di Vercel: cek status link via fetch HTTP biasa, screenshot via API screenshot free-tier, dan bila perlu browser penuh, jalankan skrip dari mesin lokal Super-Admin lalu unggah laporannya.
 
-### 6.16. Pertanyaan Gap — Celah yang Belum Terpikirkan
+### 6.16. Pertanyaan Gap - Celah yang Belum Terpikirkan
 
 Bagian ini mencakup strategi, batas operasional dan fase lanjutan. Tidak semua butir merupakan fitur untuk peluncuran pertama; konteks pertanyaan tetap berlaku.
 
-#### PRD-16-01 — Deteksi prompt curian
+#### PRD-16-01 - Deteksi prompt curian
 
 **Referensi:** SPEC-16-01.
 
@@ -1008,7 +1008,7 @@ Bagian ini mencakup strategi, batas operasional dan fase lanjutan. Tidak semua b
 
 **Keputusan:** Deteksi otomatis antar produk di katalog Althentic sendiri saja.
 
-#### PRD-16-02 — Sengketa isi tidak sesuai
+#### PRD-16-02 - Sengketa isi tidak sesuai
 
 **Referensi:** SPEC-16-02.
 
@@ -1016,7 +1016,7 @@ Bagian ini mencakup strategi, batas operasional dan fase lanjutan. Tidak semua b
 
 **Keputusan:** Seller wajib menunjukkan bukti isi (screenshot terstruktur atau walkthrough singkat) dalam 48 jam lewat dispute; terbukti sesuai: tetap lunas dengan catatan; tidak sesuai: refund manual plus poin sanksi seller.
 
-#### PRD-16-03 — Risiko monokultur seller
+#### PRD-16-03 - Risiko monokultur seller
 
 **Referensi:** SPEC-16-03.
 
@@ -1024,7 +1024,7 @@ Bagian ini mencakup strategi, batas operasional dan fase lanjutan. Tidak semua b
 
 **Keputusan:** Tambahkan metrik “konsentrasi top-1 seller” di dashboard Super-Admin sebagai sinyal untuk mempercepat rekrutmen seller, tanpa pembatasan eksplisit terhadap seller produktif.
 
-#### PRD-16-04 — Ketergantungan pihak ketiga
+#### PRD-16-04 - Ketergantungan pihak ketiga
 
 **Referensi:** SPEC-16-04.
 
@@ -1032,7 +1032,7 @@ Bagian ini mencakup strategi, batas operasional dan fase lanjutan. Tidak semua b
 
 **Keputusan:** Dokumentasikan abstraksi: modul delivery dan modul AI scanner masing-masing punya satu interface tunggal sehingga bisa ganti provider dengan menyentuh 1–2 file saja; digunakan saat benar-benar dibutuhkan.
 
-#### PRD-16-05 — Komisi vs produk super murah
+#### PRD-16-05 - Komisi vs produk super murah
 
 **Referensi:** SPEC-16-05.
 
@@ -1040,7 +1040,7 @@ Bagian ini mencakup strategi, batas operasional dan fase lanjutan. Tidak semua b
 
 **Keputusan:** Tetap Rp1.000 flat tanpa pengecualian harga.
 
-#### PRD-16-06 — Monetisasi fase kedua
+#### PRD-16-06 - Monetisasi fase kedua
 
 **Referensi:** SPEC-16-06.
 
@@ -1048,7 +1048,7 @@ Bagian ini mencakup strategi, batas operasional dan fase lanjutan. Tidak semua b
 
 **Keputusan:** Featured listing: produk tampil di posisi teratas katalog/beranda selama 7 hari dengan harga tetap.
 
-#### PRD-16-07 — Rekrutmen 10 seller pertama
+#### PRD-16-07 - Rekrutmen 10 seller pertama
 
 **Referensi:** SPEC-16-07.
 
@@ -1056,7 +1056,7 @@ Bagian ini mencakup strategi, batas operasional dan fase lanjutan. Tidak semua b
 
 **Keputusan:** Undangan personal terkurasi: cari 5–10 pembuat prompt yang karyanya sudah bagus di komunitas (X, Discord AI Indonesia), tawarkan onboarding dibantu langsung dan featured listing gratis 30 hari.
 
-#### PRD-16-08 — Strategi 100 buyer pertama
+#### PRD-16-08 - Strategi 100 buyer pertama
 
 **Referensi:** SPEC-16-08.
 
@@ -1064,7 +1064,7 @@ Bagian ini mencakup strategi, batas operasional dan fase lanjutan. Tidak semua b
 
 **Keputusan:** Konten dulu: rilis 3–5 prompt gratis berkualitas tinggi dari toko pemilik, dibagikan di komunitas AI dengan CTA menuju marketplace.
 
-#### PRD-16-09 — Penjagaan kualitas prompt
+#### PRD-16-09 - Penjagaan kualitas prompt
 
 **Referensi:** SPEC-16-09.
 
@@ -1072,7 +1072,7 @@ Bagian ini mencakup strategi, batas operasional dan fase lanjutan. Tidak semua b
 
 **Keputusan:** Tidak ada penilaian kualitas; semua prompt yang link-nya hidup boleh dijual.
 
-#### PRD-16-10 — Hak cipta & larangan resell
+#### PRD-16-10 - Hak cipta & larangan resell
 
 **Referensi:** SPEC-16-10.
 
@@ -1080,7 +1080,7 @@ Bagian ini mencakup strategi, batas operasional dan fase lanjutan. Tidak semua b
 
 **Keputusan:** ToS menyatakan: lisensi penggunaan personal dan komersial atas output, dilarang menjual ulang atau mendistribusikan file prompt mentah; pelanggaran berujung banned.
 
-#### PRD-16-11 — Diferensiasi vs kompetitor
+#### PRD-16-11 - Diferensiasi vs kompetitor
 
 **Referensi:** SPEC-16-11.
 
@@ -1088,7 +1088,7 @@ Bagian ini mencakup strategi, batas operasional dan fase lanjutan. Tidak semua b
 
 **Keputusan:** Lokalisasi penuh: pembayaran QR lokal tanpa kartu internasional, kurasi dan komunitas berbahasa Indonesia, harga Rupiah.
 
-#### PRD-16-12 — Deteksi self-buying
+#### PRD-16-12 - Deteksi self-buying
 
 **Referensi:** SPEC-16-12.
 
@@ -1096,7 +1096,7 @@ Bagian ini mencakup strategi, batas operasional dan fase lanjutan. Tidak semua b
 
 **Keputusan:** Verifikasi transaksi mencocokkan sinyal: akun buyer dengan IP/device fingerprint yang sama dengan seller ditandai; transaksi self-buy tidak dihitung ke metrik terlaris dan ratingnya diflag untuk review.
 
-#### PRD-16-13 — Risiko bus factor Super-Admin
+#### PRD-16-13 - Risiko bus factor Super-Admin
 
 **Referensi:** SPEC-16-13.
 
@@ -1104,7 +1104,7 @@ Bagian ini mencakup strategi, batas operasional dan fase lanjutan. Tidak semua b
 
 **Keputusan:** Terima risiko platform berhenti total selama itu.
 
-#### PRD-16-14 — Rencana insiden data
+#### PRD-16-14 - Rencana insiden data
 
 **Referensi:** SPEC-16-14.
 
@@ -1112,7 +1112,7 @@ Bagian ini mencakup strategi, batas operasional dan fase lanjutan. Tidak semua b
 
 **Keputusan:** Kandidat paling fatal: API key seller (menyalahgunakan kuota AI atas nama mereka) dan bukti transfer (data finansial); siapkan satu halaman SOP insiden: identifikasi → rotasi key → notifikasi terdampak → post-mortem.
 
-#### PRD-16-15 — Metrik sukses 6 bulan
+#### PRD-16-15 - Metrik sukses 6 bulan
 
 **Referensi:** SPEC-16-15.
 
@@ -1128,11 +1128,11 @@ Disalin dari instruksi eksplisit pengguna pada permintaan DESIGN.md. Kriteria in
 
 1. Font: Plus Jakarta Sans di seluruh platform.
 2. Icon: hanya dari Lucide Icon Library (via CDN). Jangan pernah menggunakan icon emoji, dalam bentuk apa pun.
-3. Elemen kustom dengan animasi smooth: custom WebKit scrollbar, custom dropdown, custom checkbox, dan elemen form/UI kustom lainnya — semua dengan transisi/animasi halus, bukan default browser.
+3. Elemen kustom dengan animasi smooth: custom WebKit scrollbar, custom dropdown, custom checkbox, dan elemen form/UI kustom lainnya - semua dengan transisi/animasi halus, bukan default browser.
 4. Accessibility wajib mengikuti standar WCAG di seluruh komponen.
 5. Smooth scroll menggunakan Lenis.
 6. Responsive design penuh untuk tiga breakpoint: Desktop, Tablet, dan Mobile.
-7. Tech stack: Next.js (App Router) sebagai frontend SEKALIGUS backend (API Routes) — satu framework full-stack, bukan React Router terpisah sebagai layer backend. NeonDB Postgres sebagai database, Supabase sebagai storage, Vercel sebagai platform deployment tunggal.
+7. Tech stack: Next.js (App Router) sebagai frontend SEKALIGUS backend (API Routes) - satu framework full-stack, bukan React Router terpisah sebagai layer backend. NeonDB Postgres sebagai database, Supabase sebagai storage, Vercel sebagai platform deployment tunggal.
 8. Animasi entrance dan exit menggunakan Framer Motion.
 9. Gaya visual card (product card, dashboard card, dll) menggunakan Liquid Glass / Glassmorphism style.
 
@@ -1153,10 +1153,10 @@ Disalin dari instruksi eksplisit pengguna pada permintaan DESIGN.md. Kriteria in
 
 ### 7.3. Detail yang belum menjadi persyaratan numerik
 
-- Nilai HEX brand, spacing, radius dan batas piksel breakpoint belum ditemukan dalam sumber/riwayat relevan yang tersedia. Arahan warna tetap navy-ke-biru terang + hitam, mengacu pada logo; nilai numeriknya **[BELUM DIPUTUSKAN — perlu klarifikasi]**.
-- Versi/level WCAG, parameter Glassmorphism/motion, detail kontrol kustom, endpoint/versi CDN Lucide dan representasi icon sosial: **[BELUM DIPUTUSKAN — perlu klarifikasi]**.
-- Target latensi, uptime, kapasitas, anggaran, RPO/RTO, frekuensi uji restore dan nilai rate limit: **[BELUM DIPUTUSKAN — perlu klarifikasi]**.
-- Schema database, kontrak API/interface, nama environment variable, provider/model AI, SMTP/screenshot, scheduler selain backup bulanan, dan library auth: **[BELUM DIPUTUSKAN — perlu klarifikasi]**.
+- Nilai HEX brand, spacing, radius dan batas piksel breakpoint belum ditemukan dalam sumber/riwayat relevan yang tersedia. Arahan warna tetap navy-ke-biru terang + hitam, mengacu pada logo; nilai numeriknya **[BELUM DIPUTUSKAN - perlu klarifikasi]**.
+- Versi/level WCAG, parameter Glassmorphism/motion, detail kontrol kustom, endpoint/versi CDN Lucide dan representasi icon sosial: **[BELUM DIPUTUSKAN - perlu klarifikasi]**.
+- Target latensi, uptime, kapasitas, anggaran, RPO/RTO, frekuensi uji restore dan nilai rate limit: **[BELUM DIPUTUSKAN - perlu klarifikasi]**.
+- Schema database, kontrak API/interface, nama environment variable, provider/model AI, SMTP/screenshot, scheduler selain backup bulanan, dan library auth: **[BELUM DIPUTUSKAN - perlu klarifikasi]**.
 - Detail visual khusus lampiran tidak disalin ke PRD. Dokumentasinya tetap berada dalam DESIGN.md.
 
 ## 8. Kriteria penerimaan berdasarkan keputusan sumber
@@ -1226,7 +1226,7 @@ Kriteria di bawah adalah skenario pemeriksaan, bukan hasil pengujian yang telah 
 
 Penerimaan perilaku terkait Booked/lock, redirect delivery, suspend komisi, reset siklus, cakupan notifikasi update, akses data transaksi, serta hubungan aturan moderasi/onboarding masih memerlukan klarifikasi. Untuk retensi bukti, penghapusan 30 hari dan klausul maksimum 90 hari perlu diselaraskan tanpa menganggap otomatis saling menggantikan.
 
-Tidak ada baris kriteria yang memberi pengecualian baru terhadap keputusan sumber. Status “lulus”, hasil UAT, tanggal peluncuran dan pihak pemberi persetujuan rilis: **[BELUM DIPUTUSKAN — perlu klarifikasi]**.
+Tidak ada baris kriteria yang memberi pengecualian baru terhadap keputusan sumber. Status “lulus”, hasil UAT, tanggal peluncuran dan pihak pemberi persetujuan rilis: **[BELUM DIPUTUSKAN - perlu klarifikasi]**.
 
 ## 9. Dependensi dan risiko yang sudah tercatat
 
@@ -1251,39 +1251,39 @@ Daftar di bawah dibawa dari SPEC.md agar kebutuhan terbuka tetap terlihat. Penan
 
 | ID     | Referensi sumber                                           | Hal yang perlu diperjelas                                                                                                                                                                                                                                                    | Status                                 |
 | ------ | ---------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------- |
-| GAP-01 | SPEC-03-07, SPEC-04-02, SPEC-07-10; Konteks Terkunci       | Booked dijelaskan sebagai keranjang yang dapat dikeluarkan buyer kapan saja; produk dapat dibeli paralel; tetapi kegagalan kedua key menyebut lock produk maksimal 24 jam. Perlu kejelasan objek lock, hubungan keranjang dengan order, serta arti Booked pada setiap jalur. | [BELUM DIPUTUSKAN — perlu klarifikasi] |
-| GAP-02 | SPEC-04-05, SPEC-11-02                                     | Checkout mensyaratkan download tanpa redirect ke Google Drive, sedangkan Delivery File menetapkan respons 302 ke link Drive. Mekanisme delivery final belum dapat dipilih tanpa menyelaraskan kedua keputusan.                                                               | [BELUM DIPUTUSKAN — perlu klarifikasi] |
-| GAP-03 | SPEC-01-06, SPEC-09-02, SPEC-09-04                         | Settings menetapkan suspend otomatis saat batas tunggakan terlewati; penagihan menetapkan grace period 7 hari dan suspend hari ke-8 setelah invoice terbit. Perlu kejelasan hubungan batas suspend, threshold invoice, dan waktu eksekusi suspend.                           | [BELUM DIPUTUSKAN — perlu klarifikasi] |
-| GAP-04 | SPEC-07-07, SPEC-14-01                                     | Scanner menetapkan penghapusan file bukti setelah 30 hari; klausul privasi menyebut maksimal 90 hari. Perlu konfirmasi hubungan kedua durasi agar teks legal dan job penghapusan konsisten; batas maksimal 90 hari tidak otomatis mengganti retensi 30 hari.                 | [BELUM DIPUTUSKAN — perlu klarifikasi] |
-| GAP-05 | SPEC-11-04, SPEC-13-02                                     | Pembaruan file dilakukan tanpa notifikasi kepada buyer lama, tetapi notification center mencakup update produk yang dibeli. Perlu penentuan cakupan event update produk yang menghasilkan notifikasi.                                                                        | [BELUM DIPUTUSKAN — perlu klarifikasi] |
-| GAP-06 | SPEC-14-02, SPEC-02-05, SPEC-02-08, SPEC-04-06, SPEC-06-02 | Klausul data transaksi membatasi akses hanya Super-Admin, sedangkan seller mengelola QR dan melihat transaksi/revenue, serta buyer menerima QR dan instruksi bayar. Perlu batas akses per jenis data dan aktor yang dimaksud klausul legal.                                  | [BELUM DIPUTUSKAN — perlu klarifikasi] |
-| GAP-07 | SPEC-10-01, SPEC-16-09; Konteks Terkunci                   | Moderasi menetapkan review deskripsi, preview, dan harga untuk konten ilegal/menyesatkan; keputusan kualitas menyebut semua prompt dengan link hidup boleh dijual. Perlu kejelasan penerapan syarat publikasi tanpa menambahkan penilaian kualitas prompt.                   | [BELUM DIPUTUSKAN — perlu klarifikasi] |
-| GAP-08 | SPEC-06-01, SPEC-06-04, SPEC-06-06                         | Langkah onboarding keempat sudah mencakup pengiriman produk untuk verifikasi, sedangkan layar selesai kembali meminta pengiriman produk pertama dan menyatakan toko siap. Perlu kejelasan kondisi layar selesai terhadap status Disiapkan dan produk terverifikasi.          | [BELUM DIPUTUSKAN — perlu klarifikasi] |
-| GAP-09 | Konteks Terkunci, SPEC-09-06                               | Konteks menyebut invoice terbit saat threshold tercapai lalu siklus reset; verifikasi komisi menetapkan counter reset setelah invoice Lunas. Perlu kejelasan counter/siklus yang dimaksud dan perlakuan transaksi baru selama invoice belum dilunasi.                        | [BELUM DIPUTUSKAN — perlu klarifikasi] |
+| GAP-01 | SPEC-03-07, SPEC-04-02, SPEC-07-10; Konteks Terkunci       | Booked dijelaskan sebagai keranjang yang dapat dikeluarkan buyer kapan saja; produk dapat dibeli paralel; tetapi kegagalan kedua key menyebut lock produk maksimal 24 jam. Perlu kejelasan objek lock, hubungan keranjang dengan order, serta arti Booked pada setiap jalur. | [BELUM DIPUTUSKAN - perlu klarifikasi] |
+| GAP-02 | SPEC-04-05, SPEC-11-02                                     | Checkout mensyaratkan download tanpa redirect ke Google Drive, sedangkan Delivery File menetapkan respons 302 ke link Drive. Mekanisme delivery final belum dapat dipilih tanpa menyelaraskan kedua keputusan.                                                               | [BELUM DIPUTUSKAN - perlu klarifikasi] |
+| GAP-03 | SPEC-01-06, SPEC-09-02, SPEC-09-04                         | Settings menetapkan suspend otomatis saat batas tunggakan terlewati; penagihan menetapkan grace period 7 hari dan suspend hari ke-8 setelah invoice terbit. Perlu kejelasan hubungan batas suspend, threshold invoice, dan waktu eksekusi suspend.                           | [BELUM DIPUTUSKAN - perlu klarifikasi] |
+| GAP-04 | SPEC-07-07, SPEC-14-01                                     | Scanner menetapkan penghapusan file bukti setelah 30 hari; klausul privasi menyebut maksimal 90 hari. Perlu konfirmasi hubungan kedua durasi agar teks legal dan job penghapusan konsisten; batas maksimal 90 hari tidak otomatis mengganti retensi 30 hari.                 | [BELUM DIPUTUSKAN - perlu klarifikasi] |
+| GAP-05 | SPEC-11-04, SPEC-13-02                                     | Pembaruan file dilakukan tanpa notifikasi kepada buyer lama, tetapi notification center mencakup update produk yang dibeli. Perlu penentuan cakupan event update produk yang menghasilkan notifikasi.                                                                        | [BELUM DIPUTUSKAN - perlu klarifikasi] |
+| GAP-06 | SPEC-14-02, SPEC-02-05, SPEC-02-08, SPEC-04-06, SPEC-06-02 | Klausul data transaksi membatasi akses hanya Super-Admin, sedangkan seller mengelola QR dan melihat transaksi/revenue, serta buyer menerima QR dan instruksi bayar. Perlu batas akses per jenis data dan aktor yang dimaksud klausul legal.                                  | [BELUM DIPUTUSKAN - perlu klarifikasi] |
+| GAP-07 | SPEC-10-01, SPEC-16-09; Konteks Terkunci                   | Moderasi menetapkan review deskripsi, preview, dan harga untuk konten ilegal/menyesatkan; keputusan kualitas menyebut semua prompt dengan link hidup boleh dijual. Perlu kejelasan penerapan syarat publikasi tanpa menambahkan penilaian kualitas prompt.                   | [BELUM DIPUTUSKAN - perlu klarifikasi] |
+| GAP-08 | SPEC-06-01, SPEC-06-04, SPEC-06-06                         | Langkah onboarding keempat sudah mencakup pengiriman produk untuk verifikasi, sedangkan layar selesai kembali meminta pengiriman produk pertama dan menyatakan toko siap. Perlu kejelasan kondisi layar selesai terhadap status Disiapkan dan produk terverifikasi.          | [BELUM DIPUTUSKAN - perlu klarifikasi] |
+| GAP-09 | Konteks Terkunci, SPEC-09-06                               | Konteks menyebut invoice terbit saat threshold tercapai lalu siklus reset; verifikasi komisi menetapkan counter reset setelah invoice Lunas. Perlu kejelasan counter/siklus yang dimaksud dan perlakuan transaksi baru selama invoice belum dilunasi.                        | [BELUM DIPUTUSKAN - perlu klarifikasi] |
 
 ### 10.2. Rincian yang belum tersedia dalam sumber
 
 | ID     | Area dan referensi                                                                                   | Rincian yang belum ditetapkan                                                                                                                                                                                                                                                                                       | Status                                 |
 | ------ | ---------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------- |
-| GAP-10 | Landing Page dan Documentation Page — Konteks Terkunci                                               | Sumber menyatakan 9 section landing dan 12 section dokumentasi sudah selesai dibrainstorm, tetapi daftar, urutan, isi, dan perilaku tiap section tidak disertakan pada bagian brainstorming yang tersedia. Detailnya tidak boleh direkonstruksi dari lampiran DESIGN.md.                                            | [BELUM DIPUTUSKAN — perlu klarifikasi] |
-| GAP-11 | Siklus order — SPEC-02-07, SPEC-04-02, SPEC-04-05, SPEC-04-08, SPEC-07-02, SPEC-07-10, SPEC-09-01    | Batas kedaluwarsa sesi pembayaran biasa; seluruh transisi status beserta pemicunya; titik mulai tenggat 24 jam; akibat mengeluarkan Booked dari keranjang terhadap order dan bukti yang sudah dikirim. Timeline yang ditulis sumber tidak cukup untuk menetapkan seluruh transisi.                                  | [BELUM DIPUTUSKAN — perlu klarifikasi] |
-| GAP-12 | Verifikasi pembayaran — Konteks Terkunci, SPEC-07-01, SPEC-07-04, SPEC-07-05, SPEC-07-08, SPEC-07-10 | Provider/model AI yang didukung, timeout dan retry, parameter pencocokan perceptual hash, data hasil scanner yang boleh disimpan, penyimpanan sementara bukti menunggu/ditolak, serta cara menilai bukti susulan untuk kurang bayar tanpa mengubah aturan nominal persis sama.                                      | [BELUM DIPUTUSKAN — perlu klarifikasi] |
-| GAP-13 | Download dan koleksi — SPEC-11-02, SPEC-11-03, SPEC-11-06                                            | Definisi teknis satu kali download (kapan kuota dianggap terpakai), penanganan unduhan terputus, serta tampilan tombol koleksi setelah kuota habis. Batas tetap satu kali tanpa kecuali dan tanpa reset; koleksi permanen tidak menetapkan hak unduh tambahan.                                                      | [BELUM DIPUTUSKAN — perlu klarifikasi] |
-| GAP-14 | Produk dan katalog — Konteks Terkunci, SPEC-03-02, SPEC-03-03, SPEC-03-04, SPEC-03-06                | Daftar kategori selain Website, penerapan tipe jual pada kategori lain, nilai chip rentang harga, nilai filter rating, batas/format preview dan ZIP, pemetaan file per tipe jual, penentuan kategori populer dan produk serupa, serta rumus lengkap Terlaris minggu ini.                                            | [BELUM DIPUTUSKAN — perlu klarifikasi] |
-| GAP-15 | Prompt Generator — SPEC-12-01, SPEC-12-05, SPEC-12-06                                                | Batas ekspor untuk guest, nama key/skema JSON, sumber struktur blok dari produk ZIP, perilaku template setelah pembelian, serta penyimpanan hasil canvas.                                                                                                                                                           | [BELUM DIPUTUSKAN — perlu klarifikasi] |
-| GAP-16 | Komisi dan invoice — SPEC-01-05, SPEC-09-04, SPEC-09-06, SPEC-16-05, SPEC-16-08                      | Perlakuan komisi untuk prompt gratis, pembayaran komisi kurang/lebih dari invoice, komisi saat refund, pemulihan toko setelah pembayaran, dan definisi saat snapshot nominal komisi diambil pada order yang belum terverifikasi ketika setting berubah. Tidak ada pengecualian komisi baru yang ditetapkan di sini. | [BELUM DIPUTUSKAN — perlu klarifikasi] |
-| GAP-17 | Auth, akun, dan otorisasi — SPEC-05-01, SPEC-05-06, SPEC-05-07; Konteks Terkunci                     | Library auth, identitas hardcoded Super-Admin, hubungan akun Google dengan email/password, validasi slug, serta proses setelah masa tenggang soft-delete dan dampaknya pada toko, order, serta kewajiban komisi.                                                                                                    | [BELUM DIPUTUSKAN — perlu klarifikasi] |
-| GAP-18 | Legal dan dispute — SPEC-10-04, SPEC-14-01, SPEC-14-02, SPEC-14-06, SPEC-16-02                       | Kota domisili hukum, naskah lengkap ToS/Privacy Policy, cakupan salinan hasil proses AI yang tidak disimpan, batas waktu pengajuan dispute, dan detail pencatatan hasil refund manual.                                                                                                                              | [BELUM DIPUTUSKAN — perlu klarifikasi] |
-| GAP-19 | Infrastruktur dan keamanan — SPEC-07-06, SPEC-08-04, SPEC-15-03, SPEC-15-06, SPEC-15-07              | Penyedia API screenshot, scheduler untuk job selain backup bulanan yang sudah disebut, durasi signed URL, angka rate limit, storage pribadi untuk backup, frekuensi uji restore, serta mekanisme akses MCP ber-secret-token yang juga disebut tidak diekspos publik.                                                | [BELUM DIPUTUSKAN — perlu klarifikasi] |
-| GAP-20 | Kontrak implementasi — SPEC-15-01, SPEC-15-02, SPEC-15-04, SPEC-16-04                                | Skema database lengkap, seluruh kontrak API, kode error, nama environment variable, versi dependency, dan bentuk interface modul delivery/scanner. Teknologi yang sudah dipilih tetap berlaku; detail tersebut belum ditentukan oleh sumber.                                                                        | [BELUM DIPUTUSKAN — perlu klarifikasi] |
-| GAP-21 | Metrik, moderasi, dan operasional — SPEC-16-01, SPEC-16-03, SPEC-16-12, SPEC-16-14, SPEC-16-15       | Algoritme deteksi plagiarisme internal, metode fingerprint perangkat, rumus konsentrasi top-1 seller, target angka transaksi bulanan, isi rinci SOP insiden, dan target performa/ketersediaan. Penerimaan risiko Super-Admin tidak tersedia tetap mengikuti SPEC-16-13.                                             | [BELUM DIPUTUSKAN — perlu klarifikasi] |
-| GAP-22 | Fase kedua dan akuisisi — SPEC-16-06, SPEC-16-07                                                     | Nominal harga tetap featured listing serta hubungan fitur fase kedua dengan penawaran featured listing gratis 30 hari untuk seller awal.                                                                                                                                                                            | [BELUM DIPUTUSKAN — perlu klarifikasi] |
-| GAP-23 | Detail visual — Konteks Terkunci, SPEC-02-02, SPEC-03-01                                             | Nilai delapan preset aksen, breakpoint pasti, spacing scale, serta spesifikasi komponen UI yang tidak disebut sumber. Grid 3/2/1 kolom dan keputusan visual eksplisit tetap dipertahankan. Detail aset dan konfigurasi GradientASCII dibahas hanya di DESIGN.md.                                                    | [BELUM DIPUTUSKAN — perlu klarifikasi] |
+| GAP-10 | Landing Page dan Documentation Page - Konteks Terkunci                                               | Sumber menyatakan 9 section landing dan 12 section dokumentasi sudah selesai dibrainstorm, tetapi daftar, urutan, isi, dan perilaku tiap section tidak disertakan pada bagian brainstorming yang tersedia. Detailnya tidak boleh direkonstruksi dari lampiran DESIGN.md.                                            | [BELUM DIPUTUSKAN - perlu klarifikasi] |
+| GAP-11 | Siklus order - SPEC-02-07, SPEC-04-02, SPEC-04-05, SPEC-04-08, SPEC-07-02, SPEC-07-10, SPEC-09-01    | Batas kedaluwarsa sesi pembayaran biasa; seluruh transisi status beserta pemicunya; titik mulai tenggat 24 jam; akibat mengeluarkan Booked dari keranjang terhadap order dan bukti yang sudah dikirim. Timeline yang ditulis sumber tidak cukup untuk menetapkan seluruh transisi.                                  | [BELUM DIPUTUSKAN - perlu klarifikasi] |
+| GAP-12 | Verifikasi pembayaran - Konteks Terkunci, SPEC-07-01, SPEC-07-04, SPEC-07-05, SPEC-07-08, SPEC-07-10 | Provider/model AI yang didukung, timeout dan retry, parameter pencocokan perceptual hash, data hasil scanner yang boleh disimpan, penyimpanan sementara bukti menunggu/ditolak, serta cara menilai bukti susulan untuk kurang bayar tanpa mengubah aturan nominal persis sama.                                      | [BELUM DIPUTUSKAN - perlu klarifikasi] |
+| GAP-13 | Download dan koleksi - SPEC-11-02, SPEC-11-03, SPEC-11-06                                            | Definisi teknis satu kali download (kapan kuota dianggap terpakai), penanganan unduhan terputus, serta tampilan tombol koleksi setelah kuota habis. Batas tetap satu kali tanpa kecuali dan tanpa reset; koleksi permanen tidak menetapkan hak unduh tambahan.                                                      | [BELUM DIPUTUSKAN - perlu klarifikasi] |
+| GAP-14 | Produk dan katalog - Konteks Terkunci, SPEC-03-02, SPEC-03-03, SPEC-03-04, SPEC-03-06                | Daftar kategori selain Website, penerapan tipe jual pada kategori lain, nilai chip rentang harga, nilai filter rating, batas/format preview dan ZIP, pemetaan file per tipe jual, penentuan kategori populer dan produk serupa, serta rumus lengkap Terlaris minggu ini.                                            | [BELUM DIPUTUSKAN - perlu klarifikasi] |
+| GAP-15 | Prompt Generator - SPEC-12-01, SPEC-12-05, SPEC-12-06                                                | Batas ekspor untuk guest, nama key/skema JSON, sumber struktur blok dari produk ZIP, perilaku template setelah pembelian, serta penyimpanan hasil canvas.                                                                                                                                                           | [BELUM DIPUTUSKAN - perlu klarifikasi] |
+| GAP-16 | Komisi dan invoice - SPEC-01-05, SPEC-09-04, SPEC-09-06, SPEC-16-05, SPEC-16-08                      | Perlakuan komisi untuk prompt gratis, pembayaran komisi kurang/lebih dari invoice, komisi saat refund, pemulihan toko setelah pembayaran, dan definisi saat snapshot nominal komisi diambil pada order yang belum terverifikasi ketika setting berubah. Tidak ada pengecualian komisi baru yang ditetapkan di sini. | [BELUM DIPUTUSKAN - perlu klarifikasi] |
+| GAP-17 | Auth, akun, dan otorisasi - SPEC-05-01, SPEC-05-06, SPEC-05-07; Konteks Terkunci                     | Library auth, identitas hardcoded Super-Admin, hubungan akun Google dengan email/password, validasi slug, serta proses setelah masa tenggang soft-delete dan dampaknya pada toko, order, serta kewajiban komisi.                                                                                                    | [BELUM DIPUTUSKAN - perlu klarifikasi] |
+| GAP-18 | Legal dan dispute - SPEC-10-04, SPEC-14-01, SPEC-14-02, SPEC-14-06, SPEC-16-02                       | Kota domisili hukum, naskah lengkap ToS/Privacy Policy, cakupan salinan hasil proses AI yang tidak disimpan, batas waktu pengajuan dispute, dan detail pencatatan hasil refund manual.                                                                                                                              | [BELUM DIPUTUSKAN - perlu klarifikasi] |
+| GAP-19 | Infrastruktur dan keamanan - SPEC-07-06, SPEC-08-04, SPEC-15-03, SPEC-15-06, SPEC-15-07              | Penyedia API screenshot, scheduler untuk job selain backup bulanan yang sudah disebut, durasi signed URL, angka rate limit, storage pribadi untuk backup, frekuensi uji restore, serta mekanisme akses MCP ber-secret-token yang juga disebut tidak diekspos publik.                                                | [BELUM DIPUTUSKAN - perlu klarifikasi] |
+| GAP-20 | Kontrak implementasi - SPEC-15-01, SPEC-15-02, SPEC-15-04, SPEC-16-04                                | Skema database lengkap, seluruh kontrak API, kode error, nama environment variable, versi dependency, dan bentuk interface modul delivery/scanner. Teknologi yang sudah dipilih tetap berlaku; detail tersebut belum ditentukan oleh sumber.                                                                        | [BELUM DIPUTUSKAN - perlu klarifikasi] |
+| GAP-21 | Metrik, moderasi, dan operasional - SPEC-16-01, SPEC-16-03, SPEC-16-12, SPEC-16-14, SPEC-16-15       | Algoritme deteksi plagiarisme internal, metode fingerprint perangkat, rumus konsentrasi top-1 seller, target angka transaksi bulanan, isi rinci SOP insiden, dan target performa/ketersediaan. Penerimaan risiko Super-Admin tidak tersedia tetap mengikuti SPEC-16-13.                                             | [BELUM DIPUTUSKAN - perlu klarifikasi] |
+| GAP-22 | Fase kedua dan akuisisi - SPEC-16-06, SPEC-16-07                                                     | Nominal harga tetap featured listing serta hubungan fitur fase kedua dengan penawaran featured listing gratis 30 hari untuk seller awal.                                                                                                                                                                            | [BELUM DIPUTUSKAN - perlu klarifikasi] |
+| GAP-23 | Detail visual - Konteks Terkunci, SPEC-02-02, SPEC-03-01                                             | Nilai delapan preset aksen, breakpoint pasti, spacing scale, serta spesifikasi komponen UI yang tidak disebut sumber. Grid 3/2/1 kolom dan keputusan visual eksplisit tetap dipertahankan. Detail aset dan konfigurasi GradientASCII dibahas hanya di DESIGN.md.                                                    | [BELUM DIPUTUSKAN - perlu klarifikasi] |
 
 ### 10.3. Tambahan dari instruksi desain terbaru
 
 - Kebutuhan umum font, Lucide via CDN, kontrol kustom, WCAG, Lenis, responsive Desktop/Tablet/Mobile, full-stack Next.js, Framer Motion, dan Glassmorphism sudah diputuskan; tidak dikembalikan menjadi pertanyaan terbuka.
-- Nilai token dan detail interaksi yang tidak disebut masih **[BELUM DIPUTUSKAN — perlu klarifikasi]**.
+- Nilai token dan detail interaksi yang tidak disebut masih **[BELUM DIPUTUSKAN - perlu klarifikasi]**.
 - Representasi ikon sosial resmi dalam batas “hanya Lucide” belum ditentukan; tidak ditambahkan library icon lain.
 - Lampiran teknis tetap khusus DESIGN.md dan tidak dipakai untuk mengisi daftar section, token ataupun kebutuhan lain dalam PRD.
 
