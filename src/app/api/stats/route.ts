@@ -1,4 +1,4 @@
-// GET /api/stats — statistik publik untuk social proof landing (section 5) &
+// GET /api/stats - statistik publik untuk social proof landing (section 5) &
 // kategori populer untuk state kosong katalog (SPEC-03-04).
 import { db } from "@/lib/db";
 import { json, handle } from "@/lib/server/helpers";
