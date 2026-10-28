@@ -1,9 +1,9 @@
 "use client";
 
 // =============================================================================
-// OnboardingView — 4 langkah (SPEC-06-01): (1) profil toko+slug permanen,
+// OnboardingView - 4 langkah (SPEC-06-01): (1) profil toko+slug permanen,
 // (2) QR + pernyataan, (3) API key semi-optional / Lewati, (4) produk pertama
-// opsional (GAP-08: toko "Siap" tanpa wajib produk — CTA ajakan).
+// opsional (GAP-08: toko "Siap" tanpa wajib produk - CTA ajakan).
 // Draft tersimpan otomatis → checklist "Toko Anda X% siap" (SPEC-06-05).
 // =============================================================================
 
@@ -170,7 +170,7 @@ export function OnboardingView() {
         const buf = await qrFile.arrayBuffer();
         qrBase64 = Buffer.from(buf).toString("base64");
       } else if (store?.qrUrl) {
-        // QR sudah ada — hanya update pernyataan bila perlu
+        // QR sudah ada - hanya update pernyataan bila perlu
       } else {
         throw new Error("Unggah gambar QR bisnismu dulu.");
       }
@@ -267,7 +267,7 @@ export function OnboardingView() {
             >
               <Package className="h-5 w-5 text-primary" />
               <span className="text-sm font-semibold">Kirim produk pertama</span>
-              <span className="text-xs text-muted-foreground">Opsional — untuk tayang publik</span>
+              <span className="text-xs text-muted-foreground">Opsional - untuk tayang publik</span>
             </button>
             <button
               onClick={() => navigateTo({ v: "dashboard", tab: "commissions" }, { reset: true })}
@@ -294,7 +294,7 @@ export function OnboardingView() {
     <div className="container-page max-w-3xl py-8 md:py-12">
       <h1 className="text-2xl font-bold tracking-tight md:text-3xl">Buka Toko</h1>
       <p className="mt-1 text-sm text-muted-foreground">
-        Tanpa approval manusia — kontrol kualitas dilakukan saat verifikasi produk. Semua akun otomatis bisa jadi seller.
+        Tanpa approval manusia - kontrol kualitas dilakukan saat verifikasi produk. Semua akun otomatis bisa jadi seller.
       </p>
 
       {/* Progress + checklist kesiapan */}
@@ -405,7 +405,7 @@ export function OnboardingView() {
                   inputMode="tel"
                 />
                 <p className="text-xs text-muted-foreground">
-                  Dipakai buyer saat verifikasi AI gagal — divalidasi format Indonesia.
+                  Dipakai buyer saat verifikasi AI gagal - divalidasi format Indonesia.
                 </p>
               </div>
               {error && <p className="rounded-xl bg-destructive/10 px-3 py-2 text-sm text-destructive" role="alert">{error}</p>}
@@ -423,7 +423,7 @@ export function OnboardingView() {
                   <QrCode className="h-5 w-5 text-primary" /> QR Pembayaran
                 </h2>
                 <p className="mt-1 text-sm text-muted-foreground">
-                  QRIS / QR bisnis milikmu sendiri — Althentic tidak memegang uang buyer. JPG/PNG maks 2 MB.
+                  QRIS / QR bisnis milikmu sendiri - Althentic tidak memegang uang buyer. JPG/PNG maks 2 MB.
                 </p>
               </div>
               <input
@@ -496,8 +496,8 @@ export function OnboardingView() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="zai">Z.AI Vision (platform — tanpa key)</SelectItem>
-                    <SelectItem value="gemini">Gemini — Google AI Studio (BYOK)</SelectItem>
+                    <SelectItem value="zai">Z.AI Vision (platform - tanpa key)</SelectItem>
+                    <SelectItem value="gemini">Gemini - Google AI Studio (BYOK)</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -529,7 +529,7 @@ export function OnboardingView() {
                 <p className="text-xs text-muted-foreground">Key tersimpan saat ini: <span className="font-mono">{store.aiKeyPrimaryMask}</span></p>
               )}
 
-              {/* Konsekuensi Lewati — eksplisit di layar (SPEC-06-03) */}
+              {/* Konsekuensi Lewati - eksplisit di layar (SPEC-06-03) */}
               <div className="rounded-2xl border border-amber-500/40 bg-amber-500/10 p-4">
                 <p className="text-sm font-semibold text-amber-600 dark:text-amber-400">
                   Lewati setup API key?
@@ -559,7 +559,7 @@ export function OnboardingView() {
             </div>
           )}
 
-          {/* ---------- Step 4: Produk pertama (opsional — GAP-08) ---------- */}
+          {/* ---------- Step 4: Produk pertama (opsional - GAP-08) ---------- */}
           {step === 4 && (
             <div className="space-y-5 text-center">
               <span className="bg-brand-gradient mx-auto flex h-14 w-14 items-center justify-center rounded-2xl text-white">
@@ -568,7 +568,7 @@ export function OnboardingView() {
               <div>
                 <h2 className="text-lg font-bold">Toko kamu sudah Siap!</h2>
                 <p className="mx-auto mt-1.5 max-w-md text-sm text-muted-foreground">
-                  Produk pertama <b>opsional</b> — kamu bisa menambahkannya nanti dari Dashboard Seller. Toko
+                  Produk pertama <b>opsional</b> - kamu bisa menambahkannya nanti dari Dashboard Seller. Toko
                   tampil publik (Live) setelah minimal satu produk lolos verifikasi.
                 </p>
               </div>
