@@ -1,4 +1,4 @@
-// POST /api/orders/[id]/pay-session — buyer menekan "Bayar Sekarang" (SPEC-07-02:
+// POST /api/orders/[id]/pay-session - buyer menekan "Bayar Sekarang" (SPEC-07-02:
 // jendela bukti dimulai; QR seller ditampilkan)
 import { NextRequest } from "next/server";
 import { db } from "@/lib/db";
