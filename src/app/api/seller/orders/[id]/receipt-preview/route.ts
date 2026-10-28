@@ -1,4 +1,4 @@
-// GET /api/seller/orders/[id]/receipt-preview — bukti transfer via signed URL pendek
+// GET /api/seller/orders/[id]/receipt-preview - bukti transfer via signed URL pendek
 // (SPEC-07-06: bucket private, akses lewat signed URL dari API)
 import { NextRequest } from "next/server";
 import { db } from "@/lib/db";
