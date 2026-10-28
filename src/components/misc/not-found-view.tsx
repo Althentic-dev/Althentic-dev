@@ -1,6 +1,6 @@
 "use client";
 
-// NotFoundView — 404/500 mengikuti bahasa visual landing (SPEC-13-04):
+// NotFoundView - 404/500 mengikuti bahasa visual landing (SPEC-13-04):
 // pesan singkat + 3 tautan pemulihan (katalog, produk terlaris, halaman sebelumnya).
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
