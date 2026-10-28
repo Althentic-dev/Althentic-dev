@@ -1,4 +1,4 @@
-// GET /api/admin/analytics — Analytics Platform (SPEC-01-01..03):
+// GET /api/admin/analytics - Analytics Platform (SPEC-01-01..03):
 // periode default 7 hari + tab Hari ini/7/30/90/Custom; metrik 4 kartu; line chart + MA7.
 import { NextRequest } from "next/server";
 import { db } from "@/lib/db";
