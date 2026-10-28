@@ -1,5 +1,5 @@
 // =============================================================================
-// Althentic.Dev — Seed data (dijalankan: bun scripts/seed.ts)
+// Althentic.Dev - Seed data (dijalankan: bun scripts/seed.ts)
 // Membuat: Super-Admin, 3 toko (pemilik platform + 2 seller), 14 produk dengan
 // preview webp, QR demo, banner 4:1, order berbagai status, review, invoice
 // komisi, notifikasi, changelog. Semua alur E2E dapat diverifikasi.
@@ -46,7 +46,7 @@ async function toWebp(file: string, opts?: { width?: number; height?: number; cr
   return img.webp({ quality: 82 }).toBuffer();
 }
 
-/** QR demo — pola visual deterministik (bukan QR scannable; environment sandbox). */
+/** QR demo - pola visual deterministik (bukan QR scannable; environment sandbox). */
 async function makeQr(seedStr: string): Promise<Buffer> {
   const N = 29;
   const cell = 10;
@@ -120,7 +120,7 @@ async function main() {
       invoiceThreshold: 25000,
       suspendThreshold: 25000,
       waTemplate:
-        "Halo {nama_toko}, saya {nama_buyer}. Order {id_order} untuk produk {nama_produk} sebesar {jumlah} — bukti transfer saya gagal diverifikasi otomatis. Mohon verifikasi manual ya. Terima kasih!",
+        "Halo {nama_toko}, saya {nama_buyer}. Order {id_order} untuk produk {nama_produk} sebesar {jumlah} - bukti transfer saya gagal diverifikasi otomatis. Mohon verifikasi manual ya. Terima kasih!",
       tosVersion: "2026-10-27",
     },
   });
@@ -209,7 +209,7 @@ async function main() {
       name: "Althentic Studio",
       slug: "althentic-studio",
       description:
-        "Toko resmi pemilik platform Althentic.Dev. Prompt & template terkurasi kualitas terbaik — dirilis gratis berkala untuk komunitas AI Indonesia.",
+        "Toko resmi pemilik platform Althentic.Dev. Prompt & template terkurasi kualitas terbaik - dirilis gratis berkala untuk komunitas AI Indonesia.",
       accentPreset: 0,
       bannerPath: banner1,
       qrPath: qr1,
@@ -248,7 +248,7 @@ async function main() {
       name: "Karya Prompt",
       slug: "karya-prompt",
       description:
-        "Prompt edukasi & belajar terstruktur. Dibuat guru & instruktur — untuk pelajar, mahasiswa, dan lifelong learner.",
+        "Prompt edukasi & belajar terstruktur. Dibuat guru & instruktur - untuk pelajar, mahasiswa, dan lifelong learner.",
       accentPreset: 2,
       bannerPath: banner3,
       qrPath: qr3,
@@ -276,7 +276,7 @@ async function main() {
   const products: SeedProduct[] = [
     {
       slug: "landing-page-saas-converter",
-      title: "Landing Page SaaS Converter — Template Next.js",
+      title: "Landing Page SaaS Converter - Template Next.js",
       store: "althentic-studio",
       category: "website",
       img: "p01.png",
@@ -322,7 +322,7 @@ async function main() {
       category: "research",
       img: "p10.png",
       sellTypes: [{ type: "prompt", price: 0, driveFileId: "demo:riset-gratis" }],
-      desc: "Rilis gratis dari toko pemilik platform (strategi konten dulu — SPEC-16-08). Prompt riset kilat untuk validasi ide sebelum membangun. Gratis, tanpa komisi.",
+      desc: "Rilis gratis dari toko pemilik platform (strategi konten dulu - SPEC-16-08). Prompt riset kilat untuk validasi ide sebelum membangun. Gratis, tanpa komisi.",
     },
     {
       slug: "tutor-personal-bahasa-inggris",
@@ -380,7 +380,7 @@ async function main() {
     },
     {
       slug: "company-profile-bundle",
-      title: "Website Company Profile — Bundle Template + Prompt",
+      title: "Website Company Profile - Bundle Template + Prompt",
       store: "promptworks",
       category: "website",
       img: "p11.png",
@@ -457,7 +457,7 @@ async function main() {
     const report = await db.inspectionReport.create({
       data: {
         productId: firstProduct.id,
-        markdown: `# Laporan Inspeksi Produk — ${firstProduct.title}\n\n- **Toko:** Althentic Studio\n- **Pemicu:** submission\n- **Timestamp inspeksi:** ${new Date(Date.now() - 38 * 24 * 3600 * 1000).toISOString()}\n\n## 1. Status link Google Drive\n- Hasil: **OK** (HTTP 200)\n\n## 2. Live demo\n- HTTP **200** — screenshot desktop tersimpan\n\n## 3. File .zip\n- Ukuran: 52.2 KB\n- Hash SHA-256: \`${firstProduct.fileHash}\`\n\n## 4. Kesimpulan otomatis\n- Lolos pemeriksaan teknis — menunggu review Super-Admin.`,
+        markdown: `# Laporan Inspeksi Produk - ${firstProduct.title}\n\n- **Toko:** Althentic Studio\n- **Pemicu:** submission\n- **Timestamp inspeksi:** ${new Date(Date.now() - 38 * 24 * 3600 * 1000).toISOString()}\n\n## 1. Status link Google Drive\n- Hasil: **OK** (HTTP 200)\n\n## 2. Live demo\n- HTTP **200** - screenshot desktop tersimpan\n\n## 3. File .zip\n- Ukuran: 52.2 KB\n- Hash SHA-256: \`${firstProduct.fileHash}\`\n\n## 4. Kesimpulan otomatis\n- Lolos pemeriksaan teknis - menunggu review Super-Admin.`,
         driveStatus: "ok",
         demoHttpStatus: 200,
         zipSize: firstProduct.zipSize,
@@ -486,7 +486,7 @@ async function main() {
         inspectionId: report.id,
         payloadJson: JSON.stringify({ title: firstProduct.title, store: "althentic-studio" }),
         decision: "approve",
-        reason: "Legalitas & keamanan lolos — link hidup, deskripsi tidak menipu (GAP-07).",
+        reason: "Legalitas & keamanan lolos - link hidup, deskripsi tidak menipu (GAP-07).",
         createdById: admin.id,
         createdAt: new Date(Date.now() - 37 * 24 * 3600 * 1000),
       },
@@ -614,7 +614,7 @@ async function main() {
   await addReview({ productSlug: "super-prompt-riset-pasar", userId: buyer.id, rating: 5, text: "Riset pasar jadi jauh lebih cepat. Outputnya terstruktur dan langsung bisa dipakai buat pitch. Recommended!", daysAgo: 4 });
   await addReview({ productSlug: "super-prompt-riset-pasar", userId: buyer2.id, rating: 5, text: "Prompt-nya detail banget, semua framework riset yang biasanya saya bayar konsultan sekarang bisa jalan sendiri.", reply: "Terima kasih! Selalu update blok konteksnya agar hasil makin personal.", daysAgo: 3 });
   await addReview({ productSlug: "copywriting-30-headline", userId: buyer.id, rating: 4, text: "Headline variasinya beragam. Beberapa perlu di-polish lagi, tapi kerangka AIDA-nya sangat membantu.", daysAgo: 3 });
-  await addReview({ productSlug: "prompt-ilustrasi-isometrik", userId: buyer2.id, rating: 5, text: "Konsistensi isometriknya juara — aset untuk landing page jadi satu paket visual.", daysAgo: 5 });
+  await addReview({ productSlug: "prompt-ilustrasi-isometrik", userId: buyer2.id, rating: 5, text: "Konsistensi isometriknya juara - aset untuk landing page jadi satu paket visual.", daysAgo: 5 });
 
   // Refresh rating produk & toko
   const allProducts = await db.product.findMany({ include: { reviews: true } });
@@ -675,9 +675,9 @@ async function main() {
     });
     await db.emailOutbox.createMany({
       data: [
-        { toEmail: seller2.email, subject: `Invoice komisi ${inv.code} — Rp${invAmount.toLocaleString("id-ID")}`, body: "Invoice komisi terbit otomatis saat threshold Rp25.000 tercapai. Batas suspend: " + suspendAt.toLocaleDateString("id-ID"), kind: "invoice_issued", status: "logged", createdAt: issuedAt },
-        { toEmail: seller2.email, subject: `Pengingat invoice ${inv.code} — hari ke-1`, body: "Tunggakan belum lunas. Suspend otomatis bila belum bayar pada hari ke-8.", kind: "invoice_reminder", status: "logged", createdAt: daysAgo(4) },
-        { toEmail: seller2.email, subject: `Pengingat invoice ${inv.code} — hari ke-3`, body: "Tunggakan belum lunas. Banner kuning tampil di dashboard seller saat tersisa 3 hari.", kind: "invoice_reminder", status: "logged", createdAt: daysAgo(2) },
+        { toEmail: seller2.email, subject: `Invoice komisi ${inv.code} - Rp${invAmount.toLocaleString("id-ID")}`, body: "Invoice komisi terbit otomatis saat threshold Rp25.000 tercapai. Batas suspend: " + suspendAt.toLocaleDateString("id-ID"), kind: "invoice_issued", status: "logged", createdAt: issuedAt },
+        { toEmail: seller2.email, subject: `Pengingat invoice ${inv.code} - hari ke-1`, body: "Tunggakan belum lunas. Suspend otomatis bila belum bayar pada hari ke-8.", kind: "invoice_reminder", status: "logged", createdAt: daysAgo(4) },
+        { toEmail: seller2.email, subject: `Pengingat invoice ${inv.code} - hari ke-3`, body: "Tunggakan belum lunas. Banner kuning tampil di dashboard seller saat tersisa 3 hari.", kind: "invoice_reminder", status: "logged", createdAt: daysAgo(2) },
       ],
     });
     await db.notification.create({
@@ -685,7 +685,7 @@ async function main() {
         userId: seller2.id,
         type: "invoice",
         title: `Invoice komisi ${inv.code} terbit`,
-        body: `Tunggakan Rp${invAmount.toLocaleString("id-ID")} — lunasi sebelum ${suspendAt.toLocaleDateString("id-ID")}.`,
+        body: `Tunggakan Rp${invAmount.toLocaleString("id-ID")} - lunasi sebelum ${suspendAt.toLocaleDateString("id-ID")}.`,
         linkQuery: "v=dashboard&tab=commissions",
         createdAt: issuedAt,
       },
@@ -695,9 +695,9 @@ async function main() {
   // ---------- Notifikasi buyer ----------
   await db.notification.createMany({
     data: [
-      { userId: buyer.id, type: "order_update", title: "Pembayaran terverifikasi — Kalender Konten IG 30 Hari", body: "Status Lunas. File bisa diunduh dari Koleksi Saya (kuota unduh 1x).", linkQuery: "v=collection", createdAt: daysAgo(2) },
-      { userId: buyer.id, type: "order_update", title: "Bukti diterima — Prompt Keyword Riset SEO Bulanan", body: "Bukti transfer kamu sedang diverifikasi AI Receipt Scanner.", linkQuery: "v=orders", createdAt: daysAgo(0, 2) },
-      { userId: buyer.id, type: "product_update", title: "Produk yang kamu beli diperbarui: Super Prompt Riset Pasar", body: "File ZIP inti diperbarui ke v1 — sesuai kebijakan, tidak ada re-grant otomatis.", linkQuery: "v=collection", createdAt: daysAgo(1) },
+      { userId: buyer.id, type: "order_update", title: "Pembayaran terverifikasi - Kalender Konten IG 30 Hari", body: "Status Lunas. File bisa diunduh dari Koleksi Saya (kuota unduh 1x).", linkQuery: "v=collection", createdAt: daysAgo(2) },
+      { userId: buyer.id, type: "order_update", title: "Bukti diterima - Prompt Keyword Riset SEO Bulanan", body: "Bukti transfer kamu sedang diverifikasi AI Receipt Scanner.", linkQuery: "v=orders", createdAt: daysAgo(0, 2) },
+      { userId: buyer.id, type: "product_update", title: "Produk yang kamu beli diperbarui: Super Prompt Riset Pasar", body: "File ZIP inti diperbarui ke v1 - sesuai kebijakan, tidak ada re-grant otomatis.", linkQuery: "v=collection", createdAt: daysAgo(1) },
     ],
   });
 
