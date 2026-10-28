@@ -1,5 +1,5 @@
-// DELETE /api/admin/reviews/[id] — hapus review melanggar dengan alasan tercatat
-// (SPEC-10-06: hanya Super-Admin). POST /api/admin/takedown — takedown produk
+// DELETE /api/admin/reviews/[id] - hapus review melanggar dengan alasan tercatat
+// (SPEC-10-06: hanya Super-Admin). POST /api/admin/takedown - takedown produk
 // dengan alasan terstruktur (SPEC-10-02) + email ke seller.
 import { NextRequest } from "next/server";
 import { db } from "@/lib/db";
@@ -68,12 +68,12 @@ export async function POST(req: NextRequest) {
       userId: product.store.ownerId,
       type: "verification_result",
       title: `Produk di-takedown: ${product.title}`,
-      body: `${body.rule ?? "Kebijakan konten"}: ${body.reason} — kamu bisa mengajukan banding lewat jalur dispute.`,
+      body: `${body.rule ?? "Kebijakan konten"}: ${body.reason} - kamu bisa mengajukan banding lewat jalur dispute.`,
       linkQuery: `v=dashboard&tab=products`,
       email: {
         to: product.store.owner.email,
         subject: `Takedown produk: ${product.title}`,
-        body: `Halo ${product.store.name},\n\nProduk "${product.title}" telah di-takedown.\nAlasan terstruktur: ${body.rule ?? "Kebijakan konten"} — ${body.reason}\n\nKamu dapat mengajukan banding melalui jalur dispute.`,
+        body: `Halo ${product.store.name},\n\nProduk "${product.title}" telah di-takedown.\nAlasan terstruktur: ${body.rule ?? "Kebijakan konten"} - ${body.reason}\n\nKamu dapat mengajukan banding melalui jalur dispute.`,
         kind: "product_takedown",
       },
     });
