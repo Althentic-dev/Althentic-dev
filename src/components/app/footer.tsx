@@ -1,7 +1,7 @@
 "use client";
 
 // =============================================================================
-// Footer — 4 kolom grid, professional style (Landing section 9 / GAP-10).
+// Footer - 4 kolom grid, professional style (Landing section 9 / GAP-10).
 // Sticky di dasar viewport saat konten pendek (flex-col + mt-auto).
 // =============================================================================
 
@@ -126,7 +126,7 @@ export function Footer() {
 
       <div className="border-t border-border/60">
         <div className="container-page flex flex-col gap-2 py-5 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-          <span>© 2026 Althentic.Dev — Marketplace Prompt Serbaguna.</span>
+          <span>© 2026 Althentic.Dev - Marketplace Prompt Serbaguna.</span>
           <span>
             Pembayaran QR lokal · Harga Rupiah · Komunitas Indonesia · Hukum Indonesia
             (domisili Aceh Besar)
