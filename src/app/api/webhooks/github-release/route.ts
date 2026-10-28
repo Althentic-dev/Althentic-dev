@@ -1,0 +1,77 @@
+// POST /api/webhooks/github-release — sync changelog dari GitHub Release (Docs §7).
+// Verifikasi signature x-hub-signature-256 (bila GITHUB_WEBHOOK_SECRET diset).
+import { NextRequest } from "next/server";
+import { createHmac, timingSafeEqual } from "crypto";
+import { db } from "@/lib/db";
+import { json, fail, handle } from "@/lib/server/helpers";
+
+function verifySignature(payload: string, signature: string | null): boolean {
+  const secret = process.env.GITHUB_WEBHOOK_SECRET;
+  if (!secret) return true; // sandbox: tanpa secret, webhook diterima
+  if (!signature?.startsWith("sha256=")) return false;
+  const expected = createHmac("sha256", secret).update(payload).digest("hex");
+  const a = Buffer.from(expected);
+  const b = Buffer.from(signature.slice(7));
+  return a.length === b.length && timingSafeEqual(a, b);
+}
+
+export async function POST(req: NextRequest) {
+  return handle(async () => {
+    const raw = await req.text();
+    if (!verifySignature(raw, req.headers.get("x-hub-signature-256"))) {
+      return fail("Signature webhook tidak valid.", 401);
+    }
+    const event = req.headers.get("x-github-event");
+    if (event !== "release") return json({ ok: true, ignored: event });
+
+    const body = JSON.parse(raw) as {
+      action?: string;
+      release?: {
+        tag_name?: string;
+        name?: string;
+        body?: string;
+        published_at?: string;
+        html_url?: string;
+      };
+    };
+    const release = body.release;
+    if (!release?.tag_name) return fail("Payload release tidak valid.", 422);
+
+    const existing = await db.changelogEntry.findFirst({
+      where: { tagName: release.tag_name },
+    });
+    const data = {
+      tagName: release.tag_name,
+      name: release.name ?? release.tag_name,
+      body: release.body ?? "",
+      publishedAt: new Date(release.published_at ?? Date.now()),
+      url: release.html_url ?? null,
+      source: "github",
+    };
+    if (existing) {
+      await db.changelogEntry.update({ where: { id: existing.id }, data });
+    } else {
+      await db.changelogEntry.create({ data });
+    }
+    return json({ ok: true, synced: release.tag_name });
+  });
+}
+
+// GET — daftar changelog kronologis (dipakai halaman dokumentasi)
+export async function GET() {
+  return handle(async () => {
+    const entries = await db.changelogEntry.findMany({
+      orderBy: { publishedAt: "desc" },
+    });
+    return json({
+      entries: entries.map((e) => ({
+        id: e.id,
+        tagName: e.tagName,
+        name: e.name,
+        body: e.body,
+        publishedAt: e.publishedAt.toISOString(),
+        url: e.url,
+      })),
+    });
+  });
+}
