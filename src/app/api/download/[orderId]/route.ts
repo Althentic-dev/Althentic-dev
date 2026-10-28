@@ -1,4 +1,4 @@
-// GET /api/download/[orderId] — Delivery proxy/stream (GAP-02 FINAL):
+// GET /api/download/[orderId] - Delivery proxy/stream (GAP-02 FINAL):
 // stream file .zip dari Google Drive dengan Content-Disposition: attachment.
 // BUKAN redirect, BUKAN 302. Link Drive tidak pernah tampil mentah (SPEC-11-02).
 // Kuota 1x terpakai saat stream DIMULAI (GAP-13). Setiap akses dicatat.
@@ -7,7 +7,57 @@ import { db } from "@/lib/db";
 import { fail, handle, getClientIp, getUserAgent } from "@/lib/server/helpers";
 import { requireUser } from "@/lib/server/auth";
 import { deliverForOrder } from "@/lib/server/delivery";
-import { markDownloadUsed } from "@/lib/server/orders";
+import { finishDownloadLog, markDownloadUsed, restoreDownloadClaim } from "@/lib/server/orders";
+
+export const maxDuration = 60;
+
+function trackDownloadStream(
+  body: ReadableStream<Uint8Array> | Buffer,
+  p: { orderId: string; userId: string; claimedAt: Date }
+): ReadableStream<Uint8Array> {
+  const source = body instanceof ReadableStream
+    ? body
+    : new ReadableStream<Uint8Array>({
+        start(controller) {
+          controller.enqueue(new Uint8Array(body));
+          controller.close();
+        },
+      });
+  const reader = source.getReader();
+  let finalized = false;
+  let bytesDelivered = 0;
+  const finalize = async (status: "completed" | "failed") => {
+    if (finalized) return;
+    finalized = true;
+    if (status === "failed" && bytesDelivered === 0) {
+      await restoreDownloadClaim(p);
+      return;
+    }
+    await finishDownloadLog({ ...p, status });
+  };
+
+  return new ReadableStream<Uint8Array>({
+    async pull(controller) {
+      try {
+        const chunk = await reader.read();
+        if (chunk.done) {
+          await finalize("completed").catch(() => undefined);
+          controller.close();
+        } else {
+          bytesDelivered += chunk.value.byteLength;
+          controller.enqueue(chunk.value);
+        }
+      } catch (error) {
+        await finalize("failed").catch(() => undefined);
+        controller.error(error);
+      }
+    },
+    async cancel(reason) {
+      await reader.cancel(reason).catch(() => undefined);
+      await finalize("failed").catch(() => undefined);
+    },
+  });
+}
 
 export async function GET(req: NextRequest, ctx: { params: Promise<{ orderId: string }> }) {
   const response = await handle(async () => {
@@ -27,23 +77,28 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ orderId: st
       return fail("Kuota unduh (1x) sudah terpakai untuk order ini. Ajukan dispute bila unduhan terputus.", 403, "QUOTA_USED");
     }
 
-    const ip = getClientIp(req);
-    // Catat akses SEBELUM stream dimulai (SPEC-11-02) + konsumsi kuota (GAP-13)
-    await db.downloadLog.create({
-      data: { orderId: order.id, userId: user.id, ip, userAgent: getUserAgent(req), status: "started" },
+    const claimedAt = await markDownloadUsed({
+      orderId: order.id,
+      userId: user.id,
+      actor: user.isSuperAdmin ? "superadmin" : "buyer",
+      ip: getClientIp(req),
+      userAgent: getUserAgent(req),
     });
-    await markDownloadUsed(order.id); // kuota terpakai saat stream dimulai
+    if (!claimedAt) return fail("Kuota unduh sudah digunakan oleh request lain.", 403, "QUOTA_USED");
 
-    const delivery = await deliverForOrder({ orderId: order.id });
+    let delivery;
+    try {
+      delivery = await deliverForOrder({ orderId: order.id });
+    } catch (error) {
+      await restoreDownloadClaim({ orderId: order.id, userId: user.id, claimedAt });
+      throw error;
+    }
     if (!delivery) {
-      await db.downloadLog.updateMany({
-        where: { orderId: order.id, status: "started" },
-        data: { status: "failed" },
-      });
+      await restoreDownloadClaim({ orderId: order.id, userId: user.id, claimedAt });
       return fail("File produk tidak dapat diakses saat ini. Silakan ajukan dispute.", 502);
     }
 
-    // Response: stream + attachment — TANPA redirect ke Google Drive (GAP-02)
+    // Response: stream + attachment - TANPA redirect ke Google Drive (GAP-02)
     const headers = new Headers({
       "Content-Type": delivery.contentType,
       "Content-Disposition": `attachment; filename="${delivery.fileName}"`,
@@ -53,10 +108,11 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ orderId: st
     if (delivery.contentLength) {
       headers.set("Content-Length", String(delivery.contentLength));
     }
-    if (Buffer.isBuffer(delivery.body)) {
-      return new Response(new Uint8Array(delivery.body), { headers });
-    }
-    return new Response(delivery.body, { headers });
+    return new Response(trackDownloadStream(delivery.body, {
+      orderId: order.id,
+      userId: user.id,
+      claimedAt,
+    }), { headers });
   });
   return response as Response;
 }
