@@ -1,4 +1,4 @@
-// POST /api/auth/logout — turunkan session manual (SPEC-05-07)
+// POST /api/auth/logout - turunkan session manual (SPEC-05-07)
 import { handle, json } from "@/lib/server/helpers";
 import { destroyCurrentSession } from "@/lib/server/auth";
 
