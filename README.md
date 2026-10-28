@@ -18,10 +18,10 @@ Production deployment targets Vercel, Neon Postgres, and Supabase Storage. Revie
 ## Local development
 
 1. Install Bun and the project dependencies with `bun install`.
-2. Copy `.env.example` to `.env` and replace every placeholder with local values. Keep `.env` private.
+2. Copy `.env.example` to `.env` and replace the local development placeholders. Keep `.env` private and never put production credentials in it.
 3. Start the development server with `bun run dev`.
 
-The checked-in environment template uses a local SQLite database path. Do not point local development at production data.
+The environment template uses a local SQLite database and local file storage. Do not point local development at production data.
 
 ## Project documents
 
