@@ -1,4 +1,4 @@
-// POST /api/auth/register — pendaftaran (SPEC-05-01, SPEC-14-03/05)
+// POST /api/auth/register - pendaftaran (SPEC-05-01, SPEC-14-03/05)
 // Checkbox ToS + usia 17+ wajib; versi & tanggal consent dicatat.
 import { NextRequest } from "next/server";
 import { z } from "zod";
@@ -62,7 +62,7 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    // Token verifikasi email — kedaluwarsa 24 jam (SPEC-05-02)
+    // Token verifikasi email - kedaluwarsa 24 jam (SPEC-05-02)
     const token = generateToken();
     await db.verificationToken.create({
       data: {
