@@ -1,5 +1,16 @@
 # Keputusan Teknis
 
+## Neon PostgreSQL dan Prisma
+
+Keputusan ini berlaku sejak migrasi provider database ke Neon PostgreSQL dan menggantikan status SQLite sandbox sebelumnya.
+
+- `DATABASE_URL` menunjuk koneksi pooled Neon untuk query runtime.
+- `DIRECT_URL` menunjuk koneksi direct Neon yang dipakai Prisma Migrate pada Prisma 6.
+- Schema PostgreSQL dan migration SQL berada di `prisma/schema.prisma` dan `prisma/migrations/`.
+- Production memakai `bun run db:deploy` untuk menerapkan migration yang sudah dikomit. `bun run db:push` tidak lagi memakai `--accept-data-loss` dan bukan jalur deployment.
+- Data lama dipindahkan oleh `scripts/migrate-sqlite-to-neon.ts` setelah preflight target kosong. Utilitas mempertahankan file sumber serta menolak menimpa object receipt.
+- Nilai `DATABASE_URL` dan `DIRECT_URL` wajib disediakan pada Vercel Production; keduanya tidak dicatat atau dicetak.
+
 ## Neon Object Storage untuk bukti transfer
 
 Keputusan ini memperbarui catatan provider receipt di SPEC-07-06 dan SPEC-15-01. Catatan Q&A historis tetap disimpan di SPEC/PRD; `docs/ARCHITECTURE.md` dan `DEVIATIONS.md` menjelaskan keputusan implementasi yang berlaku.
@@ -11,15 +22,15 @@ Keputusan ini memperbarui catatan provider receipt di SPEC-07-06 dan SPEC-15-01.
 - Bucket `receipts` harus sudah dibuat dan disetel private di Neon Console/API. Konfigurasi SDK tidak mengubah visibility bucket atau ACL.
 - Aplikasi menolak nama bucket selain `receipts` agar bukti tidak dapat diarahkan ke bucket lain karena salah konfigurasi.
 - Signed URL aplikasi tetap melewati `/api/files`; route memverifikasi signature sebelum membaca objek. Operasi unggah, baca, cek keberadaan, dan hapus receipt menggunakan Neon. Screenshot inspeksi dan file non-receipt tetap memakai adapter filesystem lokal.
-- Tidak ada migrasi objek otomatis dari storage lama. Sebelum deployment, pastikan bucket serta kredensial Neon sudah siap dan tentukan pemindahan bukti lama bila memang ada.
+- Pemindahan receipt lama disiapkan sebagai proses satu kali melalui `scripts/migrate-sqlite-to-neon.ts`; script memetakan `private/receipts/...` ke key bucket `receipts/...`, memeriksa object yang sudah ada, dan menolak menimpa byte berbeda. Import aktual menunggu koneksi Neon tersedia. Bucket serta kredensial Neon harus sudah siap.
 
-## Hasil audit environment variables
+## Hasil audit environment variables sebelum migrasi PostgreSQL
 
 Audit membandingkan template dan nama variabel di file `.env` lokal dengan referensi kode, schema Prisma, dan script seed. Nilai `.env` lokal tidak dicatat di dokumen ini.
 
 | Variabel lama atau kandidat | Keputusan | Alasan |
 | --- | --- | --- |
-| `DIRECT_URL` | Dihapus dari konfigurasi aplikasi | Schema Prisma hanya memakai `DATABASE_URL` dan tidak menetapkan `directUrl`. |
+| `DIRECT_URL` | Dihapus saat audit awal, kemudian dipulihkan untuk migrasi Prisma PostgreSQL | Pada audit awal schema SQLite hanya memakai `DATABASE_URL`; schema sekarang menetapkan `directUrl = env("DIRECT_URL")`. |
 | `NEXTAUTH_URL`, `NEXTAUTH_SECRET` | Dihapus | Autentikasi aplikasi memakai session/secret internal, bukan NextAuth. |
 | `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `SUPABASE_PASSWORD`, `SUPABASE_STORAGE_BUCKET_BANNERS`, `SUPABASE_STORAGE_BUCKET_PREVIEWS`, `SUPABASE_STORAGE_BUCKET_BACKUPS` | Dihapus dari `.env.example` dan konfigurasi lokal yang diaudit | Tidak ada adapter atau referensi Supabase di kode saat ini. Banner/preview saat ini masih melewati adapter filesystem. Integrasi Supabase untuk aset tersebut masih pekerjaan terpisah. |
 | `GOOGLE_DRIVE_API_KEY`, `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` | Dihapus | Inspeksi/download Drive memakai HTTP(S) ke tautan publik, bukan Google Drive API/OAuth resmi. |
@@ -34,7 +45,7 @@ Audit membandingkan template dan nama variabel di file `.env` lokal dengan refer
 | `SUPER_ADMIN_PASSWORD_HASH` | Dihapus | Script seed membaca `SUPER_ADMIN_INITIAL_PASSWORD`, bukan hash ini. Hash tidak dapat dikonversi kembali ke password seed. |
 | `SUPABASE_STORAGE_BUCKET_BACKUPS` | Bukan konfigurasi `.env` aplikasi | Repository belum memiliki workflow backup. Kredensial mendatang harus berada di GitHub Actions Secrets; nama bucket/region yang tidak rahasia dapat menjadi Actions Variables atau konfigurasi workflow. Lihat bagian backup di README. |
 
-`SUPABASE_ANON_KEY` tidak diperlukan karena tidak ada akses Supabase client-side. `GOOGLE_DRIVE_API_KEY` tidak diperlukan untuk fetch tautan publik. `SCREENSHOT_API_PROVIDER` juga tidak digunakan. `DIRECT_URL` tidak dibutuhkan tanpa konfigurasi pooling/direct URL terpisah pada Prisma.
+`SUPABASE_ANON_KEY` tidak diperlukan karena tidak ada akses Supabase client-side. `GOOGLE_DRIVE_API_KEY` tidak diperlukan untuk fetch tautan publik. `SCREENSHOT_API_PROVIDER` juga tidak digunakan. Kesimpulan audit awal bahwa `DIRECT_URL` tidak dibutuhkan berlaku sebelum schema Prisma memakai PostgreSQL dan kini sudah digantikan oleh keputusan di atas.
 
 ## Batas integrasi file yang belum tersedia
 

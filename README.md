@@ -9,7 +9,7 @@ Althentic is a multi-tenant marketplace for ready-to-use prompts and digital pro
 ## Technology
 
 - Next.js App Router with TypeScript
-- Prisma with SQLite for local development
+- Prisma with Neon PostgreSQL (`DATABASE_URL` pooled; `DIRECT_URL` for migrations)
 - Bun for package management
 - Local file storage in `storage/`
 
@@ -17,12 +17,15 @@ Production deployment targets Vercel and Neon. Receipt files use Neon Object Sto
 
 ## Local development
 
-1. Install Bun and the project dependencies with `bun install`.
-2. Copy `.env.example` to `.env` and replace the local development placeholders. Keep `.env` private and never put production credentials in it.
-3. Start the development server with `bun run dev`.
+1. Install Bun and the project dependencies with `bun install --frozen-lockfile`.
+2. Copy `.env.example` to `.env` and configure both database URLs for a dedicated, non-production Neon branch. Keep `.env` private and never put production credentials in it.
+3. Apply committed schema migrations with `bun run db:deploy`.
+4. Start the development server with `bun run dev`.
 
-The environment template uses a local SQLite database and local file storage. Do not point local development at production data.
+Prisma uses PostgreSQL. `DATABASE_URL` is the pooled runtime connection and `DIRECT_URL` is used by Prisma migration commands. `bun run db:deploy` applies committed migrations; `bun run db:push` is for controlled development only and does not enable automatic data loss. Do not point local development at production data.
 Receipt uploads require a configured Neon Object Storage endpoint, credentials, and private `receipts` bucket; the application does not silently store receipts in Supabase or local storage when that configuration is missing.
+
+The one-time `bun run scripts/migrate-sqlite-to-neon.ts` utility imports relational rows from `db/custom.db` and linked private receipt WebP files. It refuses to run when destination application tables are non-empty, verifies row counts and receipt bytes, and never deletes the source database or files. Run it only after `bun run db:deploy` and after confirming the Neon target branch is the intended production database.
 
 ## Project documents
 
