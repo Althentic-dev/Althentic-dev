@@ -1,7 +1,7 @@
 "use client";
 
 // =============================================================================
-// Althentic.Dev — SPA Router (sandbox: seluruh platform hidup di route "/").
+// Althentic.Dev - SPA Router (sandbox: seluruh platform hidup di route "/").
 // Navigasi berbasis query (?v=view&id=...) memakai History API sehingga:
 // - Filter katalog tersimpan di URL & bisa dibagikan (SPEC-03-02)
 // - Tombol back browser berfungsi (popstate)
@@ -57,7 +57,7 @@ export function navigateTo(
   if (!opts?.keepScroll) window.dispatchEvent(new Event(SCROLL_TOP_EVENT));
 }
 
-// URL adalah external store — subscribe via useSyncExternalStore (juga
+// URL adalah external store - subscribe via useSyncExternalStore (juga
 // menjaga konsistensi SSR/hydration).
 function subscribeUrl(cb: () => void) {
   window.addEventListener("popstate", cb);
