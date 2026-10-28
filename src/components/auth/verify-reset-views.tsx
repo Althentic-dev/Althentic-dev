@@ -1,7 +1,7 @@
 "use client";
 
-// VerifyEmailView — ?v=verify&token=... (SPEC-05-02: link 24 jam, bisa kirim ulang)
-// ResetPasswordView — ?v=reset&token=... (SPEC-05-03: sekali pakai 1 jam)
+// VerifyEmailView - ?v=verify&token=... (SPEC-05-02: link 24 jam, bisa kirim ulang)
+// ResetPasswordView - ?v=reset&token=... (SPEC-05-03: sekali pakai 1 jam)
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { BadgeCheck } from "@/components/animate-ui/icons/badge-check";
@@ -129,7 +129,7 @@ export function ResetPasswordView({ token }: { token?: string }) {
       setDone(true);
       toast({
         title: "Password direset",
-        description: "Semua session lama sudah diturunkan — silakan masuk kembali.",
+        description: "Semua session lama sudah diturunkan - silakan masuk kembali.",
       });
     } catch (err) {
       setError((err as Error).message);
