@@ -1,4 +1,4 @@
-// GET/PUT /api/admin/settings — Settings Super-Admin (SPEC-01-05..07, SPEC-09-04)
+// GET/PUT /api/admin/settings - Settings Super-Admin (SPEC-01-05..07, SPEC-09-04)
 import { NextRequest } from "next/server";
 import { z } from "zod";
 import { db } from "@/lib/db";
@@ -33,7 +33,7 @@ export async function PUT(req: NextRequest) {
   });
 }
 
-// POST — "Uji pratinjau" template WA (SPEC-01-07): render contoh pesan
+// POST - "Uji pratinjau" template WA (SPEC-01-07): render contoh pesan
 export async function POST(req: NextRequest) {
   return handle(async () => {
     await requireSuperAdmin(req);
