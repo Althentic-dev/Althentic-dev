@@ -1,9 +1,9 @@
 // =============================================================================
-// Althentic.Dev — AI Receipt Scanner (Konteks Terkunci, SPEC-07-01..10, GAP-12)
+// Althentic.Dev - AI Receipt Scanner (Konteks Terkunci, SPEC-07-01..10, GAP-12)
 // BYOK: primary + fallback key. Timeout 15 detik per request, retry 1x sebelum
 // fallback ke key kedua. Pencocokan berbasis data TERSTRUKTUR hasil ekstraksi
-// (nominal, tanggal, nama pengirim) — bukan perceptual hash gambar.
-// Data tersimpan: nominal, tanggal/waktu, nama pengirim, status match —
+// (nominal, tanggal, nama pengirim) - bukan perceptual hash gambar.
+// Data tersimpan: nominal, tanggal/waktu, nama pengirim, status match -
 // TANPA raw response penuh dari AI provider (GAP-12).
 // Provider: gemini (BYOK, production) | zai (VLM platform, aktif di sandbox).
 // =============================================================================
@@ -200,7 +200,7 @@ function failResult(reason: string): ScanResult {
   return { ok: false, amount: null, transferAt: null, senderName: null, manipulationSuspected: false, notes: reason };
 }
 
-/** Validasi key saat disimpan — satu panggilan test murah (SPEC-07-08). */
+/** Validasi key saat disimpan - satu panggilan test murah (SPEC-07-08). */
 export async function testKey(provider: string, apiKey: string): Promise<boolean> {
   try {
     if (provider === "zai") return true; // provider platform, tanpa BYOK
