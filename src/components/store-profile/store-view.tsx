@@ -1,6 +1,6 @@
 "use client";
 
-// StoreView — profil publik toko (SPEC-13-01): branding, warna aksen, deskripsi,
+// StoreView - profil publik toko (SPEC-13-01): branding, warna aksen, deskripsi,
 // ikon sosial media (Lucide), statistik publik, grid produk.
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
@@ -115,7 +115,7 @@ export function StoreView({ slug }: { slug?: string }) {
               </div>
             </div>
 
-            {/* Ikon sosial media — dirender sebagai ikon Lucide (DESIGN.md batasan icon) */}
+            {/* Ikon sosial media - dirender sebagai ikon Lucide (DESIGN.md batasan icon) */}
             <div className="flex items-center gap-1 pb-1">
               {store.socials.ig && (
                 <a
