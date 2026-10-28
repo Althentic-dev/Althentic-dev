@@ -1,5 +1,5 @@
-// POST /api/orders — checkout (SPEC-04-01: wajib akun + verifikasi email pertama)
-// GET  /api/orders — daftar order buyer (Pesanan Saya)
+// POST /api/orders - checkout (SPEC-04-01: wajib akun + verifikasi email pertama)
+// GET  /api/orders - daftar order buyer (Pesanan Saya)
 import { NextRequest } from "next/server";
 import { z } from "zod";
 import { db } from "@/lib/db";
