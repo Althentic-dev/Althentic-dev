@@ -1,9 +1,8 @@
 // =============================================================================
-// Althentic.Dev — Prisma Schema (GAP-20: kontrak implementasi teknis)
-// Sandbox: SQLite (portabel ke NeonDB Postgres untuk production Vercel).
-// Catatan: SQLite tidak mendukung enum native → semua enum disimpan sebagai
-// String + divalidasi via Zod di layer API (SPEC-15-04).
-// List primitive tidak diizinkan → array disimpan sebagai JSON string (*Json).
+// Althentic.Dev - Prisma Schema (GAP-20: kontrak implementasi teknis)
+// Neon PostgreSQL dipakai untuk development dan production Vercel.
+// Enum tetap disimpan sebagai String dan divalidasi via Zod di layer API.
+// Array aplikasi disimpan sebagai JSON string untuk menjaga format data.
 // =============================================================================
 
 generator client {
@@ -11,8 +10,9 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 // ------------------------------- AUTH & AKUN ---------------------------------
@@ -23,7 +23,7 @@ model User {
   emailVerifiedAt DateTime?
   name            String
   passwordHash    String? // null hanya untuk akun OAuth (production)
-  role            String    @default("buyer") // buyer | seller — superadmin via env match
+  role            String    @default("buyer") // buyer | seller - superadmin via env match
   isSuperAdmin    Boolean   @default(false)
   softDeletedAt   DateTime? // GAP-17: soft-delete 30 hari lalu hard-delete
   // Preferensi (SPEC-13-03)
@@ -94,7 +94,7 @@ model Store {
   onboardingStepsJson String @default("[false,false,false,false]") // 4 langkah draft (SPEC-06-05)
   suspendedAt   DateTime?
   suspendReason String?
-  // BYOK AI Receipt Scanner (SPEC-07-08) — AES-256-GCM at-rest
+  // BYOK AI Receipt Scanner (SPEC-07-08) - AES-256-GCM at-rest
   aiProvider        String  @default("gemini") // gemini | zai (GAP-12: dropdown provider)
   aiKeyPrimaryEnc   String?
   aiKeyFallbackEnc  String?
@@ -171,7 +171,7 @@ model InspectionReport {
 // ------------------------------- ORDER ---------------------------------------
 // GAP-01/11: pending_payment → payment_submitted → verified/rejected → completed
 // cabang cancelled / expired. Booked = tampilan buyer saat verifikasi berjalan
-// (jalur manual/AI gagal) — produk TETAP bisa dibeli paralel (bukan lock eksklusif).
+// (jalur manual/AI gagal) - produk TETAP bisa dibeli paralel (bukan lock eksklusif).
 
 model Order {
   id                  String    @id @default(cuid())
@@ -184,7 +184,7 @@ model Order {
   product             Product   @relation(fields: [productId], references: [id])
   sellType            String // template | prompt | bundle
   price               Int // harga terkunci saat order dibuat (SPEC-02-10)
-  commissionSnapshot  Int // snapshot komisi — final saat verified (GAP-16)
+  commissionSnapshot  Int // snapshot komisi - final saat verified (GAP-16)
   status              String    @default("pending_payment")
   verifyPath          String? // ai | manual | wa
   manualChecklistJson String? // 3 checklist approve manual (SPEC-02-06)
@@ -227,7 +227,7 @@ model Receipt {
   filePath      String? // webp bucket private receipts/{orderId}/{ts}.webp (SPEC-07-06); null setelah retensi 30 hari (GAP-04)
   fileName      String
   fileHash      String // duplikat detection (SPEC-07-04)
-  // Data terstruktur hasil AI — TANPA raw response (GAP-12)
+  // Data terstruktur hasil AI - TANPA raw response (GAP-12)
   amount        Int?
   transferAt    DateTime?
   senderName    String? // info pendukung, bukan syarat keras (SPEC-07-03)
@@ -401,7 +401,7 @@ model GeneratorExport { // batas guest 3x/hari/IP (GAP-15)
 
 // ------------------------------- PLATFORM ------------------------------------
 
-model PlatformSettings { // singleton — editable Super-Admin (SPEC-01-05..07, SPEC-09-04)
+model PlatformSettings { // singleton - editable Super-Admin (SPEC-01-05..07, SPEC-09-04)
   id              String   @default("singleton") @id
   commissionAmount Int     @default(1000) // hanya transaksi baru
   invoiceThreshold Int     @default(25000)
@@ -411,7 +411,7 @@ model PlatformSettings { // singleton — editable Super-Admin (SPEC-01-05..07, 
   updatedAt       DateTime @updatedAt
 }
 
-model EmailOutbox { // Nodemailer abstraction — logged di sandbox, sent bila SMTP dikonfigurasi
+model EmailOutbox { // Nodemailer abstraction - logged di sandbox, sent bila SMTP dikonfigurasi
   id        String   @id @default(cuid())
   toEmail   String
   subject   String
