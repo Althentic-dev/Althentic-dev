@@ -1,7 +1,7 @@
 "use client";
 
 // =============================================================================
-// CheckoutView — alur order buyer (SPEC-04-02..08, GAP-01/11/13):
+// CheckoutView - alur order buyer (SPEC-04-02..08, GAP-01/11/13):
 // Bayar Sekarang → QR seller → upload bukti (preview dulu) → AI verifikasi →
 // timeline stepper 6 status + Booked → unduh 1x → dispute 7 hari.
 // =============================================================================
@@ -259,9 +259,9 @@ export function CheckoutView({ orderId }: { orderId?: string }) {
                 <h2 className="mt-4 text-lg font-bold">Siap membayar?</h2>
                 <p className="mx-auto mt-2 max-w-md text-sm text-muted-foreground">
                   Tekan <b>Bayar Sekarang</b> untuk memulai sesi pembayaran. QR bisnis milik{" "}
-                  <b>{order.store.name}</b> akan ditampilkan — nominal transfer{" "}
+                  <b>{order.store.name}</b> akan ditampilkan - nominal transfer{" "}
                   <b>{formatRupiah(order.price)}</b>.
-                  {order.price === 0 && " Produk ini gratis — cukup konfirmasi."}
+                  {order.price === 0 && " Produk ini gratis - cukup konfirmasi."}
                 </p>
                 <Button className="mt-6 h-12 rounded-2xl px-8 text-base font-semibold" onClick={startPay} disabled={startingPay}>
                   {startingPay ? <Loader2 className="h-5 w-5 animate-spin" /> : <QrCode className="h-5 w-5" />}
@@ -286,12 +286,12 @@ export function CheckoutView({ orderId }: { orderId?: string }) {
                     )}
                   </div>
                   <p className="mt-3 text-xs text-muted-foreground">
-                    QR bisnis {order.store.name} — Althentic tidak memegang uangmu.
+                    QR bisnis {order.store.name} - Althentic tidak memegang uangmu.
                   </p>
                   <p className="mt-1 text-2xl font-bold text-primary">{formatRupiah(order.price)}</p>
                 </div>
 
-                {/* Upload bukti — preview wajib sebelum submit (SPEC-04-04) */}
+                {/* Upload bukti - preview wajib sebelum submit (SPEC-04-04) */}
                 <div>
                   <h2 className="flex items-center gap-2 text-sm font-bold">
                     <Upload className="h-4 w-4" /> Upload Bukti Transfer
@@ -346,7 +346,7 @@ export function CheckoutView({ orderId }: { orderId?: string }) {
                       </div>
                       <div className="mt-4 flex items-center justify-between gap-3">
                         <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                          <Eye className="h-3.5 w-3.5" /> Periksa pratinjau sebelum kirim — {file?.name}
+                          <Eye className="h-3.5 w-3.5" /> Periksa pratinjau sebelum kirim - {file?.name}
                         </p>
                         <Button className="rounded-full" onClick={submitReceipt} disabled={uploading}>
                           {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ShieldCheck className="h-4 w-4" />}
@@ -361,7 +361,7 @@ export function CheckoutView({ orderId }: { orderId?: string }) {
                   <div className="mt-6 space-y-2 text-xs text-muted-foreground">
                     <p className="flex items-start gap-2">
                       <ShieldCheck className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" />
-                      Bukti diproses AI Receipt Scanner milik seller (BYOK) — nominal, tanggal, dan nama pengirim
+                      Bukti diproses AI Receipt Scanner milik seller (BYOK) - nominal, tanggal, dan nama pengirim
                       dibaca secara terstruktur. File disimpan terenkripsi maks 30 hari.
                     </p>
                     <p className="flex items-start gap-2">
@@ -375,7 +375,7 @@ export function CheckoutView({ orderId }: { orderId?: string }) {
           </motion.div>
         )}
 
-        {/* Booked — jalur manual / WA fallback */}
+        {/* Booked - jalur manual / WA fallback */}
         {order.status === "payment_submitted" && (order.verifyPath === "manual" || order.verifyPath === "wa") && (
           <motion.div
             key="booked"
@@ -393,7 +393,7 @@ export function CheckoutView({ orderId }: { orderId?: string }) {
                 <p className="mt-1.5 text-sm text-muted-foreground">
                   {order.verifyPath === "wa"
                     ? "Verifikasi AI gagal total (kedua key seller bermasalah). Order masuk antrian \"Perlu Tindakan\" seller."
-                    : "Toko ini memverifikasi manual — seller akan memeriksa bukti transfermu dengan checklist."}
+                    : "Toko ini memverifikasi manual - seller akan memeriksa bukti transfermu dengan checklist."}
                   {order.verifyPath === "wa" && " Kamu bisa menghubungi seller langsung:"}
                 </p>
                 {order.waLink && (
@@ -433,7 +433,7 @@ export function CheckoutView({ orderId }: { orderId?: string }) {
           </motion.div>
         )}
 
-        {/* Lunas — akses file */}
+        {/* Lunas - akses file */}
         {(order.status === "verified" || order.status === "completed") && (
           <motion.div
             key="lunas"
@@ -447,10 +447,10 @@ export function CheckoutView({ orderId }: { orderId?: string }) {
                 <BadgeCheck className="h-6 w-6" />
               </span>
               <div className="flex-1">
-                <h2 className="text-lg font-bold">Pembayaran terverifikasi — Lunas</h2>
+                <h2 className="text-lg font-bold">Pembayaran terverifikasi - Lunas</h2>
                 <p className="mt-1 text-sm text-muted-foreground">
                   File produk v{order.product.version} siap diunduh. Link Google Drive tidak pernah
-                  tampil mentah — file di-stream langsung oleh server Althentic.
+                  tampil mentah - file di-stream langsung oleh server Althentic.
                 </p>
                 {canDownload ? (
                   <Button className="mt-5 h-12 rounded-2xl px-6 text-base font-semibold" onClick={download} disabled={downloading}>
@@ -459,18 +459,18 @@ export function CheckoutView({ orderId }: { orderId?: string }) {
                   </Button>
                 ) : (
                   <Button variant="outline" className="mt-5 h-12 rounded-2xl px-6" disabled>
-                    <Lock className="h-4 w-4" /> Sudah diunduh — kuota 1x terpakai
+                    <Lock className="h-4 w-4" /> Sudah diunduh - kuota 1x terpakai
                   </Button>
                 )}
                 <p className="mt-2 text-xs text-muted-foreground">
-                  Unduhan terputus tidak mendapat kuota tambahan otomatis — ajukan dispute bila diperlukan.
+                  Unduhan terputus tidak mendapat kuota tambahan otomatis - ajukan dispute bila diperlukan.
                 </p>
               </div>
             </div>
           </motion.div>
         )}
 
-        {/* Rejected — upload ulang */}
+        {/* Rejected - upload ulang */}
         {order.status === "rejected" && order.latestReceipt && (
           <motion.div
             key="rejected"
@@ -487,7 +487,7 @@ export function CheckoutView({ orderId }: { orderId?: string }) {
                 <h2 className="text-lg font-bold">Verifikasi gagal</h2>
                 <p className="mt-1.5 text-sm text-muted-foreground">
                   Bukti terakhir ditolak ({order.latestReceipt.matchStatus}). Upload bukti baru di panel
-                  pembayaran di bawah sebelum order kedaluwarsa — nominal harus persis sama.
+                  pembayaran di bawah sebelum order kedaluwarsa - nominal harus persis sama.
                 </p>
               </div>
             </div>
@@ -551,17 +551,17 @@ export function CheckoutView({ orderId }: { orderId?: string }) {
             </div>
             <div className="flex justify-between gap-4">
               <dt className="text-muted-foreground">Nama pengirim</dt>
-              <dd className="font-semibold">{order.latestReceipt.senderName ?? "—"}</dd>
+              <dd className="font-semibold">{order.latestReceipt.senderName ?? "-"}</dd>
             </div>
             <div className="flex justify-between gap-4">
               <dt className="text-muted-foreground">Waktu transfer</dt>
               <dd className="font-semibold">
-                {order.latestReceipt.transferAt ? formatDate(order.latestReceipt.transferAt, true) : "—"}
+                {order.latestReceipt.transferAt ? formatDate(order.latestReceipt.transferAt, true) : "-"}
               </dd>
             </div>
             <div className="flex justify-between gap-4">
               <dt className="text-muted-foreground">Status match</dt>
-              <dd className="font-semibold">{order.latestReceipt.matchStatus ?? "—"}</dd>
+              <dd className="font-semibold">{order.latestReceipt.matchStatus ?? "-"}</dd>
             </div>
           </dl>
         </div>
@@ -618,7 +618,7 @@ function OrderTimeline({ order }: { order: OrderDTO }) {
                 {event && (
                   <p className="mt-0.5 text-xs text-muted-foreground">
                     {formatDate(event.createdAt, true)} · {timeAgo(event.createdAt)}
-                    {event.note ? ` — ${event.note}` : ""}
+                    {event.note ? ` - ${event.note}` : ""}
                   </p>
                 )}
               </div>
@@ -682,7 +682,7 @@ function DisputeButton({ orderId }: { orderId: string }) {
           <div className="glass-strong max-h-[90vh] w-full max-w-md overflow-y-auto rounded-3xl p-6">
             <h2 className="text-lg font-bold">Ajukan Dispute</h2>
             <p className="mt-1 text-xs text-muted-foreground">
-              Batas waktu: 7 hari setelah transaksi selesai. Refund dieksekusi manual di luar sistem —
+              Batas waktu: 7 hari setelah transaksi selesai. Refund dieksekusi manual di luar sistem -
               Althentic berperan sebagai mediator.
             </p>
             <div className="mt-4 space-y-3">
