@@ -1,4 +1,4 @@
-// GET /api/admin/verifications — list verifikasi produk: tabel + filter + search
+// GET /api/admin/verifications - list verifikasi produk: tabel + filter + search
 // + audit trail (Konteks Terkunci; tab "Riwayat Verifikasi" = audit feed)
 import { NextRequest } from "next/server";
 import { db } from "@/lib/db";
