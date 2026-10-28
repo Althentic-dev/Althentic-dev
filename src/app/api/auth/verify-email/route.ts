@@ -1,4 +1,4 @@
-// POST /api/auth/verify-email — verifikasi token 24 jam (SPEC-05-02)
+// POST /api/auth/verify-email - verifikasi token 24 jam (SPEC-05-02)
 import { NextRequest } from "next/server";
 import { z } from "zod";
 import { db } from "@/lib/db";
