@@ -1,4 +1,4 @@
-// GET /api/seller/orders — daftar order toko (SPEC-02-05: kolom + filter default
+// GET /api/seller/orders - daftar order toko (SPEC-02-05: kolom + filter default
 // "Menunggu Verifikasi + Booked"; badge counter Perlu Tindakan SPEC-04-07)
 import { NextRequest } from "next/server";
 import { z } from "zod";
@@ -63,7 +63,7 @@ export async function GET(req: NextRequest) {
           price: o.price,
           sellType: o.sellType,
           product: { title: o.product.title, slug: o.product.slug, preview: publicFileUrl(previews[0]) },
-          // GAP-06: data buyer dibatasi — nama ter-mask, bukan data pribadi lengkap
+          // GAP-06: data buyer dibatasi - nama ter-mask, bukan data pribadi lengkap
           buyerName: o.buyer.name.split(" ")[0] + " " + (o.buyer.name.split(" ")[1]?.[0] ?? "") + ".",
           createdAt: o.createdAt.toISOString(),
           expiresAt: o.expiresAt?.toISOString() ?? null,
@@ -86,7 +86,7 @@ export async function GET(req: NextRequest) {
   });
 }
 
-// POST — approve manual dengan 3 checklist wajib (SPEC-02-06) atau reject dengan alasan
+// POST - approve manual dengan 3 checklist wajib (SPEC-02-06) atau reject dengan alasan
 
 export async function POST(req: NextRequest) {
   return handle(async () => {
@@ -107,13 +107,13 @@ export async function POST(req: NextRequest) {
         return fail("Centang 3 checklist wajib: nominal sesuai, nama/nomor pengirim terbaca, waktu transfer masuk akal.", 422, "CHECKLIST_REQUIRED");
       }
       await verifyOrder({ orderId, actor: "seller", checklist, note: "Verifikasi manual seller (3 checklist)" });
-      return json({ ok: true, message: "Order disetujui — buyer dapat mengakses file." });
+      return json({ ok: true, message: "Order disetujui - buyer dapat mengakses file." });
     }
     await rejectOrder({
       orderId,
       reason: reason || "Bukti tidak lolos verifikasi manual seller.",
       actor: "seller",
     });
-    return json({ ok: true, message: "Order ditolak — buyer dapat mengunggah bukti baru." });
+    return json({ ok: true, message: "Order ditolak - buyer dapat mengunggah bukti baru." });
   });
 }
