@@ -1,5 +1,5 @@
-// GET /api/files — penyajian objek storage (public langsung, private via signed URL
-// berumur 1 jam — SPEC-07-06, GAP-19)
+// GET /api/files - penyajian objek storage (public langsung, private via signed URL
+// berumur 1 jam - SPEC-07-06, GAP-19)
 import { NextRequest } from "next/server";
 import { db } from "@/lib/db";
 import { fail, handle } from "@/lib/server/helpers";
