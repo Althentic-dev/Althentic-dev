@@ -1,5 +1,5 @@
-// POST /api/admin/verifications/[productId]/decide — keputusan final Super-Admin
-// (SPEC-08-05: approve/reject + alasan; moderasi legalitas & keamanan — GAP-07)
+// POST /api/admin/verifications/[productId]/decide - keputusan final Super-Admin
+// (SPEC-08-05: approve/reject + alasan; moderasi legalitas & keamanan - GAP-07)
 import { NextRequest } from "next/server";
 import { z } from "zod";
 import { db } from "@/lib/db";
