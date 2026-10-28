@@ -1,0 +1,444 @@
+// =============================================================================
+// Althentic.Dev — Prisma Schema (GAP-20: kontrak implementasi teknis)
+// Sandbox: SQLite (portabel ke NeonDB Postgres untuk production Vercel).
+// Catatan: SQLite tidak mendukung enum native → semua enum disimpan sebagai
+// String + divalidasi via Zod di layer API (SPEC-15-04).
+// List primitive tidak diizinkan → array disimpan sebagai JSON string (*Json).
+// =============================================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ------------------------------- AUTH & AKUN ---------------------------------
+
+model User {
+  id              String    @id @default(cuid())
+  email           String    @unique
+  emailVerifiedAt DateTime?
+  name            String
+  passwordHash    String? // null hanya untuk akun OAuth (production)
+  role            String    @default("buyer") // buyer | seller — superadmin via env match
+  isSuperAdmin    Boolean   @default(false)
+  softDeletedAt   DateTime? // GAP-17: soft-delete 30 hari lalu hard-delete
+  // Preferensi (SPEC-13-03)
+  themePref       String    @default("system") // dark | light | system
+  emailLang       String    @default("id") // id | en
+  promoEmails     Boolean   @default(true)
+  // Consent (SPEC-14-03, SPEC-14-05)
+  tosVersion      String?
+  tosConsentedAt  DateTime?
+  ageConfirmedAt  DateTime?
+  lastLoginIp     String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  sessions          Session[]
+  resetTokens       VerificationToken[]
+  store             Store?
+  orders            Order[]
+  reviews           Review[]
+  notifications     Notification[]
+  canvases          PromptCanvas[]
+  auditLogs         AuditLog[]
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  tokenHash String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  remember  Boolean  @default(false) // SPEC-05-07: 30 hari vs 1 hari
+  expiresAt DateTime
+  ip        String?
+  userAgent String?
+  createdAt DateTime @default(now())
+}
+
+model VerificationToken {
+  id        String    @id @default(cuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash String    @unique // SPEC-05-03: token disimpan ter-hash
+  purpose   String // email_verify | password_reset | email_change
+  newEmail  String? // untuk ganti email (re-verifikasi)
+  expiresAt DateTime // 24 jam verify (SPEC-05-02) / 1 jam reset (SPEC-05-03)
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+}
+
+// ------------------------------- TOKO (TENANT) -------------------------------
+
+model Store {
+  id            String   @id @default(cuid())
+  ownerId       String   @unique // SPEC-05-04: satu akun satu toko
+  owner         User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  name          String
+  slug          String   @unique // SPEC-02-01: permanen, tidak bisa diubah
+  description   String   @default("") // maks 500 karakter (SPEC-02-04)
+  accentPreset  Int      @default(0) // index 0..7 dari 8 preset terkurasi (SPEC-02-02)
+  bannerPath    String? // storage public bucket, webp (SPEC-02-03)
+  qrPath        String? // storage public bucket (buyer harus melihat QR)
+  qrVerified    Boolean  @default(false) // checkbox pernyataan (SPEC-06-02)
+  whatsapp      String? // format Indonesia, wajib onboarding (SPEC-04-03)
+  socialIg      String?
+  socialX       String?
+  socialTiktok  String?
+  // GAP-08: preparing → ready (setup selesai) → live (min 1 produk terverifikasi, SPEC-06-04)
+  status        String   @default("preparing") // preparing | ready | live | suspended
+  onboardingStepsJson String @default("[false,false,false,false]") // 4 langkah draft (SPEC-06-05)
+  suspendedAt   DateTime?
+  suspendReason String?
+  // BYOK AI Receipt Scanner (SPEC-07-08) — AES-256-GCM at-rest
+  aiProvider        String  @default("gemini") // gemini | zai (GAP-12: dropdown provider)
+  aiKeyPrimaryEnc   String?
+  aiKeyFallbackEnc  String?
+  aiKeyPrimaryMask  String? // mis. AIza...9f2c
+  aiKeyFallbackMask String?
+  aiKeyFailCount    Int     @default(0) // 3x gagal → email rotasi (SPEC-07-09)
+  commissionCredit  Int     @default(0) // GAP-16: bayar lebih → kredit invoice berikutnya
+  ratingAvg         Float   @default(0) // agregat review toko
+  ratingCount       Int     @default(0)
+  productCount      Int     @default(0) // agregat produk aktif
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  products   Product[]
+  orders     Order[]
+  invoices   Invoice[]
+  ledger     CommissionLedger[]
+}
+
+// ------------------------------- PRODUK ---------------------------------------
+
+model Product {
+  id              String   @id @default(cuid())
+  storeId         String
+  store           Store    @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  title           String
+  slug            String   @unique
+  description     String
+  category        String // website | research | education | content | design | other (GAP-14)
+  // GAP-14: tipe jual hanya kategori Website; lainnya prompt saja
+  // JSON: [{type:'template'|'prompt'|'bundle', price:int, driveFileId:string?, fileName?:string}]
+  sellTypesJson   String
+  minPrice        Int      @default(0) // denormalisasi harga termurah (filter/sort katalog)
+  sellTypesCsv    String   @default("") // "template,prompt,bundle" (filter tipe jual)
+  previewPathsJson String @default("[]") // maks 5 gambar JPG/PNG/WEBP 5MB (GAP-14)
+  liveDemoUrl     String? // wajib bila tipe menyertakan template jadi
+  zipSize         Int? // hasil inspeksi
+  fileHash        String? // hasil inspeksi
+  // draft | pending_verification | rejected | active | archived | unlisted | suspended (SPEC-02-09, SPEC-11-01)
+  status          String   @default("draft")
+  rejectedReason  String?
+  rejectedAt      DateTime?
+  ratingAvg       Float    @default(0)
+  ratingCount     Int      @default(0)
+  salesCount      Int      @default(0) // order verified
+  version         Int      @default(1) // update ZIP inti → versi naik (GAP-05)
+  versionNote     String?  // catatan update ZIP inti
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  orders     Order[]
+  reviews    Review[]
+  inspections InspectionReport[]
+  reports    Report[]
+  auditLogs  AuditLog[]
+}
+
+model InspectionReport {
+  id             String   @id @default(cuid())
+  productId      String
+  product        Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  markdown       String // laporan struktur tetap (SPEC-08-01)
+  driveStatus    String // ok | 404 | private | unreachable
+  demoHttpStatus Int?
+  screenshotPath String? // storage path (API screenshot)
+  zipSize        Int?
+  fileHash       String?
+  trigger        String   @default("submission") // submission | reinspection | link_change
+  createdAt      DateTime @default(now())
+
+  audits AuditLog[]
+}
+
+// ------------------------------- ORDER ---------------------------------------
+// GAP-01/11: pending_payment → payment_submitted → verified/rejected → completed
+// cabang cancelled / expired. Booked = tampilan buyer saat verifikasi berjalan
+// (jalur manual/AI gagal) — produk TETAP bisa dibeli paralel (bukan lock eksklusif).
+
+model Order {
+  id                  String    @id @default(cuid())
+  code                String    @unique // ALT-XXXXXX (pesan WA & dispute)
+  buyerId             String
+  buyer               User      @relation(fields: [buyerId], references: [id])
+  storeId             String
+  store               Store     @relation(fields: [storeId], references: [id])
+  productId           String
+  product             Product   @relation(fields: [productId], references: [id])
+  sellType            String // template | prompt | bundle
+  price               Int // harga terkunci saat order dibuat (SPEC-02-10)
+  commissionSnapshot  Int // snapshot komisi — final saat verified (GAP-16)
+  status              String    @default("pending_payment")
+  verifyPath          String? // ai | manual | wa
+  manualChecklistJson String? // 3 checklist approve manual (SPEC-02-06)
+  paySessionStartedAt DateTime? // "Bayar Sekarang" ditekan (jendela bukti, SPEC-07-02)
+  expiresAt           DateTime? // 24 jam dari checkout dimulai (GAP-11)
+  verifiedAt          DateTime?
+  completedAt         DateTime?
+  cancelledAt         DateTime?
+  cancelReason        String?
+  expiredAt           DateTime?
+  selfBuyFlag         Boolean   @default(false) // sinyal IP sama (SPEC-16-12)
+  buyerIp             String?
+  downloadUsedAt      DateTime? // kuota 1x terpakai saat stream dimulai (GAP-13)
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  events    OrderEvent[]
+  receipts  Receipt[]
+  downloads DownloadLog[]
+  review    Review?
+  ledger    CommissionLedger?
+  disputes  Dispute[]
+}
+
+model OrderEvent { // timeline stepper + timestamp tiap perubahan (SPEC-04-05)
+  id        String   @id @default(cuid())
+  orderId   String
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  status    String
+  label     String
+  note      String?
+  actor     String // buyer | seller | system | ai | superadmin
+  createdAt DateTime @default(now())
+}
+
+model Receipt {
+  id            String    @id @default(cuid())
+  orderId       String
+  order         Order     @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  filePath      String? // webp bucket private receipts/{orderId}/{ts}.webp (SPEC-07-06); null setelah retensi 30 hari (GAP-04)
+  fileName      String
+  fileHash      String // duplikat detection (SPEC-07-04)
+  // Data terstruktur hasil AI — TANPA raw response (GAP-12)
+  amount        Int?
+  transferAt    DateTime?
+  senderName    String? // info pendukung, bukan syarat keras (SPEC-07-03)
+  matchStatus   String? // matched | underpaid | overpaid | duplicate | stale | suspicious | manual_review | ai_failed
+  manipulationSuspected Boolean @default(false)
+  scannerProvider String?
+  createdAt     DateTime  @default(now())
+  deletedAt     DateTime? // penghapusan fisik file setelah 30 hari
+}
+
+model DownloadLog { // setiap akses tercatat (SPEC-11-02)
+  id        String   @id @default(cuid())
+  orderId   String
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  userId    String
+  ip        String?
+  userAgent String?
+  status    String // started | completed | failed
+  createdAt DateTime @default(now())
+}
+
+// ------------------------------- KOMISI & INVOICE -----------------------------
+
+model CommissionLedger { // per event transaksi verified (SPEC-09-05)
+  id        String   @id @default(cuid())
+  storeId   String
+  store     Store    @relation(fields: [storeId], references: [id])
+  orderId   String   @unique
+  order     Order    @relation(fields: [orderId], references: [id])
+  amount    Int // = order.commissionSnapshot final
+  status    String   @default("open") // open | invoiced | settled (GAP-09)
+  invoiceId String?
+  invoice   Invoice? @relation(fields: [invoiceId], references: [id])
+  createdAt DateTime @default(now())
+}
+
+model Invoice {
+  id              String   @id @default(cuid())
+  code            String   @unique // INV-XXXXXX
+  storeId         String
+  store           Store    @relation(fields: [storeId], references: [id])
+  amount          Int
+  status          String   @default("outstanding") // outstanding | paid (GAP-16: kurang bayar tetap outstanding)
+  issuedAt        DateTime @default(now())
+  dueAt           DateTime // +7 hari grace (GAP-03)
+  suspendAt       DateTime // awal hari ke-8 → suspend otomatis (GAP-03)
+  paidAt          DateTime?
+  paidAmount      Int? // nominal diterima (SPEC-09-06)
+  paidMethod      String? // transfer | ewallet
+  paidReference   String?
+  paidNote        String?
+  verifiedBy      String? // superadmin user id
+  remindersJson   String   @default("[]") // hari 1/3/5 yang sudah dikirim (SPEC-09-02)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  entries CommissionLedger[]
+}
+
+// ------------------------------- REVIEW & TRUST ------------------------------
+
+model Review { // SPEC-10-05/06
+  id           String    @id @default(cuid())
+  orderId      String    @unique // satu review per pembelian
+  order        Order     @relation(fields: [orderId], references: [id])
+  productId    String
+  product      Product   @relation(fields: [productId], references: [id])
+  userId       String
+  user         User      @relation(fields: [userId], references: [id])
+  rating       Int // 1..5
+  text         String
+  editedAt     DateTime? // boleh edit 7 hari pertama
+  replyText    String? // balasan seller satu kali
+  repliedAt    DateTime?
+  deletedAt    DateTime?
+  deleteReason String? // hanya Super-Admin, alasan tercatat
+  flagged      Boolean   @default(false) // self-buy flag (SPEC-16-12)
+  createdAt    DateTime  @default(now())
+}
+
+model Report { // tombol laporkan produk (SPEC-10-03)
+  id        String   @id @default(cuid())
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  reporterId String
+  category  String // illegal | plagiarism | mismatch | payment_fraud | other
+  detail    String?
+  status    String   @default("open") // open | reviewed
+  createdAt DateTime @default(now())
+}
+
+model Dispute { // inbox Super-Admin Open/Investigating/Resolved (Konteks Terkunci)
+  id             String    @id @default(cuid())
+  code           String    @unique // DSP-XXXXXX
+  orderId        String?
+  order          Order?    @relation(fields: [orderId], references: [id])
+  productId      String?
+  openedByUserId String
+  openedByEmail  String
+  againstStoreId String?
+  title          String
+  body           String
+  category       String // refund_inaccessible | refund_mismatch | no_response | content_mismatch | takedown_appeal | other
+  status         String    @default("open") // open | investigating | resolved
+  resolutionNote String? // refund manual dicatat: "Resolved" + catatan teks (GAP-18)
+  resolvedAt     DateTime?
+  resolvedBy     String?
+  createdAt      DateTime  @default(now())
+  events         DisputeEvent[]
+}
+
+model DisputeEvent {
+  id        String   @id @default(cuid())
+  disputeId String
+  dispute   Dispute  @relation(fields: [disputeId], references: [id], onDelete: Cascade)
+  actor     String // buyer | seller | superadmin | system
+  note      String
+  createdAt DateTime @default(now())
+}
+
+// ------------------------------- NOTIFIKASI & AUDIT --------------------------
+
+model Notification { // SPEC-13-02: lonceng + belum-baca + link objek
+  id         String    @id @default(cuid())
+  userId     String
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type       String // order_update | verification_result | invoice | product_update | system
+  title      String
+  body       String
+  linkQuery  String? // query SPA mis. "v=orders&id=..."
+  readAt     DateTime?
+  createdAt  DateTime  @default(now())
+}
+
+model AuditLog { // audit trail verifikasi (SPEC-08-06) + MCP calls (SPEC-08-04)
+  id            String            @id @default(cuid())
+  actorType     String // system | superadmin | ai
+  actorId       String?
+  action        String // inspect | auto_reject | approve | reject | takedown | ai_propose | mcp_call | manual_verify | commission_verify ...
+  productId     String?
+  product       Product?           @relation(fields: [productId], references: [id])
+  inspectionId  String?
+  inspection    InspectionReport?  @relation(fields: [inspectionId], references: [id])
+  payloadJson   String // payload ringkas
+  decision      String?
+  reason        String?
+  createdAt     DateTime          @default(now())
+  createdById   String?
+  createdBy     User?             @relation(fields: [createdById], references: [id])
+}
+
+// ------------------------------- PROMPT GENERATOR ----------------------------
+
+model PromptCanvas { // history ekspor user login (GAP-15)
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title      String
+  blocksJson String
+  format     String? // markdown | text | json
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model GeneratorExport { // batas guest 3x/hari/IP (GAP-15)
+  id        String   @id @default(cuid())
+  ip        String
+  day       String // YYYY-MM-DD
+  createdAt DateTime @default(now())
+}
+
+// ------------------------------- PLATFORM ------------------------------------
+
+model PlatformSettings { // singleton — editable Super-Admin (SPEC-01-05..07, SPEC-09-04)
+  id              String   @default("singleton") @id
+  commissionAmount Int     @default(1000) // hanya transaksi baru
+  invoiceThreshold Int     @default(25000)
+  suspendThreshold Int     @default(25000) // default Rp25.000 (SPEC-01-06)
+  waTemplate      String   @default("")
+  tosVersion      String   @default("2026-10-27")
+  updatedAt       DateTime @updatedAt
+}
+
+model EmailOutbox { // Nodemailer abstraction — logged di sandbox, sent bila SMTP dikonfigurasi
+  id        String   @id @default(cuid())
+  toEmail   String
+  subject   String
+  body      String
+  kind      String // order_created | order_receipt | order_verified | order_rejected | seller_new_order | invoice_reminder | ...
+  status    String   @default("logged") // logged | sent | failed
+  relatedId String?
+  createdAt DateTime @default(now())
+}
+
+model McpToken { // secret token per-session 24 jam (GAP-19)
+  id        String    @id @default(cuid())
+  tokenHash String    @unique
+  note      String?
+  createdBy String
+  expiresAt DateTime
+  revokedAt DateTime?
+  createdAt DateTime  @default(now())
+}
+
+model ChangelogEntry { // sync GitHub Release via webhook (Docs section 7)
+  id          String   @id @default(cuid())
+  tagName     String
+  name        String
+  body        String
+  publishedAt DateTime
+  url         String?
+  source      String   @default("github") // github | manual
+  createdAt   DateTime @default(now())
+}
