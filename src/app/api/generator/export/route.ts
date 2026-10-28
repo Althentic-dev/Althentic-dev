@@ -1,4 +1,4 @@
-// POST /api/generator/export — ekspor prompt generator (SPEC-12-05, GAP-15)
+// POST /api/generator/export - ekspor prompt generator (SPEC-12-05, GAP-15)
 // Guest: 3x/hari/IP lalu diminta login. Login: ekspor penuh + history tersimpan.
 // Skema JSON: { blocks, metadata:{generatedAt, version}, promptText }
 import { NextRequest } from "next/server";
@@ -91,7 +91,7 @@ export async function POST(req: NextRequest) {
   });
 }
 
-// GET — riwayat ekspor user login
+// GET - riwayat ekspor user login
 export async function GET(req: Request) {
   return handle(async () => {
     const user = await getSessionUser(req);
