@@ -1,4 +1,4 @@
-// GET/POST /api/cron/maintenance — Vercel Cron Jobs pattern (GAP-19).
+// GET/POST /api/cron/maintenance - Vercel Cron Jobs pattern (GAP-19).
 // Auth: header Authorization Bearer CRON_SECRET atau sesi Super-Admin.
 import { NextRequest } from "next/server";
 import { json, fail, handle } from "@/lib/server/helpers";
