@@ -61,8 +61,8 @@
 - [x] Tambahkan environment Supabase yang dibutuhkan ke `.env.example` tanpa nilai rahasia.
 - [x] Perbarui dokumentasi arsitektur, setup bucket, migrasi file, dan changelog.
 - [x] Jalankan lint terarah dan build, periksa diff dan encoding, serta perbarui graph proyek.
-- [ ] Setelah PR dibuat, tulis review terkonsolidasi pada `docs/review/CODE_REVIEW.md`.
-- [ ] Buat Issue dan PR yang terhubung; biarkan PR terbuka untuk ditinjau pemilik.
+- [x] Setelah PR dibuat, tulis review terkonsolidasi pada `docs/review/CODE_REVIEW.md`.
+- [x] Buat Issue dan PR yang terhubung; biarkan PR terbuka untuk ditinjau pemilik.
 
 ## Deferred work
 
