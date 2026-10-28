@@ -1,7 +1,7 @@
 // =============================================================================
 // Althentic.Dev - Storage abstraction (SPEC-15-01, SPEC-07-06, SPEC-16-04)
-// Interface tunggal bucket publik/private. Sandbox: filesystem lokal.
-// Production: implementasi Supabase Storage dengan kontrak sama (ganti 1 file).
+// Interface tunggal bucket publik/private. Receipt memakai Neon saat runtime;
+// objek lain saat ini masih memakai filesystem lokal.
 // Signed URL: HMAC-SHA256, durasi default 1 jam (GAP-19).
 // =============================================================================
 
@@ -10,6 +10,12 @@ import { mkdir, readFile, writeFile, unlink, stat } from "fs/promises";
 import path from "path";
 import sharp from "sharp";
 import { getServerSecret } from "@/lib/server/secrets";
+import {
+  deleteReceiptObject,
+  getReceiptObject,
+  putReceiptObject,
+  receiptObjectExists,
+} from "@/lib/server/neon-storage";
 
 const ROOT = process.env.STORAGE_ROOT || "/home/z/my-project/storage";
 export const SIGNED_URL_TTL = 3600; // 1 jam (GAP-19)
@@ -31,6 +37,11 @@ export async function putObject(
   data: Buffer,
   _contentType?: string
 ): Promise<string> {
+  if (bucket === "private" && objectPath.startsWith("receipts/")) {
+    await putReceiptObject(objectPath, data, _contentType ?? "application/octet-stream");
+    return `${bucket}/${objectPath}`;
+  }
+
   const full = safeJoin(bucket, objectPath);
   await mkdir(path.dirname(full), { recursive: true });
   await writeFile(full, data);
@@ -38,6 +49,10 @@ export async function putObject(
 }
 
 export async function getObject(bucket: Bucket, objectPath: string): Promise<Buffer | null> {
+  if (bucket === "private" && objectPath.startsWith("receipts/")) {
+    return getReceiptObject(objectPath);
+  }
+
   try {
     const full = safeJoin(bucket, objectPath);
     return await readFile(full);
@@ -47,6 +62,11 @@ export async function getObject(bucket: Bucket, objectPath: string): Promise<Buf
 }
 
 export async function deleteObject(bucket: Bucket, objectPath: string): Promise<void> {
+  if (bucket === "private" && objectPath.startsWith("receipts/")) {
+    await deleteReceiptObject(objectPath);
+    return;
+  }
+
   try {
     const full = safeJoin(bucket, objectPath);
     await unlink(full);
@@ -56,6 +76,10 @@ export async function deleteObject(bucket: Bucket, objectPath: string): Promise<
 }
 
 export async function objectExists(bucket: Bucket, objectPath: string): Promise<boolean> {
+  if (bucket === "private" && objectPath.startsWith("receipts/")) {
+    return receiptObjectExists(objectPath);
+  }
+
   try {
     await stat(safeJoin(bucket, objectPath));
     return true;
