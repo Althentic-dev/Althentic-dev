@@ -1,5 +1,5 @@
 // =============================================================================
-// Althentic.Dev — Tipe DTO bersama (kontrak API client ↔ server, GAP-20)
+// Althentic.Dev - Tipe DTO bersama (kontrak API client ↔ server, GAP-20)
 // =============================================================================
 
 export interface SellTypeOption {
