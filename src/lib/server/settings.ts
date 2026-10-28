@@ -1,4 +1,4 @@
-// Althentic.Dev — Platform settings singleton (SPEC-01-05..07, SPEC-09-04)
+// Althentic.Dev - Platform settings singleton (SPEC-01-05..07, SPEC-09-04)
 
 import { db } from "@/lib/db";
 
@@ -11,7 +11,7 @@ export interface PlatformSettingsData {
 }
 
 const DEFAULT_WA_TEMPLATE =
-  "Halo {nama_toko}, saya {nama_buyer}. Order {id_order} untuk produk {nama_produk} sebesar {jumlah} — bukti transfer saya gagal diverifikasi otomatis. Mohon verifikasi manual ya. Terima kasih!";
+  "Halo {nama_toko}, saya {nama_buyer}. Order {id_order} untuk produk {nama_produk} sebesar {jumlah} - bukti transfer saya gagal diverifikasi otomatis. Mohon verifikasi manual ya. Terima kasih!";
 
 export async function getSettings(): Promise<PlatformSettingsData> {
   let row = await db.platformSettings.findUnique({ where: { id: "singleton" } });
