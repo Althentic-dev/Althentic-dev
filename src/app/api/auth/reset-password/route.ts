@@ -1,4 +1,4 @@
-// POST /api/auth/reset-password — token ter-hash, sekali-pakai, session lama
+// POST /api/auth/reset-password - token ter-hash, sekali-pakai, session lama
 // diturunkan (SPEC-05-03)
 import { NextRequest } from "next/server";
 import { z } from "zod";
