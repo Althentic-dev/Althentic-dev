@@ -1,4 +1,4 @@
-// POST /api/auth/login — SPEC-05-01 (email+password utama)
+// POST /api/auth/login - SPEC-05-01 (email+password utama)
 import { NextRequest } from "next/server";
 import { z } from "zod";
 import { db } from "@/lib/db";
