@@ -1,8 +1,8 @@
 // =============================================================================
-// Althentic.Dev — Inspeksi produk (Konteks Terkunci, SPEC-08-01/02, SPEC-15-07)
+// Althentic.Dev - Inspeksi produk (Konteks Terkunci, SPEC-08-01/02, SPEC-15-07)
 // Skrip Node.js: cek link Drive via fetch HTTP biasa (bukan browser penuh),
 // status HTTP live demo, ukuran .zip, hash file, timestamp → laporan Markdown.
-// Screenshot via API screenshot (urlbox/screenshotone free-tier — GAP-19);
+// Screenshot via API screenshot (urlbox/screenshotone free-tier - GAP-19);
 // bila tidak dikonfigurasi, laporan mencatat "dilewati" dengan anggun.
 // =============================================================================
 
@@ -10,6 +10,7 @@ import { db } from "@/lib/db";
 import { hashBuffer, demoProvider, googleDriveProvider } from "@/lib/server/delivery";
 import { notifyUser } from "@/lib/server/notifications";
 import { tplProductRejected } from "@/lib/server/email";
+import { safeFetchPublic } from "@/lib/server/safe-fetch";
 
 export interface InspectionOutcome {
   reportId: string;
@@ -24,57 +25,49 @@ async function checkDriveLink(driveFileId: string): Promise<{
   hash?: string;
 }> {
   if (driveFileId.startsWith("demo:")) {
-    // Demo provider: file dibangkitkan lokal — selalu OK
+    // Demo provider: file dibangkitkan lokal - selalu OK
     const r = await demoProvider.fetchFile({ driveFileId, fileName: "demo.zip" });
     const buf = Buffer.from(r.body as Buffer);
     return { status: "ok", size: buf.length, hash: hashBuffer(buf) };
   }
   try {
     const url = `https://drive.google.com/uc?export=download&id=${encodeURIComponent(driveFileId)}`;
-    const res = await fetch(url, { redirect: "follow", signal: AbortSignal.timeout(15_000) });
+    const res = await safeFetchPublic(url, { maxBytes: 100 * 1024 * 1024, timeoutMs: 15_000 });
     if (res.status === 404) return { status: "404", httpStatus: 404 };
     if (res.status === 403) return { status: "private", httpStatus: 403 };
-    if (!res.ok) return { status: "unreachable", httpStatus: res.status };
-    // Coba baca sebagian untuk hash & ukuran
-    const buf = Buffer.from(await res.arrayBuffer());
-    return { status: "ok", httpStatus: 200, size: buf.length, hash: hashBuffer(buf) };
+    if (res.status < 200 || res.status >= 300) return { status: "unreachable", httpStatus: res.status };
+    return { status: "ok", httpStatus: res.status, size: res.body.length, hash: hashBuffer(res.body) };
   } catch {
     return { status: "unreachable" };
   }
 }
 
-async function checkLiveDemo(url: string): Promise<{ httpStatus: number | null; ok: boolean }> {
+async function checkLiveDemo(url: string): Promise<{ httpStatus: number | null; ok: boolean; finalUrl: string | null }> {
   try {
-    const res = await fetch(url, {
-      redirect: "follow",
-      signal: AbortSignal.timeout(15_000),
-      headers: { "User-Agent": "AlthenticInspection/1.0" },
-    });
-    return { httpStatus: res.status, ok: res.status < 500 };
+    const res = await safeFetchPublic(url, { maxBytes: 2 * 1024 * 1024, timeoutMs: 15_000 });
+    return { httpStatus: res.status, ok: res.status < 500, finalUrl: res.url.toString() };
   } catch {
-    return { httpStatus: null, ok: false };
+    return { httpStatus: null, ok: false, finalUrl: null };
   }
 }
 
 /** Screenshot desktop via API screenshot (GAP-19: urlbox / screenshotone). */
-async function takeScreenshot(url: string): Promise<string | null> {
+async function takeScreenshot(url: string): Promise<{ path: string; data: Buffer } | null> {
   const urlboxKey = process.env.URLBOX_KEY;
   const screenshotoneKey = process.env.SCREENSHOTONE_KEY;
   try {
     if (urlboxKey) {
       const full = `https://api.urlbox.io/v1/${urlboxKey}/png?url=${encodeURIComponent(url)}&full_page=false&width=1440`;
-      const res = await fetch(full, { signal: AbortSignal.timeout(20_000) });
-      if (res.ok) {
-        const buf = Buffer.from(await res.arrayBuffer());
-        return `screenshots/${Date.now()}.png|${buf}`; // dikembalikan untuk disimpan
+      const res = await safeFetchPublic(full, { maxBytes: 10 * 1024 * 1024, timeoutMs: 20_000 });
+      if (res.status >= 200 && res.status < 300) {
+        return { path: `screenshots/${Date.now()}.png`, data: res.body };
       }
     }
     if (screenshotoneKey) {
       const full = `https://api.screenshotone.com/take?access_key=${screenshotoneKey}&url=${encodeURIComponent(url)}&viewport_width=1440&format=png`;
-      const res = await fetch(full, { signal: AbortSignal.timeout(20_000) });
-      if (res.ok) {
-        const buf = Buffer.from(await res.arrayBuffer());
-        return `screenshots/${Date.now()}.png|${buf}`;
+      const res = await safeFetchPublic(full, { maxBytes: 10 * 1024 * 1024, timeoutMs: 20_000 });
+      if (res.status >= 200 && res.status < 300) {
+        return { path: `screenshots/${Date.now()}.png`, data: res.body };
       }
     }
   } catch {
@@ -109,18 +102,17 @@ export async function runInspection(p: {
 
   // Screenshot live demo (opsional, dilewati bila provider tidak dikonfigurasi)
   let screenshotPath: string | null = null;
-  if (requiresDemo && product.liveDemoUrl) {
-    const shot = await takeScreenshot(product.liveDemoUrl);
+  if (requiresDemo && demo?.finalUrl) {
+    const shot = await takeScreenshot(demo.finalUrl);
     if (shot) {
-      const [relPath, data] = shot.split("|");
       const { putObject } = await import("@/lib/server/storage");
-      await putObject("private", relPath, Buffer.from(data, "binary"), "image/png");
-      screenshotPath = `private/${relPath}`;
+      await putObject("private", shot.path, shot.data, "image/png");
+      screenshotPath = `private/${shot.path}`;
     }
   }
 
   const lines: string[] = [];
-  lines.push(`# Laporan Inspeksi Produk — ${product.title}`);
+  lines.push(`# Laporan Inspeksi Produk - ${product.title}`);
   lines.push("");
   lines.push(`- **Produk:** ${product.title} (\`${product.slug}\`)`);
   lines.push(`- **Toko:** ${product.store.name} (\`${product.store.slug}\`)`);
@@ -132,14 +124,14 @@ export async function runInspection(p: {
   lines.push("");
   lines.push(`## 2. Live demo`);
   if (!requiresDemo) {
-    lines.push(`- Tipe jual tidak menyertakan template jadi — live demo tidak diwajibkan.`);
+    lines.push(`- Tipe jual tidak menyertakan template jadi - live demo tidak diwajibkan.`);
   } else if (!product.liveDemoUrl) {
     lines.push(`- **Live demo belum diisi** (wajib untuk tipe yang menyertakan template jadi).`);
   } else {
     lines.push(
-      `- URL: \`${product.liveDemoUrl.replace(/https?:\/\//, "")}\` — HTTP **${demo?.httpStatus ?? "tidak terjangkau"}**`
+      `- URL: \`${product.liveDemoUrl.replace(/https?:\/\//, "")}\` - HTTP **${demo?.httpStatus ?? "tidak terjangkau"}**`
     );
-    lines.push(screenshotPath ? `- Screenshot desktop: tersimpan (${screenshotPath})` : `- Screenshot desktop: dilewati (provider screenshot tidak aktif — SPEC-15-07)`);
+    lines.push(screenshotPath ? `- Screenshot desktop: tersimpan (${screenshotPath})` : `- Screenshot desktop: dilewati (provider screenshot tidak aktif - SPEC-15-07)`);
   }
   lines.push("");
   lines.push(`## 3. File .zip`);
@@ -156,9 +148,9 @@ export async function runInspection(p: {
     if (driveDead) reasons.push(`link Drive ${drive.status}`);
     if (demoDead) reasons.push(`live demo HTTP ${demo?.httpStatus}`);
     if (missingDemo) reasons.push("live demo wajib belum diisi");
-    lines.push(`- **REJECT OTOMATIS** — ${reasons.join("; ")} (SPEC-08-02)`);
+    lines.push(`- **REJECT OTOMATIS** - ${reasons.join("; ")} (SPEC-08-02)`);
   } else {
-    lines.push(`- Lolos pemeriksaan teknis — menunggu review Super-Admin (moderasi legalitas & keamanan, GAP-07).`);
+    lines.push(`- Lolos pemeriksaan teknis - menunggu review Super-Admin (moderasi legalitas & keamanan, GAP-07).`);
   }
 
   const report = await db.inspectionReport.create({
@@ -205,7 +197,7 @@ export async function runInspection(p: {
       userId: product.store.ownerId,
       type: "verification_result",
       title: `Produk ditolak: ${product.title}`,
-      body: `${reason} — gunakan "Perbaiki & Kirim Ulang" (tenggat 14 hari).`,
+      body: `${reason} - gunakan "Perbaiki & Kirim Ulang" (tenggat 14 hari).`,
       linkQuery: `v=dashboard&tab=products`,
       email: {
         to: product.store.owner.email,
@@ -221,14 +213,14 @@ export async function runInspection(p: {
     where: { id: product.id },
     data: { status: "pending_verification", zipSize: drive.size ?? null, fileHash: drive.hash ?? null },
   });
-  // Notifikasi email ke Super-Admin (Konteks Terkunci — Nodemailer)
+  // Notifikasi email ke Super-Admin (Konteks Terkunci - Nodemailer)
   const admin = await db.user.findFirst({ where: { isSuperAdmin: true } });
   if (admin) {
     await notifyUser({
       userId: admin.id,
       type: "verification_result",
       title: `Produk menunggu verifikasi: ${product.title}`,
-      body: `Toko ${product.store.name} — laporan inspeksi siap ditinjau.`,
+      body: `Toko ${product.store.name} - laporan inspeksi siap ditinjau.`,
       linkQuery: `v=admin&tab=verifications`,
       email: {
         to: admin.email,
@@ -289,7 +281,7 @@ export async function decideVerification(p: {
       userId: product.store.ownerId,
       type: "verification_result",
       title: `Produk ditolak: ${product.title}`,
-      body: `${p.reason ?? "Tidak memenuhi kebijakan konten"} — gunakan "Perbaiki & Kirim Ulang" (tenggat 14 hari).`,
+      body: `${p.reason ?? "Tidak memenuhi kebijakan konten"} - gunakan "Perbaiki & Kirim Ulang" (tenggat 14 hari).`,
       linkQuery: `v=dashboard&tab=products`,
       email: {
         to: product.store.owner.email,

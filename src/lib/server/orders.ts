@@ -1,5 +1,5 @@
 // =============================================================================
-// Althentic.Dev — Order state machine (GAP-01/11, SPEC-02/04/07)
+// Althentic.Dev - Order state machine (GAP-01/11, SPEC-02/04/07)
 // pending_payment → payment_submitted → verified/rejected → completed
 // cabang cancelled / expired. "Booked" = label buyer saat jalur manual/AI gagal.
 // Produk TETAP bisa dibeli paralel (bukan exclusive lock).
@@ -19,7 +19,7 @@ import {
   tplManualNoResponse,
   tplSellerNewOrder,
 } from "@/lib/server/email";
-import { recordLedgerAndMaybeInvoice } from "@/lib/server/commission";
+import { processCommissionThreshold, recordLedgerForVerifiedOrder } from "@/lib/server/commission";
 import { ORDER_EXPIRY_HOURS, MANUAL_RESPONSE_HOURS } from "@/lib/constants";
 
 export async function addEvent(
@@ -93,14 +93,14 @@ export async function createOrder(p: {
     linkQuery: `v=checkout&id=${order.id}`,
     email: {
       to: p.buyerEmail,
-      subject: `Order ${order.code} — instruksi pembayaran`,
+      subject: `Order ${order.code} - instruksi pembayaran`,
       body: tplOrderCreated({
         buyerName: p.buyerName,
         orderCode: order.code,
         productTitle: product.title,
         price: st.price,
         storeName: product.store.name,
-        qrNote: st.price === 0 ? "Produk ini gratis — cukup konfirmasi tanpa transfer." : "QR akan tampil setelah kamu menekan Bayar Sekarang.",
+        qrNote: st.price === 0 ? "Produk ini gratis - cukup konfirmasi tanpa transfer." : "QR akan tampil setelah kamu menekan Bayar Sekarang.",
       }),
       kind: "order_created",
     },
@@ -130,8 +130,8 @@ export async function startPaySession(orderId: string) {
   const order = await db.order.findUnique({ where: { id: orderId } });
   if (!order || order.status !== "pending_payment") return order;
   if (!order.paySessionStartedAt) {
-    await db.order.update({
-      where: { id: orderId },
+    await db.order.updateMany({
+      where: { id: orderId, status: "pending_payment", paySessionStartedAt: null },
       data: { paySessionStartedAt: new Date() },
     });
   }
@@ -158,42 +158,53 @@ export async function verifyOrder(p: {
   const settings = await getSettings();
   const commissionSnapshot = settings.commissionAmount;
 
-  const updated = await db.order.update({
-    where: { id: order.id },
-    data: {
-      status: "verified",
-      verifiedAt: new Date(),
-      commissionSnapshot,
-      manualChecklistJson:
-        p.actor === "seller" && p.checklist ? JSON.stringify(p.checklist) : order.manualChecklistJson,
-    },
-  });
-  await addEvent(
-    order.id,
-    "verified",
-    p.actor === "seller" ? "Diverifikasi manual oleh seller" : p.actor === "ai" ? "Diverifikasi AI Receipt Scanner" : "Diverifikasi",
-    p.actor,
-    p.note
-  );
+  const updated = await db.$transaction(async (tx) => {
+    const changed = await tx.order.updateMany({
+      where: { id: order.id, status: "payment_submitted" },
+      data: {
+        status: "verified",
+        verifiedAt: new Date(),
+        commissionSnapshot,
+        manualChecklistJson:
+          p.actor === "seller" && p.checklist ? JSON.stringify(p.checklist) : order.manualChecklistJson,
+      },
+    });
+    if (changed.count !== 1) {
+      throw Object.assign(new Error("Order sudah diproses oleh request lain."), { status: 409 });
+    }
 
-  // Komisi ledger per event (SPEC-09-05) + invoice threshold
-  await recordLedgerAndMaybeInvoice(order.id);
+    const verified = await tx.order.findUnique({ where: { id: order.id } });
+    if (!verified) throw Object.assign(new Error("Order tidak ditemukan."), { status: 404 });
 
-  // statistik produk
-  await db.product.update({
-    where: { id: order.productId },
-    data: { salesCount: { increment: 1 } },
+    await tx.orderEvent.create({
+      data: {
+        orderId: order.id,
+        status: "verified",
+        label: p.actor === "seller" ? "Diverifikasi manual oleh seller" : p.actor === "ai" ? "Diverifikasi AI Receipt Scanner" : "Diverifikasi",
+        actor: p.actor,
+        note: p.note ?? null,
+      },
+    });
+    await recordLedgerForVerifiedOrder(tx, verified);
+    await tx.product.update({
+      where: { id: order.productId },
+      data: { salesCount: { increment: 1 } },
+    });
+    return verified;
   });
+
+  // Proses invoice dan notifikasi setelah ledger transaksi tersimpan atomik.
+  if (order.price > 0) await processCommissionThreshold(order.storeId);
 
   await notifyUser({
     userId: order.buyerId,
     type: "order_update",
-    title: `Pembayaran terverifikasi — ${order.product.title}`,
+    title: `Pembayaran terverifikasi - ${order.product.title}`,
     body: "Status Lunas. File bisa diunduh dari Koleksi Saya (kuota unduh 1x).",
     linkQuery: `v=collection`,
     email: {
       to: order.buyer.email,
-      subject: `Order ${order.code} lunas — file siap diunduh`,
+      subject: `Order ${order.code} lunas - file siap diunduh`,
       body: tplOrderVerified({
         buyerName: order.buyer.name,
         orderCode: order.code,
@@ -214,17 +225,27 @@ export async function rejectOrder(p: { orderId: string; reason: string; actor: "
   if (order.status !== "payment_submitted") {
     throw Object.assign(new Error(`Order berstatus ${order.status}.`), { status: 400 });
   }
-  await db.order.update({ where: { id: order.id }, data: { status: "rejected" } });
-  await addEvent(order.id, "rejected", "Bukti ditolak", p.actor, p.reason);
+  const changed = await db.$transaction(async (tx) => {
+    const result = await tx.order.updateMany({
+      where: { id: order.id, status: "payment_submitted" },
+      data: { status: "rejected" },
+    });
+    if (result.count !== 1) return false;
+    await tx.orderEvent.create({
+      data: { orderId: order.id, status: "rejected", label: "Bukti ditolak", actor: p.actor, note: p.reason },
+    });
+    return true;
+  });
+  if (!changed) throw Object.assign(new Error("Order sudah diproses oleh request lain."), { status: 409 });
   await notifyUser({
     userId: order.buyerId,
     type: "order_update",
-    title: `Bukti transfer ditolak — ${order.code}`,
+    title: `Bukti transfer ditolak - ${order.code}`,
     body: `${p.reason} Upload ulang bukti sebelum order kedaluwarsa.`,
     linkQuery: `v=checkout&id=${order.id}`,
     email: {
       to: order.buyer.email,
-      subject: `Verifikasi gagal — ${order.code}`,
+      subject: `Verifikasi gagal - ${order.code}`,
       body: tplOrderRejected({
         buyerName: order.buyer.name,
         orderCode: order.code,
@@ -235,18 +256,26 @@ export async function rejectOrder(p: { orderId: string; reason: string; actor: "
   });
 }
 
-/** Order batal (buyer 1 klik sebelum Lunas — SPEC-04-08 / GAP-01). */
+/** Order batal (buyer 1 klik sebelum Lunas - SPEC-04-08 / GAP-01). */
 export async function cancelOrder(orderId: string, reason: string) {
   const order = await db.order.findUnique({ where: { id: orderId }, include: { buyer: true } });
   if (!order) throw Object.assign(new Error("Order tidak ditemukan."), { status: 404 });
   if (!["pending_payment", "payment_submitted", "rejected"].includes(order.status)) {
-    throw Object.assign(new Error("Order sudah Lunas — gunakan jalur dispute."), { status: 400 });
+    throw Object.assign(new Error("Order sudah Lunas - gunakan jalur dispute."), { status: 400 });
   }
-  await db.order.update({
-    where: { id: orderId },
-    data: { status: "cancelled", cancelledAt: new Date(), cancelReason: reason },
+  const now = new Date();
+  const changed = await db.$transaction(async (tx) => {
+    const result = await tx.order.updateMany({
+      where: { id: orderId, status: { in: ["pending_payment", "payment_submitted", "rejected"] } },
+      data: { status: "cancelled", cancelledAt: now, cancelReason: reason },
+    });
+    if (result.count !== 1) return false;
+    await tx.orderEvent.create({
+      data: { orderId, status: "cancelled", label: "Dibatalkan buyer", actor: "buyer", note: reason },
+    });
+    return true;
   });
-  await addEvent(orderId, "cancelled", "Dibatalkan buyer", "buyer", reason);
+  if (!changed) throw Object.assign(new Error("Order sudah diproses oleh request lain."), { status: 409 });
   await notifyUser({
     userId: order.buyerId,
     type: "order_update",
@@ -262,18 +291,26 @@ export async function cancelOrder(orderId: string, reason: string) {
   });
 }
 
-/** Kedaluwarsa (tanpa progres 24 jam dari checkout — GAP-11). */
+/** Kedaluwarsa (tanpa progres 24 jam dari checkout - GAP-11). */
 export async function expireOrder(orderId: string) {
   const order = await db.order.findUnique({
     where: { id: orderId },
     include: { buyer: true, product: { select: { slug: true } } },
   });
   if (!order || !["pending_payment", "payment_submitted", "rejected"].includes(order.status)) return;
-  await db.order.update({
-    where: { id: orderId },
-    data: { status: "expired", expiredAt: new Date() },
+  const now = new Date();
+  const changed = await db.$transaction(async (tx) => {
+    const result = await tx.order.updateMany({
+      where: { id: orderId, status: { in: ["pending_payment", "payment_submitted", "rejected"] }, expiresAt: { lte: now } },
+      data: { status: "expired", expiredAt: now },
+    });
+    if (result.count !== 1) return false;
+    await tx.orderEvent.create({
+      data: { orderId, status: "expired", label: "Kedaluwarsa (24 jam tanpa progres)", actor: "system" },
+    });
+    return true;
   });
-  await addEvent(orderId, "expired", "Kedaluwarsa (24 jam tanpa progres)", "system");
+  if (!changed) return;
   await notifyUser({
     userId: order.buyerId,
     type: "order_update",
@@ -296,11 +333,25 @@ export async function autoCancelUnresponded(orderId: string) {
     include: { buyer: true, product: { include: { store: { include: { owner: true } } } } },
   });
   if (!order || order.status !== "payment_submitted" || (order.verifyPath !== "manual" && order.verifyPath !== "wa")) return;
-  await db.order.update({
-    where: { id: orderId },
-    data: { status: "cancelled", cancelledAt: new Date(), cancelReason: "Tidak ada respons seller 24 jam" },
+  const now = new Date();
+  const deadline = new Date(now.getTime() - MANUAL_RESPONSE_HOURS * 3600 * 1000);
+  const changed = await db.$transaction(async (tx) => {
+    const result = await tx.order.updateMany({
+      where: {
+        id: orderId,
+        status: "payment_submitted",
+        verifyPath: { in: ["manual", "wa"] },
+        updatedAt: { lte: deadline },
+      },
+      data: { status: "cancelled", cancelledAt: now, cancelReason: "Tidak ada respons seller 24 jam" },
+    });
+    if (result.count !== 1) return false;
+    await tx.orderEvent.create({
+      data: { orderId, status: "cancelled", label: "Batal otomatis - seller tidak merespons 24 jam", actor: "system" },
+    });
+    return true;
   });
-  await addEvent(orderId, "cancelled", "Batal otomatis — seller tidak merespons 24 jam", "system");
+  if (!changed) return;
   await notifyUser({
     userId: order.buyerId,
     type: "order_update",
@@ -323,26 +374,107 @@ export async function autoCancelUnresponded(orderId: string) {
     linkQuery: `v=dashboard&tab=orders`,
     email: {
       to: order.product.store.owner.email,
-      subject: `Peringatan kinerja — order ${order.code} batal otomatis`,
+      subject: `Peringatan kinerja - order ${order.code} batal otomatis`,
       body: `Halo ${order.product.store.name}, order ${order.code} batal otomatis karena tidak diverifikasi manual dalam ${MANUAL_RESPONSE_HOURS} jam. Ini peringatan kinerja pertama tokomu.`,
       kind: "seller_performance_warning",
     },
   });
 }
 
-/** Kuota download 1x terpakai saat stream dimulai (GAP-13). */
-export async function markDownloadUsed(orderId: string) {
-  const order = await db.order.findUnique({ where: { id: orderId } });
-  if (!order) return null;
-  if (order.downloadUsedAt) return null; // kuota sudah terpakai
-  await db.order.update({
-    where: { id: orderId },
-    data: {
-      downloadUsedAt: new Date(),
-      status: order.status === "verified" ? "completed" : order.status,
-      completedAt: order.status === "verified" ? new Date() : order.completedAt,
-    },
+/** Konsumsi kuota unduh dan audit log secara atomik untuk mencegah klaim paralel. */
+export async function markDownloadUsed(p: {
+  orderId: string;
+  userId: string;
+  actor: "buyer" | "superadmin";
+  ip?: string;
+  userAgent?: string;
+}): Promise<Date | null> {
+  return db.$transaction(async (tx) => {
+    const now = new Date();
+    const claimed = await tx.order.updateMany({
+      where: {
+        id: p.orderId,
+        downloadUsedAt: null,
+        status: { in: ["verified", "completed"] },
+      },
+      data: { downloadUsedAt: now, status: "completed", completedAt: now },
+    });
+    if (claimed.count !== 1) return null;
+
+    await tx.orderEvent.create({
+      data: {
+        orderId: p.orderId,
+        status: "completed",
+        label: "File diunduh (kuota 1x terpakai)",
+        actor: p.actor,
+      },
+    });
+    await tx.downloadLog.create({
+      data: {
+        orderId: p.orderId,
+        userId: p.userId,
+        ip: p.ip ?? null,
+        userAgent: p.userAgent ?? null,
+        status: "started",
+        createdAt: now,
+      },
+    });
+    return now;
   });
-  await addEvent(orderId, "completed", "File diunduh (kuota 1x terpakai)", "buyer");
-  return db.order.findUnique({ where: { id: orderId } });
+}
+
+/** Pulihkan klaim hanya bila pengambilan upstream gagal sebelum stream dikirim. */
+export async function restoreDownloadClaim(p: {
+  orderId: string;
+  userId: string;
+  claimedAt: Date;
+}): Promise<boolean> {
+  return db.$transaction(async (tx) => {
+    const restored = await tx.order.updateMany({
+      where: {
+        id: p.orderId,
+        status: "completed",
+        downloadUsedAt: p.claimedAt,
+      },
+      data: { downloadUsedAt: null, status: "verified", completedAt: null },
+    });
+    if (restored.count !== 1) return false;
+
+    await tx.downloadLog.updateMany({
+      where: {
+        orderId: p.orderId,
+        userId: p.userId,
+        status: "started",
+        createdAt: p.claimedAt,
+      },
+      data: { status: "failed" },
+    });
+    await tx.orderEvent.create({
+      data: {
+        orderId: p.orderId,
+        status: "verified",
+        label: "Pengambilan file gagal sebelum stream dimulai; kuota dipulihkan",
+        actor: "system",
+      },
+    });
+    return true;
+  });
+}
+
+/** Tandai hasil stream pada log tanpa mengubah kuota yang sudah mulai dipakai. */
+export async function finishDownloadLog(p: {
+  orderId: string;
+  userId: string;
+  claimedAt: Date;
+  status: "completed" | "failed";
+}): Promise<void> {
+  await db.downloadLog.updateMany({
+    where: {
+      orderId: p.orderId,
+      userId: p.userId,
+      createdAt: p.claimedAt,
+      status: "started",
+    },
+    data: { status: p.status },
+  });
 }

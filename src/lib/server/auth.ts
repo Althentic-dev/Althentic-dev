@@ -1,7 +1,7 @@
 // =============================================================================
-// Althentic.Dev — Auth (GAP-17)
+// Althentic.Dev - Auth (GAP-17)
 // Sandbox: session custom (httpOnly cookie + DB) mengimplementasikan perilaku
-// NextAuth (email/password + Google merge-ready) — lihat TECHNICAL_DECISIONS.md.
+// NextAuth (email/password + Google merge-ready) - lihat TECHNICAL_DECISIONS.md.
 // Password: scrypt (node:crypto). Token reset/verify disimpan ter-hash (SPEC-05-03).
 // Session: 30 hari dengan "Ingat saya", 1 hari tanpa (SPEC-05-07).
 // =============================================================================
@@ -10,10 +10,13 @@ import { createHash, randomBytes, scryptSync, timingSafeEqual } from "crypto";
 import { cookies } from "next/headers";
 import { db } from "@/lib/db";
 import type { SessionUser } from "@/lib/types";
+import { getServerSecret } from "@/lib/server/secrets";
 
 export const SESSION_COOKIE = "althentic_session";
 
-const SESSION_SECRET = process.env.AUTH_SECRET || "dev-secret";
+function sessionSecret(): string {
+  return getServerSecret("AUTH_SECRET", "dev-secret");
+}
 
 export function hashPassword(password: string): string {
   const salt = randomBytes(16).toString("hex");
@@ -31,7 +34,7 @@ export function verifyPassword(password: string, stored: string | null): boolean
 }
 
 export function hashToken(token: string): string {
-  return createHash("sha256").update(token + SESSION_SECRET).digest("hex");
+  return createHash("sha256").update(token + sessionSecret()).digest("hex");
 }
 
 export function generateToken(): string {
@@ -87,7 +90,7 @@ export async function destroyAllSessions(userId: string): Promise<void> {
   await db.session.deleteMany({ where: { userId } });
 }
 
-/** Ambil user dari session cookie — dipanggil DI DALAM route (SPEC-15-04). */
+/** Ambil user dari session cookie - dipanggil DI DALAM route (SPEC-15-04). */
 export async function getSessionUser(req?: Request): Promise<SessionUser | null> {
   let token: string | undefined;
   try {

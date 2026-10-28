@@ -1,13 +1,15 @@
-// POST /api/webhooks/github-release — sync changelog dari GitHub Release (Docs §7).
-// Verifikasi signature x-hub-signature-256 (bila GITHUB_WEBHOOK_SECRET diset).
+// POST /api/webhooks/github-release - sync changelog dari GitHub Release (Docs §7).
+// Signature wajib diverifikasi; konfigurasi secret kosong ditolak.
 import { NextRequest } from "next/server";
 import { createHmac, timingSafeEqual } from "crypto";
 import { db } from "@/lib/db";
-import { json, fail, handle } from "@/lib/server/helpers";
+import { json, fail, handle, readJsonBodyLimited } from "@/lib/server/helpers";
+import { getServerSecret } from "@/lib/server/secrets";
+
+const MAX_WEBHOOK_BYTES = 1024 * 1024;
 
 function verifySignature(payload: string, signature: string | null): boolean {
-  const secret = process.env.GITHUB_WEBHOOK_SECRET;
-  if (!secret) return true; // sandbox: tanpa secret, webhook diterima
+  const secret = getServerSecret("GITHUB_WEBHOOK_SECRET", "dev-github-webhook-secret");
   if (!signature?.startsWith("sha256=")) return false;
   const expected = createHmac("sha256", secret).update(payload).digest("hex");
   const a = Buffer.from(expected);
@@ -17,14 +19,22 @@ function verifySignature(payload: string, signature: string | null): boolean {
 
 export async function POST(req: NextRequest) {
   return handle(async () => {
-    const raw = await req.text();
+    const parsedBody = await readJsonBodyLimited(req, MAX_WEBHOOK_BYTES);
+    if (!parsedBody.ok) {
+      if (parsedBody.reason === "too_large") return fail("Payload webhook melebihi batas 1 MB.", 413);
+      return fail("Payload JSON webhook tidak valid.", 400);
+    }
+    const raw = parsedBody.text;
     if (!verifySignature(raw, req.headers.get("x-hub-signature-256"))) {
       return fail("Signature webhook tidak valid.", 401);
     }
     const event = req.headers.get("x-github-event");
     if (event !== "release") return json({ ok: true, ignored: event });
+    if (!parsedBody.value || typeof parsedBody.value !== "object" || Array.isArray(parsedBody.value)) {
+      return fail("Payload release harus berupa object JSON.", 400);
+    }
 
-    const body = JSON.parse(raw) as {
+    const body = parsedBody.value as {
       action?: string;
       release?: {
         tag_name?: string;
@@ -57,7 +67,7 @@ export async function POST(req: NextRequest) {
   });
 }
 
-// GET — daftar changelog kronologis (dipakai halaman dokumentasi)
+// GET - daftar changelog kronologis (dipakai halaman dokumentasi)
 export async function GET() {
   return handle(async () => {
     const entries = await db.changelogEntry.findMany({

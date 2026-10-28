@@ -1,5 +1,5 @@
 // =============================================================================
-// Althentic.Dev — Komisi, invoice, dan suspend (SPEC-09, GAP-03, GAP-09, GAP-16)
+// Althentic.Dev - Komisi, invoice, dan suspend (SPEC-09, GAP-03, GAP-09, GAP-16)
 // - Ledger per event transaksi verified; order batal/expired TIDAK masuk (SPEC-09-05)
 // - Prompt gratis Rp0 → tidak kena komisi (GAP-16)
 // - Invoice terbit otomatis saat threshold tercapai → grace 7 hari → suspend
@@ -20,6 +20,7 @@ import {
   tplCommissionWarning,
 } from "@/lib/server/email";
 import { GRACE_PERIOD_DAYS } from "@/lib/constants";
+import type { Prisma } from "@prisma/client";
 
 export async function commissionOwed(storeId: string): Promise<number> {
   const entries = await db.commissionLedger.findMany({
@@ -38,12 +39,13 @@ export async function uninvoicedOpen(storeId: string): Promise<number> {
 }
 
 /** Dipanggil saat order verified: catat ledger + cek threshold invoice. */
-export async function recordLedgerAndMaybeInvoice(orderId: string): Promise<void> {
-  const order = await db.order.findUnique({ where: { id: orderId }, include: { store: true } });
-  if (!order) return;
+export async function recordLedgerForVerifiedOrder(
+  tx: Prisma.TransactionClient,
+  order: { id: string; storeId: string; price: number; commissionSnapshot: number }
+): Promise<void> {
   if (order.price === 0) return; // prompt gratis: tanpa komisi (GAP-16)
 
-  await db.commissionLedger.create({
+  await tx.commissionLedger.create({
     data: {
       storeId: order.storeId,
       orderId: order.id,
@@ -52,8 +54,11 @@ export async function recordLedgerAndMaybeInvoice(orderId: string): Promise<void
     },
   });
 
-  await maybeIssueInvoice(order.storeId);
-  await maybeWarnThreshold(order.storeId);
+}
+
+export async function processCommissionThreshold(storeId: string): Promise<void> {
+  await maybeIssueInvoice(storeId);
+  await maybeWarnThreshold(storeId);
 }
 
 async function maybeWarnThreshold(storeId: string) {
@@ -63,7 +68,7 @@ async function maybeWarnThreshold(storeId: string) {
   const owed = await commissionOwed(storeId);
   const pct = owed / Math.max(settings.suspendThreshold, 1);
   if ((pct >= 0.5 && pct < 0.8) || pct >= 0.8) {
-    // peringatan 50% / 80% (SPEC-01-06) — kirim sekali per ambang
+    // peringatan 50% / 80% (SPEC-01-06) - kirim sekali per ambang
     const key = pct >= 0.8 ? "warn80" : "warn50";
     const existing = await db.notification.findFirst({
       where: { userId: store.ownerId, title: { contains: `${key}:${owed}` } },
@@ -72,7 +77,7 @@ async function maybeWarnThreshold(storeId: string) {
       await notifyUser({
         userId: store.ownerId,
         type: "invoice",
-        title: `Peringatan tunggakan ${key}:${owed} — ${Math.round(pct * 100)}% dari batas`,
+        title: `Peringatan tunggakan ${key}:${owed} - ${Math.round(pct * 100)}% dari batas`,
         body: `Commission Owed Rp${owed.toLocaleString("id-ID")} sudah ${Math.round(pct * 100)}% dari batas suspend.`,
         linkQuery: `v=dashboard&tab=commissions`,
         email: {
@@ -94,52 +99,60 @@ async function maybeWarnThreshold(storeId: string) {
 /** Invoice otomatis saat Commission Owed (entri open) mencapai threshold. */
 export async function maybeIssueInvoice(storeId: string): Promise<void> {
   const settings = await getSettings();
-  const open = await uninvoicedOpen(storeId);
-  if (open < settings.invoiceThreshold) return;
+  const issued = await db.$transaction(async (tx) => {
+    const entries = await tx.commissionLedger.findMany({
+      where: { storeId, status: "open" },
+      orderBy: { createdAt: "asc" },
+    });
+    const amount = entries.reduce((total, entry) => total + entry.amount, 0);
+    if (amount < settings.invoiceThreshold) return null;
 
-  const store = await db.store.findUnique({ where: { id: storeId }, include: { owner: true } });
-  if (!store) return;
+    const store = await tx.store.findUnique({ where: { id: storeId }, include: { owner: true } });
+    if (!store) return null;
 
-  const entries = await db.commissionLedger.findMany({
-    where: { storeId, status: "open" },
-    orderBy: { createdAt: "asc" },
+    const issuedAt = new Date();
+    const dueAt = new Date(issuedAt.getTime() + GRACE_PERIOD_DAYS * 24 * 3600 * 1000);
+    const suspendAt = new Date(dueAt);
+    suspendAt.setHours(0, 0, 0, 0);
+    const invoice = await tx.invoice.create({
+      data: {
+        code: randomCode("INV"),
+        storeId,
+        amount,
+        issuedAt,
+        dueAt,
+        suspendAt,
+        status: "outstanding",
+      },
+    });
+    const claimed = await tx.commissionLedger.updateMany({
+      where: { id: { in: entries.map((entry) => entry.id) }, status: "open" },
+      data: { status: "invoiced", invoiceId: invoice.id },
+    });
+    if (claimed.count !== entries.length) {
+      throw Object.assign(new Error("Ledger komisi sudah dimasukkan ke invoice lain."), { code: "LEDGER_ALREADY_INVOICED" });
+    }
+    return { invoice, store, suspendAt };
+  }).catch((error: unknown) => {
+    if ((error as { code?: string }).code === "LEDGER_ALREADY_INVOICED") return null;
+    throw error;
   });
-  const amount = entries.reduce((a, e) => a + e.amount, 0);
-  const issuedAt = new Date();
-  const dueAt = new Date(issuedAt.getTime() + GRACE_PERIOD_DAYS * 24 * 3600 * 1000);
-  // Suspend di AWAL hari ke-8 (GAP-03)
-  const suspendAt = new Date(dueAt);
-  suspendAt.setHours(0, 0, 0, 0);
-
-  const invoice = await db.invoice.create({
-    data: {
-      code: randomCode("INV"),
-      storeId,
-      amount,
-      issuedAt,
-      dueAt,
-      suspendAt,
-      status: "outstanding",
-    },
-  });
-  await db.commissionLedger.updateMany({
-    where: { id: { in: entries.map((e) => e.id) } },
-    data: { status: "invoiced", invoiceId: invoice.id },
-  });
+  if (!issued) return;
+  const { invoice, store, suspendAt } = issued;
 
   await notifyUser({
     userId: store.ownerId,
     type: "invoice",
     title: `Invoice komisi ${invoice.code} terbit`,
-    body: `Tunggakan Rp${amount.toLocaleString("id-ID")} — lunasi sebelum ${suspendAt.toLocaleDateString("id-ID")} agar toko tidak suspend.`,
+    body: `Tunggakan Rp${invoice.amount.toLocaleString("id-ID")} - lunasi sebelum ${suspendAt.toLocaleDateString("id-ID")} agar toko tidak suspend.`,
     linkQuery: `v=dashboard&tab=commissions`,
     email: {
       to: store.owner.email,
-      subject: `Invoice komisi ${invoice.code} — Rp${amount.toLocaleString("id-ID")}`,
+      subject: `Invoice komisi ${invoice.code} - Rp${invoice.amount.toLocaleString("id-ID")}`,
       body: tplInvoiceIssued({
         sellerName: store.name,
         invoiceCode: invoice.code,
-        amount,
+        amount: invoice.amount,
         dueDate: suspendAt.toLocaleDateString("id-ID"),
         payNote: "Pembayaran komisi diverifikasi manual oleh Super-Admin (tanpa AI). Kirim bukti ke tim Althentic setelah transfer.",
       }),
@@ -169,7 +182,7 @@ export async function runInvoiceReminders(): Promise<{ sent: number }> {
           linkQuery: `v=dashboard&tab=commissions`,
           email: {
             to: inv.store.owner.email,
-            subject: `Pengingat invoice ${inv.code} — hari ke-${d}`,
+            subject: `Pengingat invoice ${inv.code} - hari ke-${d}`,
             body: tplInvoiceReminder({
               sellerName: inv.store.name,
               invoiceCode: inv.code,
@@ -216,7 +229,7 @@ export async function suspendStore(storeId: string, reason: string): Promise<voi
     where: { id: storeId },
     data: { status: "suspended", suspendedAt: new Date(), suspendReason: reason },
   });
-  // Produk disembunyikan dari katalog (SPEC-09-01) — status query filter 'suspended'
+  // Produk disembunyikan dari katalog (SPEC-09-01) - status query filter 'suspended'
   await notifyUser({
     userId: store.ownerId,
     type: "system",
@@ -225,7 +238,7 @@ export async function suspendStore(storeId: string, reason: string): Promise<voi
     linkQuery: `v=dashboard&tab=commissions`,
     email: {
       to: store.owner.email,
-      subject: "Toko Anda di-suspend — tunggakan komisi",
+      subject: "Toko Anda di-suspend - tunggakan komisi",
       body: tplSuspended({ sellerName: store.name, reason }),
       kind: "store_suspended",
     },
@@ -233,17 +246,18 @@ export async function suspendStore(storeId: string, reason: string): Promise<voi
 }
 
 export async function unsuspendStore(storeId: string): Promise<void> {
-  const store = await db.store.findUnique({ where: { id: storeId } });
-  if (!store) return;
-  // Pulihkan status sebelumnya (live bila punya produk terverifikasi)
-  const hasActive = await db.product.count({ where: { storeId, status: "active" } });
-  await db.store.update({
-    where: { id: storeId },
-    data: {
-      status: hasActive > 0 ? "live" : "ready",
-      suspendedAt: null,
-      suspendReason: null,
-    },
+  await db.$transaction(async (tx) => {
+    const store = await tx.store.findUnique({ where: { id: storeId } });
+    if (!store) return;
+    const hasActive = await tx.product.count({ where: { storeId, status: "active" } });
+    await tx.store.update({
+      where: { id: storeId },
+      data: {
+        status: hasActive > 0 ? "live" : "ready",
+        suspendedAt: null,
+        suspendReason: null,
+      },
+    });
   });
 }
 
@@ -260,71 +274,84 @@ export async function verifyInvoicePayment(p: {
   paidReference?: string;
   paidNote?: string;
 }): Promise<{ ok: boolean; message: string }> {
-  const inv = await db.invoice.findUnique({
-    where: { id: p.invoiceId },
-    include: { store: { include: { owner: true } }, entries: true },
-  });
-  if (!inv) throw Object.assign(new Error("Invoice tidak ditemukan."), { status: 404 });
+  const result = await db.$transaction(async (tx) => {
+    const inv = await tx.invoice.findUnique({
+      where: { id: p.invoiceId },
+      include: { store: { include: { owner: true } } },
+    });
+    if (!inv) throw Object.assign(new Error("Invoice tidak ditemukan."), { status: 404 });
+    if (inv.status !== "outstanding") throw Object.assign(new Error("Invoice sudah diproses."), { status: 409 });
 
-  if (p.paidAmount < inv.amount) {
-    // Bayar kurang: invoice tetap belum lunas (GAP-16) — catat saja
-    await db.invoice.update({
-      where: { id: inv.id },
+    if (p.paidAmount < inv.amount) {
+      const updated = await tx.invoice.updateMany({
+        where: { id: inv.id, status: "outstanding", amount: inv.amount, paidAmount: inv.paidAmount, paidAt: inv.paidAt },
+        data: {
+          paidAmount: p.paidAmount,
+          paidAt: p.paidAt,
+          paidMethod: p.paidMethod,
+          paidReference: p.paidReference ?? null,
+          paidNote:
+            (p.paidNote ? p.paidNote + " " : "") +
+            `[Pembayaran kurang: diterima Rp${p.paidAmount.toLocaleString("id-ID")} dari Rp${inv.amount.toLocaleString("id-ID")} - invoice tetap belum lunas]`,
+        },
+      });
+      if (updated.count !== 1) throw Object.assign(new Error("Invoice sedang diproses request lain."), { status: 409 });
+      return { kind: "underpaid" as const, inv, credit: 0 };
+    }
+
+    const updated = await tx.invoice.updateMany({
+      where: { id: inv.id, status: "outstanding", amount: inv.amount, paidAmount: inv.paidAmount, paidAt: inv.paidAt },
       data: {
-        paidAmount: p.paidAmount,
+        status: "paid",
         paidAt: p.paidAt,
+        paidAmount: p.paidAmount,
         paidMethod: p.paidMethod,
         paidReference: p.paidReference ?? null,
-        paidNote:
-          (p.paidNote ? p.paidNote + " " : "") +
-          `[Pembayaran kurang: diterima Rp${p.paidAmount.toLocaleString("id-ID")} dari Rp${inv.amount.toLocaleString("id-ID")} — invoice tetap belum lunas]`,
+        paidNote: p.paidNote ?? null,
+        verifiedBy: p.superAdminId,
       },
     });
+    if (updated.count !== 1) throw Object.assign(new Error("Invoice sedang diproses request lain."), { status: 409 });
+
+    await tx.commissionLedger.updateMany({ where: { invoiceId: inv.id }, data: { status: "settled" } });
+    const credit = p.paidAmount - inv.amount;
+    const storeUpdate: {
+      commissionCredit?: { increment: number };
+      status?: string;
+      suspendedAt?: null;
+      suspendReason?: null;
+    } = {};
+    if (credit > 0) storeUpdate.commissionCredit = { increment: credit };
+    if (inv.store.status === "suspended") {
+      const hasActive = await tx.product.count({ where: { storeId: inv.storeId, status: "active" } });
+      storeUpdate.status = hasActive > 0 ? "live" : "ready";
+      storeUpdate.suspendedAt = null;
+      storeUpdate.suspendReason = null;
+    }
+    if (Object.keys(storeUpdate).length > 0) {
+      await tx.store.update({ where: { id: inv.storeId }, data: storeUpdate });
+    }
+    return { kind: "paid" as const, inv, credit };
+  });
+
+  if (result.kind === "underpaid") {
     await notifyUser({
-      userId: inv.store.ownerId,
+      userId: result.inv.store.ownerId,
       type: "invoice",
-      title: `Pembayaran komisi kurang — ${inv.code}`,
-      body: `Diterima Rp${p.paidAmount.toLocaleString("id-ID")} dari Rp${inv.amount.toLocaleString("id-ID")}. Invoice tetap belum lunas.`,
+      title: `Pembayaran komisi kurang - ${result.inv.code}`,
+      body: `Diterima Rp${p.paidAmount.toLocaleString("id-ID")} dari Rp${result.inv.amount.toLocaleString("id-ID")}. Invoice tetap belum lunas.`,
       linkQuery: `v=dashboard&tab=commissions`,
     });
-    return { ok: false, message: "Pembayaran kurang — invoice tetap belum lunas (dicatat)." };
+    return { ok: false, message: "Pembayaran kurang - invoice tetap belum lunas (dicatat)." };
   }
 
-  const credit = p.paidAmount - inv.amount; // kelebihan → kredit (GAP-16)
-  await db.invoice.update({
-    where: { id: inv.id },
-    data: {
-      status: "paid",
-      paidAt: p.paidAt,
-      paidAmount: p.paidAmount,
-      paidMethod: p.paidMethod,
-      paidReference: p.paidReference ?? null,
-      paidNote: p.paidNote ?? null,
-      verifiedBy: p.superAdminId,
-    },
-  });
-  // Entry tercakup invoice ini → settled; counter reset utk porsi itu (GAP-09)
-  await db.commissionLedger.updateMany({
-    where: { invoiceId: inv.id },
-    data: { status: "settled" },
-  });
-  if (credit > 0) {
-    await db.store.update({
-      where: { id: inv.storeId },
-      data: { commissionCredit: { increment: credit } },
-    });
-  }
-  if (inv.store.status === "suspended") {
-    await unsuspendStore(inv.storeId);
-  }
-  // Kredit otomatis dipakai untuk invoice berikutnya yang terbit
   await notifyUser({
-    userId: inv.store.ownerId,
+    userId: result.inv.store.ownerId,
     type: "invoice",
-    title: `Invoice ${inv.code} lunas`,
+    title: `Invoice ${result.inv.code} lunas`,
     body:
-      credit > 0
-        ? `Terima kasih! Kelebihan Rp${credit.toLocaleString("id-ID")} menjadi saldo kredit untuk invoice berikutnya.`
+      result.credit > 0
+        ? `Terima kasih! Kelebihan Rp${result.credit.toLocaleString("id-ID")} menjadi saldo kredit untuk invoice berikutnya.`
         : "Terima kasih! Invoice komisi Anda telah lunas.",
     linkQuery: `v=dashboard&tab=commissions`,
   });
@@ -333,20 +360,25 @@ export async function verifyInvoicePayment(p: {
 
 /** Kredit store dipakai untuk mengurangi invoice baru (GAP-16: saldo kredit). */
 export async function applyCreditToInvoice(invoiceId: string): Promise<void> {
-  const inv = await db.invoice.findUnique({ where: { id: invoiceId }, include: { store: true } });
-  if (!inv || inv.store.commissionCredit <= 0) return;
-  const use = Math.min(inv.store.commissionCredit, inv.amount);
-  if (use <= 0) return;
-  await db.store.update({
-    where: { id: inv.storeId },
-    data: { commissionCredit: { decrement: use } },
-  });
-  // Kurangi amount invoice dengan kredit — invoice tetap satu record
-  await db.invoice.update({
-    where: { id: invoiceId },
-    data: {
-      amount: inv.amount - use,
-      paidNote: `Kredit saldo diterapkan: Rp${use.toLocaleString("id-ID")}`,
-    },
+  await db.$transaction(async (tx) => {
+    const inv = await tx.invoice.findUnique({ where: { id: invoiceId }, include: { store: true } });
+    if (!inv || inv.status !== "outstanding" || inv.store.commissionCredit <= 0) return;
+    const use = Math.min(inv.store.commissionCredit, inv.amount);
+    if (use <= 0) return;
+
+    const debited = await tx.store.updateMany({
+      where: { id: inv.storeId, commissionCredit: inv.store.commissionCredit },
+      data: { commissionCredit: { decrement: use } },
+    });
+    if (debited.count !== 1) throw Object.assign(new Error("Saldo kredit berubah saat invoice diproses."), { status: 409 });
+
+    const updated = await tx.invoice.updateMany({
+      where: { id: invoiceId, status: "outstanding", amount: inv.amount },
+      data: {
+        amount: inv.amount - use,
+        paidNote: `Kredit saldo diterapkan: Rp${use.toLocaleString("id-ID")}`,
+      },
+    });
+    if (updated.count !== 1) throw Object.assign(new Error("Invoice berubah saat kredit diterapkan."), { status: 409 });
   });
 }

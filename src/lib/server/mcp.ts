@@ -1,19 +1,23 @@
 // =============================================================================
-// Althentic.Dev — MCP (SPEC-08-04/05, GAP-19)
+// Althentic.Dev - MCP (SPEC-08-04/05, GAP-19)
 // Streamable HTTP endpoint /api/mcp dengan secret token per-session dari
 // dashboard Super-Admin, expire 24 jam, tidak didaftarkan di direktori publik.
 // AI hanya boleh MEMBACA laporan inspeksi & data produk lalu MENGUSULKAN
-// keputusan — eksekusi final tetap satu klik Super-Admin.
+// keputusan - eksekusi final tetap satu klik Super-Admin.
 // =============================================================================
 
 import { createHash, randomBytes } from "crypto";
 import { db } from "@/lib/db";
+import { getServerSecret } from "@/lib/server/secrets";
 
-const MCP_SECRET = process.env.MCP_SECRET || "dev-mcp-secret";
+function mcpSecret(): string {
+  return getServerSecret("MCP_SECRET", "dev-mcp-secret");
+}
 
 export async function issueMcpToken(createdBy: string, note?: string) {
   const token = `mcp_${randomBytes(24).toString("hex")}`;
-  const tokenHash = createHash("sha256").update(token + MCP_SECRET).digest("hex");
+  const secret = mcpSecret();
+  const tokenHash = createHash("sha256").update(token + secret).digest("hex");
   await db.mcpToken.create({
     data: {
       tokenHash,
@@ -27,9 +31,10 @@ export async function issueMcpToken(createdBy: string, note?: string) {
 
 export async function verifyMcpToken(token: string): Promise<boolean> {
   if (!token) return false;
+  const secret = mcpSecret();
   // Dukung juga master secret dari environment (untuk klien tetap)
-  if (token === MCP_SECRET) return true;
-  const tokenHash = createHash("sha256").update(token + MCP_SECRET).digest("hex");
+  if (token === secret) return true;
+  const tokenHash = createHash("sha256").update(token + secret).digest("hex");
   const row = await db.mcpToken.findUnique({ where: { tokenHash } });
   if (!row) return false;
   if (row.revokedAt) return false;
@@ -56,7 +61,7 @@ export async function logMcpCall(p: {
   });
 }
 
-/** AI mengusulkan keputusan (tidak mengeksekusi) — SPEC-08-05. */
+/** AI mengusulkan keputusan (tidak mengeksekusi) - SPEC-08-05. */
 export async function recordAiProposal(p: {
   productId: string;
   proposal: "approve" | "reject";
