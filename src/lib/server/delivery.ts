@@ -1,7 +1,7 @@
 // =============================================================================
-// Althentic.Dev — Delivery file (GAP-02 final: PROXY/STREAM, bukan redirect!)
+// Althentic.Dev - Delivery file (GAP-02 final: PROXY/STREAM, bukan redirect!)
 // API Route men-stream file .zip dari Google Drive dengan header
-// Content-Disposition: attachment — link Drive TIDAK PERNAH tampil mentah
+// Content-Disposition: attachment - link Drive TIDAK PERNAH tampil mentah
 // (SPEC-04-05, SPEC-11-02). Interface tunggal (SPEC-16-04) → ganti provider
 // cukup 1 file.
 // Sandbox: driveFileId berformat "demo:*" dilayani DemoZipProvider (file dibuat
@@ -10,6 +10,7 @@
 
 import { createHash } from "crypto";
 import { db } from "@/lib/db";
+import { safeFetchPublicStream, type SafeFetchStreamResult } from "@/lib/server/safe-fetch";
 
 // ---------------- Minimal ZIP writer (store, no compression) ----------------
 
@@ -100,7 +101,7 @@ function promptReadme(p: {
       name: "README.txt",
       content: `${p.productTitle}
 Dari toko: ${p.storeName} (Althentic.Dev)
-Versi file: v${p.version} — Tipe: ${p.sellType}
+Versi file: v${p.version} - Tipe: ${p.sellType}
 
 LISENSI (SPEC-16-10):
 - Lisensi penggunaan personal dan komersial atas OUTPUT prompt.
@@ -121,7 +122,7 @@ Butuh bantuan? Buka Dokumentasi > Panduan Buyer > Eksekusi Prompt.
 1. Salin isi prompt-utama.md
 2. Tempel ke AI tool pilihanmu (ChatGPT, Claude, Gemini, dsb.)
 3. Sesuaikan bagian [KONTEKS KAMU] dengan kebutuhanmu
-4. Iterasi — mulai dari prompt dasar lalu tambahkan batasan
+4. Iterasi - mulai dari prompt dasar lalu tambahkan batasan
 
 Dokumentasi lengkap: menu Dokumentasi di Althentic.Dev
 `,
@@ -148,16 +149,22 @@ export const googleDriveProvider: DeliveryProvider = {
   id: "gdrive",
   async fetchFile({ driveFileId, fileName }) {
     const url = `https://drive.google.com/uc?export=download&id=${encodeURIComponent(driveFileId)}`;
-    const res = await fetch(url, { redirect: "follow" });
-    if (!res.ok || !res.body) {
+    let res: SafeFetchStreamResult;
+    try {
+      res = await safeFetchPublicStream(url, { maxBytes: 100 * 1024 * 1024, timeoutMs: 15_000 });
+    } catch {
+      throw Object.assign(new Error("File di Google Drive tidak dapat diakses."), { status: 502 });
+    }
+    if (res.status < 200 || res.status >= 300) {
+      await res.body.cancel().catch(() => undefined);
       throw Object.assign(new Error("File di Google Drive tidak dapat diakses."), { status: 502 });
     }
     return {
       body: res.body,
       fileName,
       contentType: "application/zip",
-      contentLength: res.headers.get("content-length")
-        ? Number(res.headers.get("content-length"))
+      contentLength: res.headers["content-length"]
+        ? Number(res.headers["content-length"])
         : undefined,
     };
   },
@@ -182,7 +189,7 @@ Kamu adalah senior product designer dengan 10 tahun pengalaman...
 Rancang landing page konversi tinggi untuk SaaS B2B...
 
 ## Konteks
-[KONTEKS KAMU — ganti dengan deskripsi produkmu]
+[KONTEKS KAMU - ganti dengan deskripsi produkmu]
 
 ## Format Output
 - Struktur section lengkap
