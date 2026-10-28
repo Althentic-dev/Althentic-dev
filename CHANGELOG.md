@@ -5,6 +5,10 @@
 
 ### Unreleased Update
 
+- Perbaiki opsi `next/dynamic` agar setiap view dapat dikompilasi oleh Turbopack di Next.js 16.
+
+### Unreleased Update
+
 - Simpan bukti transfer WebP private di Neon Object Storage bucket `receipts` melalui AWS S3 SDK; rapikan env example dan dokumentasi konfigurasi serta backup GitHub Actions.
 
 ### Unreleased Update
