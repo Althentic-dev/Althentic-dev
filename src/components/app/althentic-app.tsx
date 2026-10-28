@@ -18,26 +18,25 @@ import { Footer } from "@/components/app/footer";
 import { AuthDialog } from "@/components/auth/auth-dialog";
 import type { SessionUser } from "@/lib/types";
 
-const viewOptions = { loading: ViewLoading };
-const LandingPage = dynamic(() => import("@/components/landing/landing-page").then((m) => m.LandingPage), viewOptions);
-const DocsPage = dynamic(() => import("@/components/docs/docs-page").then((m) => m.DocsPage), viewOptions);
-const GeneratorPage = dynamic(() => import("@/components/generator/generator-page").then((m) => m.GeneratorPage), viewOptions);
-const VerifyEmailView = dynamic(() => import("@/components/auth/verify-reset-views").then((m) => m.VerifyEmailView), viewOptions);
-const ResetPasswordView = dynamic(() => import("@/components/auth/verify-reset-views").then((m) => m.ResetPasswordView), viewOptions);
-const CatalogView = dynamic(() => import("@/components/catalog/catalog-view").then((m) => m.CatalogView), viewOptions);
-const ProductView = dynamic(() => import("@/components/product/product-view").then((m) => m.ProductView), viewOptions);
-const StoreView = dynamic(() => import("@/components/store-profile/store-view").then((m) => m.StoreView), viewOptions);
-const CheckoutView = dynamic(() => import("@/components/checkout/checkout-view").then((m) => m.CheckoutView), viewOptions);
-const OrdersView = dynamic(() => import("@/components/checkout/orders-view").then((m) => m.OrdersView), viewOptions);
-const CollectionView = dynamic(() => import("@/components/collection/collection-view").then((m) => m.CollectionView), viewOptions);
-const NotificationsView = dynamic(() => import("@/components/notifications/notifications-view").then((m) => m.NotificationsView), viewOptions);
-const OnboardingView = dynamic(() => import("@/components/onboarding/onboarding-view").then((m) => m.OnboardingView), viewOptions);
-const SellerDashboard = dynamic(() => import("@/components/seller/seller-dashboard").then((m) => m.SellerDashboard), viewOptions);
-const AdminDashboard = dynamic(() => import("@/components/admin/admin-dashboard").then((m) => m.AdminDashboard), viewOptions);
-const SettingsView = dynamic(() => import("@/components/settings/settings-view").then((m) => m.SettingsView), viewOptions);
-const StatusView = dynamic(() => import("@/components/misc/status-view").then((m) => m.StatusView), viewOptions);
-const LegalView = dynamic(() => import("@/components/misc/legal-view").then((m) => m.LegalView), viewOptions);
-const NotFoundView = dynamic(() => import("@/components/misc/not-found-view").then((m) => m.NotFoundView), viewOptions);
+const LandingPage = dynamic(() => import("@/components/landing/landing-page").then((m) => m.LandingPage), { loading: ViewLoading });
+const DocsPage = dynamic(() => import("@/components/docs/docs-page").then((m) => m.DocsPage), { loading: ViewLoading });
+const GeneratorPage = dynamic(() => import("@/components/generator/generator-page").then((m) => m.GeneratorPage), { loading: ViewLoading });
+const VerifyEmailView = dynamic(() => import("@/components/auth/verify-reset-views").then((m) => m.VerifyEmailView), { loading: ViewLoading });
+const ResetPasswordView = dynamic(() => import("@/components/auth/verify-reset-views").then((m) => m.ResetPasswordView), { loading: ViewLoading });
+const CatalogView = dynamic(() => import("@/components/catalog/catalog-view").then((m) => m.CatalogView), { loading: ViewLoading });
+const ProductView = dynamic(() => import("@/components/product/product-view").then((m) => m.ProductView), { loading: ViewLoading });
+const StoreView = dynamic(() => import("@/components/store-profile/store-view").then((m) => m.StoreView), { loading: ViewLoading });
+const CheckoutView = dynamic(() => import("@/components/checkout/checkout-view").then((m) => m.CheckoutView), { loading: ViewLoading });
+const OrdersView = dynamic(() => import("@/components/checkout/orders-view").then((m) => m.OrdersView), { loading: ViewLoading });
+const CollectionView = dynamic(() => import("@/components/collection/collection-view").then((m) => m.CollectionView), { loading: ViewLoading });
+const NotificationsView = dynamic(() => import("@/components/notifications/notifications-view").then((m) => m.NotificationsView), { loading: ViewLoading });
+const OnboardingView = dynamic(() => import("@/components/onboarding/onboarding-view").then((m) => m.OnboardingView), { loading: ViewLoading });
+const SellerDashboard = dynamic(() => import("@/components/seller/seller-dashboard").then((m) => m.SellerDashboard), { loading: ViewLoading });
+const AdminDashboard = dynamic(() => import("@/components/admin/admin-dashboard").then((m) => m.AdminDashboard), { loading: ViewLoading });
+const SettingsView = dynamic(() => import("@/components/settings/settings-view").then((m) => m.SettingsView), { loading: ViewLoading });
+const StatusView = dynamic(() => import("@/components/misc/status-view").then((m) => m.StatusView), { loading: ViewLoading });
+const LegalView = dynamic(() => import("@/components/misc/legal-view").then((m) => m.LegalView), { loading: ViewLoading });
+const NotFoundView = dynamic(() => import("@/components/misc/not-found-view").then((m) => m.NotFoundView), { loading: ViewLoading });
 
 function ViewLoading() {
   return (
