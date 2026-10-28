@@ -1,12 +1,13 @@
 "use client";
 
 // =============================================================================
-// AlthenticApp — kerangka SPA (route "/" tunggal di sandbox; navigasi via query).
+// AlthenticApp - kerangka SPA (route "/" tunggal di sandbox; navigasi via query).
 // Bootstrapping session + notifikasi, navbar auto-hide, footer sticky (mt-auto),
 // Lenis smooth scroll, Framer Motion entrance per view.
 // =============================================================================
 
 import { useEffect } from "react";
+import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
 import { useAppRouter } from "@/lib/router";
 import { useAppStore } from "@/lib/store";
@@ -17,24 +18,34 @@ import { Footer } from "@/components/app/footer";
 import { AuthDialog } from "@/components/auth/auth-dialog";
 import type { SessionUser } from "@/lib/types";
 
-import { LandingPage } from "@/components/landing/landing-page";
-import { DocsPage } from "@/components/docs/docs-page";
-import { GeneratorPage } from "@/components/generator/generator-page";
-import { VerifyEmailView, ResetPasswordView } from "@/components/auth/verify-reset-views";
-import { CatalogView } from "@/components/catalog/catalog-view";
-import { ProductView } from "@/components/product/product-view";
-import { StoreView } from "@/components/store-profile/store-view";
-import { CheckoutView } from "@/components/checkout/checkout-view";
-import { OrdersView } from "@/components/checkout/orders-view";
-import { CollectionView } from "@/components/collection/collection-view";
-import { NotificationsView } from "@/components/notifications/notifications-view";
-import { OnboardingView } from "@/components/onboarding/onboarding-view";
-import { SellerDashboard } from "@/components/seller/seller-dashboard";
-import { AdminDashboard } from "@/components/admin/admin-dashboard";
-import { SettingsView } from "@/components/settings/settings-view";
-import { StatusView } from "@/components/misc/status-view";
-import { LegalView } from "@/components/misc/legal-view";
-import { NotFoundView } from "@/components/misc/not-found-view";
+const viewOptions = { loading: ViewLoading };
+const LandingPage = dynamic(() => import("@/components/landing/landing-page").then((m) => m.LandingPage), viewOptions);
+const DocsPage = dynamic(() => import("@/components/docs/docs-page").then((m) => m.DocsPage), viewOptions);
+const GeneratorPage = dynamic(() => import("@/components/generator/generator-page").then((m) => m.GeneratorPage), viewOptions);
+const VerifyEmailView = dynamic(() => import("@/components/auth/verify-reset-views").then((m) => m.VerifyEmailView), viewOptions);
+const ResetPasswordView = dynamic(() => import("@/components/auth/verify-reset-views").then((m) => m.ResetPasswordView), viewOptions);
+const CatalogView = dynamic(() => import("@/components/catalog/catalog-view").then((m) => m.CatalogView), viewOptions);
+const ProductView = dynamic(() => import("@/components/product/product-view").then((m) => m.ProductView), viewOptions);
+const StoreView = dynamic(() => import("@/components/store-profile/store-view").then((m) => m.StoreView), viewOptions);
+const CheckoutView = dynamic(() => import("@/components/checkout/checkout-view").then((m) => m.CheckoutView), viewOptions);
+const OrdersView = dynamic(() => import("@/components/checkout/orders-view").then((m) => m.OrdersView), viewOptions);
+const CollectionView = dynamic(() => import("@/components/collection/collection-view").then((m) => m.CollectionView), viewOptions);
+const NotificationsView = dynamic(() => import("@/components/notifications/notifications-view").then((m) => m.NotificationsView), viewOptions);
+const OnboardingView = dynamic(() => import("@/components/onboarding/onboarding-view").then((m) => m.OnboardingView), viewOptions);
+const SellerDashboard = dynamic(() => import("@/components/seller/seller-dashboard").then((m) => m.SellerDashboard), viewOptions);
+const AdminDashboard = dynamic(() => import("@/components/admin/admin-dashboard").then((m) => m.AdminDashboard), viewOptions);
+const SettingsView = dynamic(() => import("@/components/settings/settings-view").then((m) => m.SettingsView), viewOptions);
+const StatusView = dynamic(() => import("@/components/misc/status-view").then((m) => m.StatusView), viewOptions);
+const LegalView = dynamic(() => import("@/components/misc/legal-view").then((m) => m.LegalView), viewOptions);
+const NotFoundView = dynamic(() => import("@/components/misc/not-found-view").then((m) => m.NotFoundView), viewOptions);
+
+function ViewLoading() {
+  return (
+    <div className="container-page py-12" role="status" aria-live="polite">
+      <span className="text-sm text-muted-foreground">Memuat halaman...</span>
+    </div>
+  );
+}
 
 export default function AlthenticApp() {
   const { view, query } = useAppRouter();
@@ -166,7 +177,7 @@ function NotAuthenticatedView({ view }: { view: string }) {
       <h1 className="text-2xl font-bold">Masuk dulu untuk melanjutkan</h1>
       <p className="mt-2 max-w-md text-muted-foreground">
         Halaman <span className="font-medium text-foreground">{view}</span> membutuhkan akun
-        Althentic. Daftar gratis — verifikasi email hanya perlu sekali sebelum checkout pertama.
+        Althentic. Daftar gratis - verifikasi email hanya perlu sekali sebelum checkout pertama.
       </p>
       <div className="mt-6 flex gap-3">
         <button
