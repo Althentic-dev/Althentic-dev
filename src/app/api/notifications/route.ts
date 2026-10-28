@@ -1,4 +1,4 @@
-// GET /api/notifications — daftar notifikasi user (SPEC-13-02)
+// GET /api/notifications - daftar notifikasi user (SPEC-13-02)
 import { handle, json } from "@/lib/server/helpers";
 import { requireUser } from "@/lib/server/auth";
 import { db } from "@/lib/db";
