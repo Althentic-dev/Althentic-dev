@@ -1,4 +1,4 @@
-// GET /api/seller/commissions — Commission Owed berjalan + invoice + ledger (SPEC-09, GAP-09)
+// GET /api/seller/commissions - Commission Owed berjalan + invoice + ledger (SPEC-09, GAP-09)
 import { db } from "@/lib/db";
 import { json, handle, fail } from "@/lib/server/helpers";
 import { requireUser } from "@/lib/server/auth";
