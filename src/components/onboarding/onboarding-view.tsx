@@ -228,7 +228,7 @@ export function OnboardingView() {
 
   if (loading) {
     return (
-      <div className="container-page max-w-3xl py-12">
+      <div role="status" aria-label="Memuat onboarding toko" aria-live="polite" aria-busy="true" className="container-page max-w-3xl py-12">
         <Skeleton className="h-10 w-72" />
         <Skeleton className="mt-8 h-96 rounded-3xl" />
       </div>
