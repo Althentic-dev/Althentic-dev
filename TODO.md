@@ -81,6 +81,13 @@
 - [x] Jalankan lint dan build, lalu periksa diff, encoding UTF-8, dan karakter em dash; perbarui graph proyek setelah perubahan kode.
 - [x] Buat Issue dan PR yang terhubung, tulis satu review terkonsolidasi pada `docs/review/CODE_REVIEW.md` di worktree, dan biarkan PR terbuka untuk ditinjau pemilik.
 
+### PR: Jadikan warna CTA katalog solid
+
+- [x] Ganti gradient pada tombol utama “Jelajahi Katalog” di landing page dengan satu warna dari token tema yang sudah tersedia; pertahankan teks, ripple, ukuran, dan interaksi tombol.
+- [x] Perbarui changelog di bawah marker terbaru dan tandai rencana ini selesai dalam PR yang sama.
+- [x] Perbarui knowledge graph, lalu jalankan lint/build serta pemeriksaan diff, encoding UTF-8, dan karakter em dash.
+- [x] Buat Issue dan PR yang terhubung, tulis review terkonsolidasi pada file CODE_REVIEW.md di worktree, dan biarkan PR terbuka untuk ditinjau pemilik.
+
 ## Deferred work
 
 - [ ] Audit dinamis penuh hanya dijalankan setelah tersedia runner OS sandbox yang menegakkan batas jaringan, environment, filesystem, dan sumber daya.

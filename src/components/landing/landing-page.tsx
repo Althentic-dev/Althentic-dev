@@ -293,7 +293,7 @@ function HeroSection() {
             onClick={() => navigateTo({ v: "catalog" }, { reset: true })}
             hoverScale={1.02}
             tapScale={0.98}
-            className="group inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-[linear-gradient(135deg,var(--primary),var(--brand-blue))] px-7 text-base font-semibold text-primary-foreground shadow-lg shadow-primary/30 transition-[translate,box-shadow] hover:-translate-y-0.5 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:w-auto sm:px-8"
+            className="group inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-primary px-7 text-base font-semibold text-primary-foreground shadow-lg shadow-primary/30 transition-[translate,box-shadow] hover:-translate-y-0.5 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:w-auto sm:px-8"
           >
             <RippleButtonRipples color="currentColor" />
             Jelajahi Katalog
