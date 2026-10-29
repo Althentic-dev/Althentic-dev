@@ -6,9 +6,9 @@
 // =============================================================================
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import { useTheme } from "next-themes";
 import { ChevronDown } from "@/components/animate-ui/icons/chevron-down";
-import { Hexagon } from "@/components/animate-ui/icons/hexagon";
 import { LogOut } from "@/components/animate-ui/icons/log-out";
 import { Menu } from "@/components/animate-ui/icons/menu";
 import { Moon } from "@/components/animate-ui/icons/moon";
@@ -102,9 +102,14 @@ export function Navbar({ activeView }: { activeView: string }) {
           className="flex items-center gap-2.5 font-semibold tracking-tight"
           aria-label="Althentic.Dev - beranda"
         >
-          <span className="bg-brand-gradient flex h-9 w-9 items-center justify-center rounded-xl text-white shadow-lg shadow-black/25">
-            <Hexagon className="h-5 w-5" strokeWidth={2.4} />
-          </span>
+          <Image
+            src="/logo.svg"
+            alt=""
+            aria-hidden="true"
+            width={36}
+            height={36}
+            className="h-9 w-9 shrink-0 rounded-xl shadow-lg shadow-black/25"
+          />
           <span className="text-[17px] leading-none">
             Althentic<span className="text-primary">.Dev</span>
           </span>

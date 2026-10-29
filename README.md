@@ -1,60 +1,113 @@
 <div align="center">
-    <img src="public/assets/profile/banner.gif" alt="Althentic.dev banner" width="100%" />
+  <img src="public/assets/profile/banner.gif" alt="Banner Althentic.Dev" width="100%" />
+
+  <h1>Althentic.Dev</h1>
+
+  <p>Marketplace multi-seller untuk prompt dan produk digital siap pakai.</p>
+
+  <p>
+    <a href="https://nextjs.org/"><img alt="Next.js App Router" src="https://img.shields.io/badge/Next.js-App%20Router-000000?logo=next.js" /></a>
+    <a href="https://www.typescriptlang.org/"><img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-typed-3178C6?logo=typescript&logoColor=white" /></a>
+    <a href="https://bun.sh/"><img alt="Bun" src="https://img.shields.io/badge/Runtime-Bun-fbf0df?logo=bun&logoColor=000000" /></a>
+    <a href="https://vercel.com/"><img alt="Vercel" src="https://img.shields.io/badge/Hosting-Vercel-000000?logo=vercel" /></a>
+  </p>
 </div>
 
-# Althentic.Dev
+Althentic menyediakan toko untuk seller yang menjual prompt, template, dan produk digital lain. Buyer membayar seller secara langsung menggunakan QR milik seller. Althentic mencatat komisi tetap sebagai tagihan seller dan tidak menampung atau membagi dana buyer.
 
-Althentic is a multi-tenant marketplace for ready-to-use prompts and digital products. Buyers pay sellers directly using the seller's QR code. The platform records its commission as an amount owed by the seller; it does not hold buyer funds.
+## Fitur utama
 
-## Technology
+- Setiap seller mengelola toko dengan slug unik dan produk digitalnya sendiri.
+- Buyer membayar seller secara langsung. Transaksi yang terverifikasi mencatat komisi tetap sebagai **Commission Owed**.
+- Bukti transfer dipindai oleh AI Receipt Scanner menggunakan API key milik seller (BYOK). Seller dapat memeriksa transaksi secara manual sebagai fallback.
+- Receipt tersimpan privat di Neon Object Storage dan hanya disajikan melalui API yang memeriksa otorisasi.
+- Produk dikirim melalui proxy Google Drive agar tautan sumber tidak ditampilkan langsung kepada buyer.
 
-- Next.js App Router with TypeScript
-- Prisma with Neon PostgreSQL (`DATABASE_URL` pooled; `DIRECT_URL` for migrations)
-- Bun for package management
-- Local file storage in `storage/`
+## Teknologi dan penyimpanan
 
-Production deployment targets Vercel and Neon. Receipt files use the private Neon Object Storage bucket `receipts`. Production banners and store QR images use the public Supabase bucket named by `SUPABASE_STORAGE_BUCKET_BANNERS`; product previews use the public bucket named by `SUPABASE_STORAGE_BUCKET_PREVIEWS`. Local development continues to use `storage/`.
+- Next.js App Router, TypeScript, React, dan Tailwind CSS.
+- Prisma dengan PostgreSQL Neon. `DATABASE_URL` digunakan untuk koneksi runtime terpool, sedangkan `DIRECT_URL` dipakai command migrasi Prisma.
+- Neon Object Storage untuk receipt privat pada bucket `receipts`.
+- Supabase Storage untuk banner dan QR toko pada bucket publik, serta preview produk pada bucket publik terpisah.
+- Direktori `storage/` digunakan untuk file lokal saat development. Production berjalan di Vercel.
 
-## Local development
+## Menjalankan secara lokal
 
-1. Install Bun and the project dependencies with `bun install --frozen-lockfile`.
-2. Copy `.env.example` to `.env` and configure both database URLs for a dedicated, non-production Neon branch. Keep `.env` private and never put production credentials in it.
-3. Apply committed schema migrations with `bun run db:deploy`.
-4. Start the development server with `bun run dev`.
+### Prasyarat
 
-Prisma uses PostgreSQL. `DATABASE_URL` is the pooled runtime connection and `DIRECT_URL` is used by Prisma migration commands. `bun run db:deploy` applies committed migrations; `bun run db:push` is for controlled development only and does not enable automatic data loss. Do not point local development at production data.
-Receipt uploads require a configured Neon Object Storage endpoint, credentials, and private `receipts` bucket; the application does not silently store receipts in Supabase or local storage when that configuration is missing.
+- Bun terpasang.
+- Branch database Neon non-production dengan schema yang sudah dimigrasikan.
+- Salinan `.env.example` yang sudah dilengkapi untuk environment lokal.
 
-## Supabase Storage production setup
+### Setup
 
-Create two Supabase Storage buckets before deploying: the bucket configured by `SUPABASE_STORAGE_BUCKET_BANNERS` for store banners and QR images, and the bucket configured by `SUPABASE_STORAGE_BUCKET_PREVIEWS` for product previews. Set both buckets to **Public** so public asset URLs and the storage readiness probe work without authentication. Uploads and deletes run only on the server with `SUPABASE_SERVICE_ROLE_KEY`; never expose this key in a `NEXT_PUBLIC_` variable or browser code. Production also requires `SUPABASE_URL`. Local development does not use these variables for file writes.
+1. Pasang dependency yang tercatat pada lockfile:
 
-`/api/health` checks PostgreSQL, the private Neon `receipts` bucket, and a public Supabase banner object. It returns HTTP 200 only when all three checks are reachable, and HTTP 503 otherwise.
+   ```bash
+   bun install --frozen-lockfile
+   ```
 
-To copy existing files from `storage/public` after configuring `.env`, first run a dry-run, then add `--apply` to upload. The script checks every existing target object before uploading, refuses to overwrite objects whose SHA-256 differs, verifies uploaded bytes, and leaves all source files in place:
+2. Salin `.env.example` menjadi `.env`, lalu isi konfigurasi development. Gunakan `DATABASE_URL` dari connection pool dan `DIRECT_URL` untuk operasi migrasi. Jangan gunakan kredensial production untuk development.
+
+3. Terapkan migrasi database:
+
+   ```bash
+   bun run db:deploy
+   ```
+
+4. Jalankan server development:
+
+   ```bash
+   bun run dev
+   ```
+
+Perintah database lain tersedia di `package.json`. `bun run db:push` hanya untuk perubahan schema development yang dikendalikan; gunakan migration untuk perubahan schema yang akan dirilis.
+
+Receipt memerlukan endpoint Neon Object Storage, kredensial S3-compatible, dan bucket privat `receipts`. Aplikasi tidak memindahkan receipt ke Supabase atau filesystem secara diam-diam ketika storage tersebut belum tersedia.
+
+## Konfigurasi Supabase untuk production
+
+Buat dua bucket Supabase sebelum deployment:
+
+- Bucket `SUPABASE_STORAGE_BUCKET_BANNERS` untuk banner dan gambar QR toko.
+- Bucket `SUPABASE_STORAGE_BUCKET_PREVIEWS` untuk preview produk.
+
+Keduanya harus berstatus **Public** agar URL aset dapat dibuka buyer dan pemeriksaan readiness dapat membaca object sentinel. Upload dan penghapusan dilakukan server menggunakan `SUPABASE_SERVICE_ROLE_KEY`; jangan menaruh key tersebut pada variabel `NEXT_PUBLIC_` atau kode browser. Production juga memerlukan `SUPABASE_URL`.
+
+Endpoint `/api/health` memeriksa PostgreSQL, bucket privat receipt Neon, dan object publik Supabase. Endpoint mengembalikan HTTP 200 jika seluruh pemeriksaan siap, atau HTTP 503 jika ada layanan yang belum siap.
+
+## Memindahkan aset dan data lama
+
+Script migrasi aset publik mendukung dry-run. Jalankan dari root repository setelah `.env` disiapkan:
 
 ```powershell
 bun --env-file=.env scripts/migrate-supabase-public-assets.ts --source .\storage\public
 bun --env-file=.env scripts/migrate-supabase-public-assets.ts --source .\storage\public --apply
 ```
 
-Run the migration from the repository root. It maps `banners/` and `qr/` to the banners bucket, and `products/` to the previews bucket. The migration reports counts and byte totals only, not environment values or file contents. Do not remove the local source until you have confirmed the public files load in production.
+Script memetakan `banners/` dan `qr/` ke bucket banner, serta `products/` ke bucket preview. Script memeriksa object tujuan sebelum upload, menolak penimpaan object dengan hash berbeda, memverifikasi byte hasil upload, dan mempertahankan file sumber. Pastikan file publik berhasil dibuka di production sebelum menghapus sumber lokal.
 
-The one-time `bun run scripts/migrate-sqlite-to-neon.ts` utility imports relational rows from `db/custom.db` and linked private receipt WebP files. It refuses to run when destination application tables are non-empty, verifies row counts and receipt bytes, and never deletes the source database or files. Run it only after `bun run db:deploy` and after confirming the Neon target branch is the intended production database.
+Untuk impor awal SQLite dan receipt lokal ke Neon, jalankan `bun run db:deploy`, pastikan target adalah branch database yang benar dan tabel aplikasi masih kosong, lalu jalankan:
 
-## Project documents
+```bash
+bun run scripts/migrate-sqlite-to-neon.ts
+```
 
-- `docs/PRD.md`: product requirements
-- `docs/SPEC.md`: detailed decisions and unresolved questions
-- `docs/ARCHITECTURE.md`: system boundaries and data flows
-- `docs/DESIGN.md`: interface and design constraints
-- `docs/CONTEXT.md`: project handoff context
-- `docs/WORKFLOW.md`: end-to-end user and operational flows
+Utilitas memverifikasi jumlah record dan byte receipt serta tidak menghapus database atau file sumber. Jangan arahkan migrasi lokal ke database production tanpa pemeriksaan target yang disengaja.
 
-## GitHub Actions dan backup
+## Dokumentasi
 
-Repository ini belum memiliki workflow backup GitHub Actions. Jika workflow `pg_dump` ditambahkan, kredensial database dan storage disimpan sebagai GitHub Actions Secrets pada repository atau organization, bukan di `.env` aplikasi. Nama bucket dan region yang tidak rahasia dapat menjadi Actions Variables atau konfigurasi workflow. Nama konfigurasi ditentukan bersama workflow yang benar-benar menggunakannya. Backup tersebut belum diimplementasikan oleh kode aplikasi.
+- [PRD](docs/PRD.md): tujuan dan kebutuhan produk.
+- [SPEC](docs/SPEC.md): alur dan ketentuan fungsional.
+- [Architecture](docs/ARCHITECTURE.md): batas sistem dan aliran data.
+- [Design](docs/DESIGN.md): aturan antarmuka dan sistem desain.
+- [Context](docs/CONTEXT.md): konteks untuk handoff pekerjaan.
+- [Workflow](docs/WORKFLOW.md): alur buyer, seller, dan operasional.
 
-## License
+## Backup GitHub Actions
 
-All rights reserved. See `LICENSE`.
+Repository ini belum menyediakan workflow backup. Jika workflow `pg_dump` ditambahkan, simpan kredensial database dan storage sebagai GitHub Actions Secrets pada repository atau organization, bukan di `.env` aplikasi. Nama bucket dan region yang tidak rahasia dapat disimpan sebagai Actions Variables atau konfigurasi workflow. Workflow backup belum diimplementasikan oleh aplikasi.
+
+## Lisensi
+
+All rights reserved. Lihat [LICENSE](LICENSE).

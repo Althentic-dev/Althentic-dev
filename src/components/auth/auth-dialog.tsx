@@ -7,8 +7,8 @@
 // =============================================================================
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
-import { Hexagon } from "@/components/animate-ui/icons/hexagon";
 import { LoaderCircle as Loader2 } from "@/components/animate-ui/icons/loader-circle";
 import { Lock } from "@/components/animate-ui/icons/lock";
 import { Mail } from "@/components/animate-ui/icons/mail";
@@ -123,9 +123,14 @@ export function AuthDialog() {
         {/* Header brand */}
         <div className="bg-brand-gradient px-6 pb-6 pt-7 text-white">
           <div className="flex items-center gap-2.5">
-            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/15 backdrop-blur">
-              <Hexagon className="h-5 w-5" strokeWidth={2.4} />
-            </span>
+            <Image
+              src="/logo.svg"
+              alt=""
+              aria-hidden="true"
+              width={36}
+              height={36}
+              className="h-9 w-9 shrink-0 rounded-xl"
+            />
             <span className="text-lg font-semibold">
               Althentic<span className="opacity-80">.Dev</span>
             </span>
