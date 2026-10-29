@@ -1,11 +1,13 @@
-PR: #22
+PR: #24
 Repo: Althentic-dev/Althentic-dev
 Status: [ ] dicopas
 
-Review PR #22
+Review PR #24
 
 ```md
-`src/components/landing/landing-page.tsx` kini memakai `bg-primary` untuk CTA “Jelajahi Katalog”, dengan `text-primary-foreground` yang mengikuti token tema terang dan gelap. Ripple, ukuran, focus ring, dan interaksi tetap dipertahankan. Build tidak memeriksa tampilan visual, jadi mohon cek CTA pada Preview di kedua tema dan pastikan kontras serta pemisahan dari CTA “Buka Toko Gratis” tetap jelas.
+`src/components/ui/particle-text.tsx` memakai implementasi ReactBits dari dokumentasi yang disediakan. Saat `idleDrift` bernilai nol, loop canvas berhenti setelah pengumpulan partikel selesai, dan cleanup melepas observer, listener, serta frame yang tersisa.
 
-Entri `CHANGELOG.md` membatasi dampak pada CTA katalog, sesuai perubahan kode. `TODO.md` mencatat implementasi, validasi, serta Issue dan PR yang sudah dibuat. Tidak ada perubahan database, storage, environment, atau data pengguna.
+`src/components/app/splash-screen.tsx` memuat animasi secara lazy, menampilkan fallback teks biru selama bundle dimuat, menghormati reduced motion, lalu meng-unmount canvas. Timer tetap berdurasi sekitar 2,1 detik tanpa menunggu kesiapan halaman; mohon pastikan durasi ini terasa tepat pada jaringan seluler lambat.
+
+`src/app/layout.tsx` memasang overlay di root. Karena view aplikasi berubah melalui History API tanpa remount layout, splash tidak muncul saat navigasi internal. `CHANGELOG.md` dan `TODO.md` mencatat cakupan serta validasi yang dilakukan. Tidak ada perubahan database, storage, environment, atau data pengguna.
 ```
