@@ -1,13 +1,15 @@
-PR: #18
+PR: #20
 Repo: Althentic-dev/Althentic-dev
 Status: [ ] dicopas
 
-Review PR #18
+Review PR #20
 
 ```md
-Perubahan 1.173 karakter em dash menjadi tanda hubung biasa tersebar di 133 file teks, termasuk copy UI dan pesan API. Pemeriksaan menunjukkan perubahan source hanya mengganti karakter tersebut, dan lint serta build lulus. Mohon tinjau beberapa contoh copy UI dan dokumentasi untuk memastikan tanda hubung ASCII tetap terbaca sesuai konteks.
+`README.md` kini merangkum fitur, batas pembayaran langsung ke seller, konfigurasi Neon dan Supabase, setup lokal, serta migrasi. Pastikan instruksi `bun run db:deploy` untuk branch Neon non-production tetap sesuai dengan alur development yang diinginkan. Badge teknologi memakai gambar Shields.io eksternal, sehingga badge dapat tidak tampil jika layanan tersebut tidak tersedia.
 
-`db/custom.db` juga berubah secara biner. Laporan menyatakan 43 penggantian dalam 38 nilai teks, jumlah record tetap, integrity check lulus, dan tidak ada em dash tersisa. Diff Git biasa tidak memperlihatkan nilai database yang berubah; mohon pastikan file ini memang fixture lokal yang seharusnya di-commit dan perubahan SQL-level tidak menyentuh nilai lain.
+`layout.tsx` menunjuk ke `/logo.svg`, yang tersedia di `public/`. Navbar, footer, dan dialog autentikasi menggunakan file logo yang sama, dan pencarian pemakaian komponen menunjukkan ketiganya dirender melalui app shell. Mohon tinjau hasil visual pada tema terang dan gelap: SVG memiliki bidang gelap dan animasi napas, sementara logo sekarang ditampilkan pada ukuran 36 piksel di latar header, footer, dan dialog. Build tidak memeriksa kecocokan tampilannya.
 
-Graphify memperbarui graph code, tetapi melaporkan parser SQL opsional tidak tersedia. Ini tidak tampak memengaruhi build aplikasi, namun graph tidak mencakup isi SQL tersebut.
+Entri `CHANGELOG.md` menggambarkan perubahan README dan brand yang memang dilakukan. Checklist `TODO.md` mencatat lint, build, graph, Issue, dan PR; build lokal lulus tetapi Next.js melewati validasi tipe sesuai konfigurasi dan memberi peringatan dua lockfile karena worktree berada di bawah checkout root.
+
+Perubahan `docs/review/CODE_REVIEW.md` mengganti review PR sebelumnya dengan satu blok untuk PR ini dan status salin tetap belum dicentang. Tidak ada perubahan database, storage, atau environment.
 ```
