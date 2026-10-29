@@ -54,7 +54,7 @@ export function StatusView() {
       </div>
 
       {loading && !data ? (
-        <div className="mt-8 space-y-3">
+        <div role="status" aria-label="Memuat status layanan" aria-live="polite" aria-busy="true" className="mt-8 space-y-3">
           {Array.from({ length: 4 }).map((_, i) => (
             <Skeleton key={i} className="h-16 rounded-2xl" />
           ))}
