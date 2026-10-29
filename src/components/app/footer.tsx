@@ -5,7 +5,7 @@
 // Sticky di dasar viewport saat konten pendek (flex-col + mt-auto).
 // =============================================================================
 
-import { Hexagon } from "@/components/animate-ui/icons/hexagon";
+import Image from "next/image";
 import { Instagram } from "@/components/animate-ui/icons/instagram";
 import { Twitter } from "@/components/animate-ui/icons/twitter";
 import { Music2 } from "@/components/animate-ui/icons/music-2";
@@ -56,9 +56,14 @@ export function Footer() {
         {/* Kolom brand */}
         <div className="max-w-xs">
           <div className="flex items-center gap-2.5 font-semibold tracking-tight">
-            <span className="bg-brand-gradient flex h-9 w-9 items-center justify-center rounded-xl text-white">
-              <Hexagon className="h-5 w-5" strokeWidth={2.4} />
-            </span>
+            <Image
+              src="/logo.svg"
+              alt=""
+              aria-hidden="true"
+              width={36}
+              height={36}
+              className="h-9 w-9 shrink-0 rounded-xl"
+            />
             <span className="text-[17px]">
               Althentic<span className="text-primary">.Dev</span>
             </span>
