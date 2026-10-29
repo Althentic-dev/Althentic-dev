@@ -102,7 +102,7 @@
 - [x] Pertahankan aksesibilitas melalui status pemuatan dan teks screen reader milik Particle Text.
 - [x] Perbarui changelog dan graphify, jalankan lint/build, serta periksa diff, UTF-8, dan em dash.
 - [x] Pastikan tidak ada isi `docs/reactbits/` yang dilacak atau dimasukkan ke PR; direktori tetap di-ignore oleh `.gitignore` yang sudah ada di `main`.
-- [ ] Buat Issue dan PR tertaut, catat review PR di worktree, dan jangan merge PR.
+- [x] Buat Issue dan PR tertaut, catat review PR di worktree, dan jangan merge PR.
 
 ## Deferred work
 
