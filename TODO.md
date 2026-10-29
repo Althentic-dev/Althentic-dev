@@ -79,7 +79,7 @@
 - [x] Pertahankan ikon fungsional antarmuka dan avatar yang bukan logo; periksa seluruh pemakaian komponen bersama sebelum menyuntingnya.
 - [x] Sisipkan catatan changelog tepat di bawah marker entri baru.
 - [x] Jalankan lint dan build, lalu periksa diff, encoding UTF-8, dan karakter em dash; perbarui graph proyek setelah perubahan kode.
-- [ ] Buat Issue dan PR yang terhubung, tulis satu review terkonsolidasi pada `docs/review/CODE_REVIEW.md` di worktree, dan biarkan PR terbuka untuk ditinjau pemilik.
+- [x] Buat Issue dan PR yang terhubung, tulis satu review terkonsolidasi pada `docs/review/CODE_REVIEW.md` di worktree, dan biarkan PR terbuka untuk ditinjau pemilik.
 
 ## Deferred work
 
