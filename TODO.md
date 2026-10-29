@@ -83,9 +83,9 @@
 
 ### PR: Jadikan warna CTA katalog solid
 
-- [ ] Ganti gradient pada tombol utama “Jelajahi Katalog” di landing page dengan satu warna dari token tema yang sudah tersedia; pertahankan teks, ripple, ukuran, dan interaksi tombol.
-- [ ] Perbarui changelog di bawah marker terbaru dan tandai rencana ini selesai dalam PR yang sama.
-- [ ] Perbarui knowledge graph, lalu jalankan lint/build serta pemeriksaan diff, encoding UTF-8, dan karakter em dash.
+- [x] Ganti gradient pada tombol utama “Jelajahi Katalog” di landing page dengan satu warna dari token tema yang sudah tersedia; pertahankan teks, ripple, ukuran, dan interaksi tombol.
+- [x] Perbarui changelog di bawah marker terbaru dan tandai rencana ini selesai dalam PR yang sama.
+- [x] Perbarui knowledge graph, lalu jalankan lint/build serta pemeriksaan diff, encoding UTF-8, dan karakter em dash.
 - [ ] Buat Issue dan PR yang terhubung, tulis review terkonsolidasi pada file CODE_REVIEW.md di worktree, dan biarkan PR terbuka untuk ditinjau pemilik.
 
 ## Deferred work
