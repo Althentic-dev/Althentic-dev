@@ -5,6 +5,10 @@
 
 ### Unreleased Update
 
+- Hilangkan teks fallback yang menduplikasi “Althentic” selama Particle Text dimuat; teks visual splash kini hanya berasal dari animasi.
+
+### Unreleased Update
+
 - Tampilkan splash screen “Althentic” dengan Particle Text biru saat halaman dimuat ulang; animasi dimuat secara lazy dan mengikuti preferensi reduced motion.
 
 ### Unreleased Update
