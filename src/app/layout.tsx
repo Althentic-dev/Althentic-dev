@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     "Indonesia",
   ],
   authors: [{ name: "Althentic.Dev" }],
-  icons: { icon: "/assets/logo.svg" },
+  icons: { icon: "/logo.svg" },
   openGraph: {
     title: "Althentic.Dev - Marketplace Prompt Serbaguna",
     description:
