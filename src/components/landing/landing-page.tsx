@@ -574,33 +574,36 @@ function SocialProofSection() {
         />
 
         {loading ? (
-          <div aria-hidden="true" className="mt-10 space-y-6">
-            <div className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
-              {Array.from({ length: 4 }).map((_, i) => (
-                <div key={i} className="glass-card p-6">
-                  <div className="mx-auto size-10 animate-pulse rounded-xl bg-muted" />
-                  <div className="mx-auto mt-3 h-8 w-20 animate-pulse rounded bg-muted" />
-                  <div className="mx-auto mt-2.5 h-3.5 w-28 animate-pulse rounded bg-muted" />
-                </div>
-              ))}
-            </div>
-            <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-              {Array.from({ length: 3 }).map((_, i) => (
-                <div key={i} className="glass-card p-6">
-                  <div className="flex items-center gap-3">
-                    <div className="size-11 animate-pulse rounded-full bg-muted" />
-                    <div className="space-y-2">
-                      <div className="h-3.5 w-24 animate-pulse rounded bg-muted" />
-                      <div className="h-3 w-16 animate-pulse rounded bg-muted" />
+          <div role="status" aria-label="Memuat statistik dan ulasan" aria-live="polite" aria-busy="true" className="mt-10 space-y-6">
+            <span className="sr-only">Memuat statistik dan ulasan</span>
+            <div aria-hidden="true">
+              <div className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
+                {Array.from({ length: 4 }).map((_, i) => (
+                  <div key={i} className="glass-card p-6">
+                    <div className="mx-auto size-10 motion-safe:animate-pulse rounded-xl bg-muted" />
+                    <div className="mx-auto mt-3 h-8 w-20 motion-safe:animate-pulse rounded bg-muted" />
+                    <div className="mx-auto mt-2.5 h-3.5 w-28 motion-safe:animate-pulse rounded bg-muted" />
+                  </div>
+                ))}
+              </div>
+              <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+                {Array.from({ length: 3 }).map((_, i) => (
+                  <div key={i} className="glass-card p-6">
+                    <div className="flex items-center gap-3">
+                      <div className="size-11 motion-safe:animate-pulse rounded-full bg-muted" />
+                      <div className="space-y-2">
+                        <div className="h-3.5 w-24 motion-safe:animate-pulse rounded bg-muted" />
+                        <div className="h-3 w-16 motion-safe:animate-pulse rounded bg-muted" />
+                      </div>
+                    </div>
+                    <div className="mt-4 space-y-2">
+                      <div className="h-3 w-full motion-safe:animate-pulse rounded bg-muted" />
+                      <div className="h-3 w-5/6 motion-safe:animate-pulse rounded bg-muted" />
+                      <div className="h-3 w-2/3 motion-safe:animate-pulse rounded bg-muted" />
                     </div>
                   </div>
-                  <div className="mt-4 space-y-2">
-                    <div className="h-3 w-full animate-pulse rounded bg-muted" />
-                    <div className="h-3 w-5/6 animate-pulse rounded bg-muted" />
-                    <div className="h-3 w-2/3 animate-pulse rounded bg-muted" />
-                  </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
         ) : error || !stats ? (
