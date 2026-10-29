@@ -396,10 +396,10 @@ function ChangelogFeed() {
           <span className="sr-only">Memuat changelog…</span>
           {[0, 1, 2].map((i) => (
             <div key={i} className="glass-card flex flex-col gap-3 p-5" aria-hidden>
-              <div className="h-4 w-24 animate-pulse rounded-full bg-muted" />
-              <div className="h-5 w-2/3 animate-pulse rounded-full bg-muted" />
-              <div className="h-3 w-full animate-pulse rounded-full bg-muted" />
-              <div className="h-3 w-5/6 animate-pulse rounded-full bg-muted" />
+              <div className="h-4 w-24 motion-safe:animate-pulse rounded-full bg-muted" />
+              <div className="h-5 w-2/3 motion-safe:animate-pulse rounded-full bg-muted" />
+              <div className="h-3 w-full motion-safe:animate-pulse rounded-full bg-muted" />
+              <div className="h-3 w-5/6 motion-safe:animate-pulse rounded-full bg-muted" />
             </div>
           ))}
         </div>
