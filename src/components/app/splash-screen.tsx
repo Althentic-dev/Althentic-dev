@@ -7,15 +7,6 @@ const ParticleText = dynamic(
   () => import("@/components/ui/particle-text"),
   {
     ssr: false,
-    loading: () => (
-      <span
-        aria-hidden="true"
-        className="font-extrabold tracking-tight text-[#3B82F6]"
-        style={{ fontSize: "clamp(3rem, 12vw, 7rem)" }}
-      >
-        Althentic
-      </span>
-    ),
   },
 );
 
