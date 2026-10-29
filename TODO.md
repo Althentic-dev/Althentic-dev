@@ -96,6 +96,14 @@
 - [x] Perbarui changelog dan knowledge graph, lalu jalankan lint/build serta pemeriksaan diff, encoding UTF-8, dan karakter em dash.
 - [x] Buat Issue dan PR yang saling ditautkan, tulis satu review terkonsolidasi pada CODE_REVIEW.md di worktree, dan biarkan PR terbuka untuk ditinjau pemilik.
 
+### PR: Hapus teks fallback splash yang duplikat
+
+- [x] Hapus teks fallback statis “Althentic” saat chunk dimuat; teks visual splash hanya berasal dari komponen Particle Text.
+- [x] Pertahankan aksesibilitas melalui status pemuatan dan teks screen reader milik Particle Text.
+- [x] Perbarui changelog dan graphify, jalankan lint/build, serta periksa diff, UTF-8, dan em dash.
+- [x] Pastikan tidak ada isi `docs/reactbits/` yang dilacak atau dimasukkan ke PR; direktori tetap di-ignore oleh `.gitignore` yang sudah ada di `main`.
+- [ ] Buat Issue dan PR tertaut, catat review PR di worktree, dan jangan merge PR.
+
 ## Deferred work
 
 - [ ] Audit dinamis penuh hanya dijalankan setelah tersedia runner OS sandbox yang menegakkan batas jaringan, environment, filesystem, dan sumber daya.
