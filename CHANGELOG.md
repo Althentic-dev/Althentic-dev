@@ -5,6 +5,10 @@
 
 ### Unreleased Update
 
+- Tampilkan skeleton loader spesifik view saat pemuatan modul atau data awal, cegah flash autentikasi, hormati reduced motion, dan tampilkan error dashboard setelah request gagal.
+
+### Unreleased Update
+
 - Hilangkan teks fallback yang menduplikasi “Althentic” selama Particle Text dimuat; teks visual splash kini hanya berasal dari animasi.
 
 ### Unreleased Update
