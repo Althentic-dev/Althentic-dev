@@ -72,6 +72,15 @@
 - [x] Jalankan pemeriksaan diff, encoding, dan pemindaian menyeluruh; lint dan build lulus.
 - [x] Buat Issue dan PR terkait, tulis review PR pada file CODE_REVIEW di worktree, dan biarkan PR terbuka untuk ditinjau pemilik.
 
+### PR: Perjelas README dan penggunaan logo Althentic
+
+- [x] Pusatkan judul README, tambahkan badge stack yang sesuai repository, dan susun ulang penjelasan fitur, arsitektur storage, setup lokal, migrasi, dan dokumentasi tanpa mengubah instruksi operasional yang masih berlaku.
+- [x] Ganti ikon hexagon yang berfungsi sebagai brand mark pada navbar, footer, dan dialog autentikasi dengan `public/logo.svg`; arahkan metadata ikon situs ke file logo yang tersedia.
+- [x] Pertahankan ikon fungsional antarmuka dan avatar yang bukan logo; periksa seluruh pemakaian komponen bersama sebelum menyuntingnya.
+- [x] Sisipkan catatan changelog tepat di bawah marker entri baru.
+- [x] Jalankan lint dan build, lalu periksa diff, encoding UTF-8, dan karakter em dash; perbarui graph proyek setelah perubahan kode.
+- [ ] Buat Issue dan PR yang terhubung, tulis satu review terkonsolidasi pada `docs/review/CODE_REVIEW.md` di worktree, dan biarkan PR terbuka untuk ditinjau pemilik.
+
 ## Deferred work
 
 - [ ] Audit dinamis penuh hanya dijalankan setelah tersedia runner OS sandbox yang menegakkan batas jaringan, environment, filesystem, dan sumber daya.
