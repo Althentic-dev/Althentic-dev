@@ -5,6 +5,10 @@
 
 ### Unreleased Update
 
+- Perjelas README dengan judul terpusat, badge stack, dan panduan setup yang lebih terstruktur; gunakan logo Althentic pada navbar, footer, dialog autentikasi, dan metadata ikon situs.
+
+### Unreleased Update
+
 - Ganti karakter U+2014 dengan tanda hubung biasa pada file teks proyek dan database SQLite lokal; struktur serta jumlah record database tetap terjaga.
 
 ### Unreleased Update
