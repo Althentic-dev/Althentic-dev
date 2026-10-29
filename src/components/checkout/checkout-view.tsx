@@ -187,7 +187,7 @@ export function CheckoutView({ orderId }: { orderId?: string }) {
 
   if (loading) {
     return (
-      <div className="container-page max-w-4xl py-10">
+      <div role="status" aria-label="Memuat detail pesanan" aria-live="polite" aria-busy="true" className="container-page max-w-4xl py-10">
         <Skeleton className="h-10 w-64" />
         <Skeleton className="mt-6 h-72 w-full rounded-3xl" />
       </div>
