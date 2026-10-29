@@ -74,7 +74,7 @@ export function NotificationsView() {
       </div>
 
       {!items ? (
-        <div className="mt-6 space-y-3">
+        <div role="status" aria-label="Memuat notifikasi" aria-live="polite" aria-busy="true" className="mt-6 space-y-3">
           {Array.from({ length: 5 }).map((_, i) => (
             <Skeleton key={i} className="h-20 rounded-2xl" />
           ))}
