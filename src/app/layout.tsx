@@ -3,6 +3,7 @@ import "@fontsource-variable/plus-jakarta-sans";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "@/components/providers/theme-provider";
+import { SplashScreen } from "@/components/app/splash-screen";
 
 // Font: Plus Jakarta Sans di seluruh platform - kriteria wajib DESIGN.md #1.
 // Dimuat self-hosted via @fontsource (offline-safe, tanpa CDN eksternal).
@@ -58,6 +59,7 @@ export default function RootLayout({
         >
           {children}
           <Toaster />
+          <SplashScreen />
         </ThemeProvider>
       </body>
     </html>
