@@ -125,19 +125,27 @@ export function AdminDashboard() {
 // ==================== OVERVIEW (Konteks Terkunci, SPEC-01-02/03, SPEC-16-03) ====================
 function OverviewTab() {
   const [data, setData] = useState<AdminOverviewDTO | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [loadFailed, setLoadFailed] = useState(false);
 
   useEffect(() => {
-    api<AdminOverviewDTO>("/api/admin/overview").then(setData).catch(() => setData(null));
+    api<AdminOverviewDTO>("/api/admin/overview")
+      .then(setData)
+      .catch(() => setLoadFailed(true))
+      .finally(() => setLoading(false));
   }, []);
 
-  if (!data) {
+  if (loading) {
     return (
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div role="status" aria-label="Memuat ringkasan Super-Admin" aria-live="polite" aria-busy="true" className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {Array.from({ length: 8 }).map((_, i) => (
           <Skeleton key={i} className="h-28 rounded-3xl" />
         ))}
       </div>
     );
+  }
+  if (loadFailed || !data) {
+    return <div role="alert" className="glass-card p-6 text-sm text-muted-foreground">Ringkasan Super-Admin tidak dapat dimuat. Coba muat ulang halaman.</div>;
   }
 
   const cards = [
@@ -254,14 +262,29 @@ function AnalyticsTab() {
     sellerRatio: number;
     chart: { date: string; tx: number; ma7: number }[];
   } | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [loadFailed, setLoadFailed] = useState(false);
 
   useEffect(() => {
+    let cancelled = false;
     const sp = new URLSearchParams({ range });
     if (range === "custom" && from && to) {
       sp.set("from", from);
       sp.set("to", to);
     }
-    api<typeof data>(`/api/admin/analytics?${sp}`).then(setData).catch(() => setData(null));
+    api<typeof data>(`/api/admin/analytics?${sp}`)
+      .then((result) => {
+        if (!cancelled) setData(result);
+      })
+      .catch(() => {
+        if (!cancelled) setLoadFailed(true);
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
   }, [range, from, to]);
 
   const ranges = [
@@ -279,7 +302,12 @@ function AnalyticsTab() {
         {ranges.map((r) => (
           <button
             key={r.id}
-            onClick={() => setRange(r.id)}
+            onClick={() => {
+              setData(null);
+              setLoading(true);
+              setLoadFailed(false);
+              setRange(r.id);
+            }}
             aria-pressed={range === r.id}
             className={`rounded-full border px-4 py-2 text-sm font-medium transition-all ${
               range === r.id ? "border-primary bg-primary text-primary-foreground" : "border-border text-muted-foreground hover:border-primary/40"
@@ -290,17 +318,20 @@ function AnalyticsTab() {
         ))}
         {range === "custom" && (
           <div className="flex items-center gap-2">
-            <Input type="date" value={from} onChange={(e) => setFrom(e.target.value)} className="h-10 rounded-xl" aria-label="Dari tanggal" />
+            <Input type="date" value={from} onChange={(e) => { setData(null); setLoading(true); setLoadFailed(false); setFrom(e.target.value); }} className="h-10 rounded-xl" aria-label="Dari tanggal" />
             <span className="text-muted-foreground">→</span>
-            <Input type="date" value={to} onChange={(e) => setTo(e.target.value)} className="h-10 rounded-xl" aria-label="Sampai tanggal" />
+            <Input type="date" value={to} onChange={(e) => { setData(null); setLoading(true); setLoadFailed(false); setTo(e.target.value); }} className="h-10 rounded-xl" aria-label="Sampai tanggal" />
           </div>
         )}
       </div>
 
-      {!data ? (
-        <div className="grid gap-4 sm:grid-cols-4">{Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-24 rounded-3xl" />)}</div>
+      {!data && loading ? (
+        <div role="status" aria-label="Memuat analitik Super-Admin" aria-live="polite" aria-busy="true" className="grid gap-4 sm:grid-cols-4">{Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-24 rounded-3xl" />)}</div>
+      ) : !data ? (
+        <div role="alert" className="glass-card p-6 text-sm text-muted-foreground">Analitik Super-Admin tidak dapat dimuat. Coba ubah rentang waktu atau muat ulang halaman.</div>
       ) : (
         <>
+          {loadFailed && <div role="alert" className="glass-card p-4 text-sm text-muted-foreground">Permintaan rentang waktu terbaru gagal. Data sebelumnya masih ditampilkan.</div>}
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {[
               { label: "GMV Estimasi", value: formatRupiah(data.gmv) },
@@ -393,7 +424,7 @@ function SellersTab() {
     }
   };
 
-  if (!rows) return <Skeleton className="h-96 rounded-3xl" />;
+  if (!rows) return <div role="status" aria-label="Memuat daftar seller" aria-live="polite" aria-busy="true"><Skeleton className="h-96 rounded-3xl" /></div>;
 
   return (
     <div className="glass-card overflow-x-auto">
@@ -554,7 +585,7 @@ function VerificationsTab() {
 
       {sub === "queue" ? (
         !items ? (
-          <Skeleton className="h-64 rounded-3xl" />
+          <div role="status" aria-label="Memuat antrean verifikasi" aria-live="polite" aria-busy="true"><Skeleton className="h-64 rounded-3xl" /></div>
         ) : items.length === 0 ? (
           <div className="glass-card p-10 text-center text-sm text-muted-foreground">Antrean kosong.</div>
         ) : (
@@ -728,7 +759,7 @@ function DisputesTab() {
     }
   };
 
-  if (!disputes) return <Skeleton className="h-64 rounded-3xl" />;
+  if (!disputes) return <div role="status" aria-label="Memuat sengketa" aria-live="polite" aria-busy="true"><Skeleton className="h-64 rounded-3xl" /></div>;
 
   const groups = [
     { id: "open", label: "Open", tint: "bg-primary/10 text-primary" },
@@ -868,7 +899,7 @@ function InvoicesTab() {
     }
   };
 
-  if (!invoices) return <Skeleton className="h-64 rounded-3xl" />;
+  if (!invoices) return <div role="status" aria-label="Memuat invoice" aria-live="polite" aria-busy="true"><Skeleton className="h-64 rounded-3xl" /></div>;
 
   return (
     <div className="glass-card overflow-x-auto">
@@ -1032,7 +1063,7 @@ function SettingsTab() {
     }
   };
 
-  if (!settings) return <Skeleton className="h-96 rounded-3xl" />;
+  if (!settings) return <div role="status" aria-label="Memuat pengaturan Super-Admin" aria-live="polite" aria-busy="true"><Skeleton className="h-96 rounded-3xl" /></div>;
 
   return (
     <div className="grid gap-6 lg:grid-cols-2">
