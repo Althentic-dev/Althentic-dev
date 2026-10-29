@@ -48,6 +48,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Select,
   SelectContent,
@@ -553,6 +554,7 @@ export function GeneratorPage() {
         <FadeIn delay={0.05}>
           <div
             role="note"
+            aria-busy={tplLoading}
             className="glass-card mt-6 flex flex-wrap items-center gap-3 p-4 sm:p-5"
           >
             <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-primary/10 text-primary">
@@ -562,9 +564,10 @@ export function GeneratorPage() {
               <p className="text-sm font-semibold leading-tight">
                 Template dari produk:{" "}
                 {tplLoading ? (
-                  <span className="animate-pulse-soft text-muted-foreground">
-                    memuat…
-                  </span>
+                  <>
+                    <span role="status" aria-live="polite" className="sr-only">Memuat template produk</span>
+                    <Skeleton className="inline-block h-4 w-28 align-middle" />
+                  </>
                 ) : tplProduct ? (
                   tplProduct.title
                 ) : (
@@ -751,9 +754,13 @@ export function GeneratorPage() {
                       Riwayat Prompt
                     </h2>
                     {history === null ? (
-                      <p className="mt-3 animate-pulse-soft text-xs text-muted-foreground">
-                        Memuat riwayat…
-                      </p>
+                      <div role="status" aria-label="Memuat riwayat prompt" aria-live="polite" aria-busy="true" className="mt-3 space-y-2">
+                        <span className="sr-only">Memuat riwayat prompt</span>
+                        <div aria-hidden="true" className="space-y-2">
+                          <Skeleton className="h-10 w-full rounded-xl" />
+                          <Skeleton className="h-10 w-full rounded-xl" />
+                        </div>
+                      </div>
                     ) : history.length === 0 ? (
                       <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
                         Belum ada prompt tersimpan. Setiap ekspor otomatis masuk
