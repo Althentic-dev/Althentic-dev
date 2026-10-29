@@ -5,6 +5,10 @@
 
 ### Unreleased Update
 
+- Ubah CTA utama “Jelajahi Katalog” menjadi warna solid sesuai token tema, tanpa mengubah ripple, ukuran, atau interaksinya.
+
+### Unreleased Update
+
 - Perjelas README dengan judul terpusat, badge stack, dan panduan setup yang lebih terstruktur; gunakan logo Althentic pada navbar, footer, dialog autentikasi, dan metadata ikon situs.
 
 ### Unreleased Update
