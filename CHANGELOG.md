@@ -5,6 +5,10 @@
 
 ### Unreleased Update
 
+- Tampilkan splash screen “Althentic” dengan Particle Text biru saat halaman dimuat ulang; animasi dimuat secara lazy dan mengikuti preferensi reduced motion.
+
+### Unreleased Update
+
 - Ubah CTA utama “Jelajahi Katalog” menjadi warna solid sesuai token tema, tanpa mengubah ripple, ukuran, atau interaksinya.
 
 ### Unreleased Update
