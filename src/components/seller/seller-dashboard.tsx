@@ -159,22 +159,28 @@ export function SellerDashboard() {
 // ============================ OVERVIEW (SPEC-02-08) ============================
 function OverviewTab() {
   const [stats, setStats] = useState<SellerStatsDTO | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [loadFailed, setLoadFailed] = useState(false);
 
   useEffect(() => {
     api<SellerStatsDTO>("/api/seller/analytics")
       .then(setStats)
-      .catch(() => setStats(null));
+      .catch(() => setLoadFailed(true))
+      .finally(() => setLoading(false));
   }, []);
 
-  if (!stats) {
+  if (loading) {
     return (
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div role="status" aria-label="Memuat ringkasan dashboard seller" aria-live="polite" aria-busy="true" className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {Array.from({ length: 4 }).map((_, i) => (
           <Skeleton key={i} className="h-32 rounded-3xl" />
         ))}
         <Skeleton className="h-72 rounded-3xl sm:col-span-2 lg:col-span-4" />
       </div>
     );
+  }
+  if (loadFailed || !stats) {
+    return <div role="alert" className="glass-card p-6 text-sm text-muted-foreground">Ringkasan dashboard seller tidak dapat dimuat. Coba muat ulang halaman.</div>;
   }
 
   const cards = [
@@ -330,7 +336,7 @@ function ProductsTab() {
       </div>
 
       {!products ? (
-        <div className="space-y-3">{Array.from({ length: 3 }).map((_, i) => <Skeleton key={i} className="h-24 rounded-3xl" />)}</div>
+        <div role="status" aria-label="Memuat produk seller" aria-live="polite" aria-busy="true" className="space-y-3">{Array.from({ length: 3 }).map((_, i) => <Skeleton key={i} className="h-24 rounded-3xl" />)}</div>
       ) : products.length === 0 ? (
         <div className="glass-card p-10 text-center">
           <Package className="mx-auto h-12 w-12 text-muted-foreground" aria-hidden />
@@ -857,7 +863,7 @@ function OrdersTab() {
       </div>
 
       {!orders ? (
-        <div className="space-y-3">{Array.from({ length: 3 }).map((_, i) => <Skeleton key={i} className="h-32 rounded-3xl" />)}</div>
+        <div role="status" aria-label="Memuat pesanan seller" aria-live="polite" aria-busy="true" className="space-y-3">{Array.from({ length: 3 }).map((_, i) => <Skeleton key={i} className="h-32 rounded-3xl" />)}</div>
       ) : orders.length === 0 ? (
         <div className="glass-card p-10 text-center text-sm text-muted-foreground">Tidak ada order pada filter ini.</div>
       ) : (
@@ -1007,22 +1013,28 @@ interface CommissionsData {
 
 function CommissionsTab() {
   const [data, setData] = useState<CommissionsData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [loadFailed, setLoadFailed] = useState(false);
 
   useEffect(() => {
     api<CommissionsData>("/api/seller/commissions")
       .then(setData)
-      .catch(() => setData(null));
+      .catch(() => setLoadFailed(true))
+      .finally(() => setLoading(false));
   }, []);
 
-  if (!data) {
+  if (loading) {
     return (
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div role="status" aria-label="Memuat komisi seller" aria-live="polite" aria-busy="true" className="grid gap-4 sm:grid-cols-3">
         {Array.from({ length: 3 }).map((_, i) => (
           <Skeleton key={i} className="h-28 rounded-3xl" />
         ))}
         <Skeleton className="h-64 rounded-3xl sm:col-span-3" />
       </div>
     );
+  }
+  if (loadFailed || !data) {
+    return <div role="alert" className="glass-card p-6 text-sm text-muted-foreground">Ringkasan komisi tidak dapat dimuat. Coba muat ulang halaman.</div>;
   }
 
   return (
@@ -1271,7 +1283,7 @@ function StoreTab() {
   };
 
   if (!store) {
-    return <div className="space-y-4">{Array.from({ length: 3 }).map((_, i) => <Skeleton key={i} className="h-40 rounded-3xl" />)}</div>;
+    return <div role="status" aria-label="Memuat pengaturan toko" aria-live="polite" aria-busy="true" className="space-y-4">{Array.from({ length: 3 }).map((_, i) => <Skeleton key={i} className="h-40 rounded-3xl" />)}</div>;
   }
 
   return (
