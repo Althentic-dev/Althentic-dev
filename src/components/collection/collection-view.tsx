@@ -76,7 +76,7 @@ export function CollectionView() {
 
   if (!items) {
     return (
-      <div className="container-page max-w-5xl space-y-4 py-10">
+      <div role="status" aria-label="Memuat koleksi" aria-live="polite" aria-busy="true" className="container-page max-w-5xl space-y-4 py-10">
         <Skeleton className="h-9 w-64" />
         {Array.from({ length: 3 }).map((_, i) => (
           <Skeleton key={i} className="h-28 rounded-3xl" />
