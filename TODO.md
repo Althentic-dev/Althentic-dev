@@ -104,6 +104,17 @@
 - [x] Pastikan tidak ada isi `docs/reactbits/` yang dilacak atau dimasukkan ke PR; direktori tetap di-ignore oleh `.gitignore` yang sudah ada di `main`.
 - [x] Buat Issue dan PR tertaut, catat review PR di worktree, dan jangan merge PR.
 
+### PR: Skeleton loader di seluruh view
+
+- [x] Petakan seluruh dynamic view, status loading data, dan fallback yang sudah ada; pertahankan state error, kosong, dan aksi lokal.
+- [x] Ganti fallback teks dynamic import dengan skeleton yang bentuknya sesuai untuk setiap view.
+- [x] Selaraskan skeleton data awal, tambahkan status loading aksesibel, dan pisahkan error API agar skeleton tidak tertinggal saat request gagal.
+- [x] Cegah tampilan sementara halaman tidak terautentikasi sampai bootstrap sesi selesai.
+- [x] Pastikan skeleton responsif, mendukung tema, tidak interaktif, dan menghormati reduced motion.
+- [x] Perbarui changelog dan graphify; validasi lint/build, diff, UTF-8, dan em dash.
+- [x] Buat Issue dan PR yang saling ditautkan, catat review terkonsolidasi di worktree, dan biarkan PR terbuka untuk pemilik.
+- [ ] Buat Issue/PR yang saling ditautkan dan review terkonsolidasi pada file CODE_REVIEW.md di worktree; jangan merge PR.
+
 ## Deferred work
 
 - [ ] Audit dinamis penuh hanya dijalankan setelah tersedia runner OS sandbox yang menegakkan batas jaringan, environment, filesystem, dan sumber daya.

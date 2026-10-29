@@ -44,7 +44,7 @@ export function StoreView({ slug }: { slug?: string }) {
 
   if (loading) {
     return (
-      <div className="container-page py-10">
+      <div role="status" aria-label="Memuat profil toko" aria-live="polite" aria-busy="true" className="container-page py-10">
         <Skeleton className="h-48 w-full rounded-3xl md:h-64" />
         <div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {Array.from({ length: 6 }).map((_, i) => (

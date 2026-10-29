@@ -6,7 +6,7 @@
 // Lenis smooth scroll, Framer Motion entrance per view.
 // =============================================================================
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
 import { useAppRouter } from "@/lib/router";
@@ -17,38 +17,32 @@ import { Navbar } from "@/components/app/navbar";
 import { Footer } from "@/components/app/footer";
 import { AuthDialog } from "@/components/auth/auth-dialog";
 import type { SessionUser } from "@/lib/types";
+import { PageSkeleton } from "@/components/app/page-skeleton";
 
-const LandingPage = dynamic(() => import("@/components/landing/landing-page").then((m) => m.LandingPage), { loading: ViewLoading });
-const DocsPage = dynamic(() => import("@/components/docs/docs-page").then((m) => m.DocsPage), { loading: ViewLoading });
-const GeneratorPage = dynamic(() => import("@/components/generator/generator-page").then((m) => m.GeneratorPage), { loading: ViewLoading });
-const VerifyEmailView = dynamic(() => import("@/components/auth/verify-reset-views").then((m) => m.VerifyEmailView), { loading: ViewLoading });
-const ResetPasswordView = dynamic(() => import("@/components/auth/verify-reset-views").then((m) => m.ResetPasswordView), { loading: ViewLoading });
-const CatalogView = dynamic(() => import("@/components/catalog/catalog-view").then((m) => m.CatalogView), { loading: ViewLoading });
-const ProductView = dynamic(() => import("@/components/product/product-view").then((m) => m.ProductView), { loading: ViewLoading });
-const StoreView = dynamic(() => import("@/components/store-profile/store-view").then((m) => m.StoreView), { loading: ViewLoading });
-const CheckoutView = dynamic(() => import("@/components/checkout/checkout-view").then((m) => m.CheckoutView), { loading: ViewLoading });
-const OrdersView = dynamic(() => import("@/components/checkout/orders-view").then((m) => m.OrdersView), { loading: ViewLoading });
-const CollectionView = dynamic(() => import("@/components/collection/collection-view").then((m) => m.CollectionView), { loading: ViewLoading });
-const NotificationsView = dynamic(() => import("@/components/notifications/notifications-view").then((m) => m.NotificationsView), { loading: ViewLoading });
-const OnboardingView = dynamic(() => import("@/components/onboarding/onboarding-view").then((m) => m.OnboardingView), { loading: ViewLoading });
-const SellerDashboard = dynamic(() => import("@/components/seller/seller-dashboard").then((m) => m.SellerDashboard), { loading: ViewLoading });
-const AdminDashboard = dynamic(() => import("@/components/admin/admin-dashboard").then((m) => m.AdminDashboard), { loading: ViewLoading });
-const SettingsView = dynamic(() => import("@/components/settings/settings-view").then((m) => m.SettingsView), { loading: ViewLoading });
-const StatusView = dynamic(() => import("@/components/misc/status-view").then((m) => m.StatusView), { loading: ViewLoading });
-const LegalView = dynamic(() => import("@/components/misc/legal-view").then((m) => m.LegalView), { loading: ViewLoading });
-const NotFoundView = dynamic(() => import("@/components/misc/not-found-view").then((m) => m.NotFoundView), { loading: ViewLoading });
-
-function ViewLoading() {
-  return (
-    <div className="container-page py-12" role="status" aria-live="polite">
-      <span className="text-sm text-muted-foreground">Memuat halaman...</span>
-    </div>
-  );
-}
+const LandingPage = dynamic(() => import("@/components/landing/landing-page").then((m) => m.LandingPage), { loading: () => <PageSkeleton variant="landing" /> });
+const DocsPage = dynamic(() => import("@/components/docs/docs-page").then((m) => m.DocsPage), { loading: () => <PageSkeleton variant="docs" /> });
+const GeneratorPage = dynamic(() => import("@/components/generator/generator-page").then((m) => m.GeneratorPage), { loading: () => <PageSkeleton variant="generator" /> });
+const VerifyEmailView = dynamic(() => import("@/components/auth/verify-reset-views").then((m) => m.VerifyEmailView), { loading: () => <PageSkeleton variant="auth" /> });
+const ResetPasswordView = dynamic(() => import("@/components/auth/verify-reset-views").then((m) => m.ResetPasswordView), { loading: () => <PageSkeleton variant="auth" /> });
+const CatalogView = dynamic(() => import("@/components/catalog/catalog-view").then((m) => m.CatalogView), { loading: () => <PageSkeleton variant="catalog" /> });
+const ProductView = dynamic(() => import("@/components/product/product-view").then((m) => m.ProductView), { loading: () => <PageSkeleton variant="product" /> });
+const StoreView = dynamic(() => import("@/components/store-profile/store-view").then((m) => m.StoreView), { loading: () => <PageSkeleton variant="store" /> });
+const CheckoutView = dynamic(() => import("@/components/checkout/checkout-view").then((m) => m.CheckoutView), { loading: () => <PageSkeleton variant="checkout" /> });
+const OrdersView = dynamic(() => import("@/components/checkout/orders-view").then((m) => m.OrdersView), { loading: () => <PageSkeleton variant="orders" /> });
+const CollectionView = dynamic(() => import("@/components/collection/collection-view").then((m) => m.CollectionView), { loading: () => <PageSkeleton variant="collection" /> });
+const NotificationsView = dynamic(() => import("@/components/notifications/notifications-view").then((m) => m.NotificationsView), { loading: () => <PageSkeleton variant="notifications" /> });
+const OnboardingView = dynamic(() => import("@/components/onboarding/onboarding-view").then((m) => m.OnboardingView), { loading: () => <PageSkeleton variant="onboarding" /> });
+const SellerDashboard = dynamic(() => import("@/components/seller/seller-dashboard").then((m) => m.SellerDashboard), { loading: () => <PageSkeleton variant="seller-dashboard" /> });
+const AdminDashboard = dynamic(() => import("@/components/admin/admin-dashboard").then((m) => m.AdminDashboard), { loading: () => <PageSkeleton variant="admin-dashboard" /> });
+const SettingsView = dynamic(() => import("@/components/settings/settings-view").then((m) => m.SettingsView), { loading: () => <PageSkeleton variant="settings" /> });
+const StatusView = dynamic(() => import("@/components/misc/status-view").then((m) => m.StatusView), { loading: () => <PageSkeleton variant="status" /> });
+const LegalView = dynamic(() => import("@/components/misc/legal-view").then((m) => m.LegalView), { loading: () => <PageSkeleton variant="legal" /> });
+const NotFoundView = dynamic(() => import("@/components/misc/not-found-view").then((m) => m.NotFoundView), { loading: () => <PageSkeleton variant="not-found" /> });
 
 export default function AlthenticApp() {
   const { view, query } = useAppRouter();
   const { user, setUser } = useAppStore();
+  const [sessionReady, setSessionReady] = useState(false);
 
   // Bootstrap session (SPEC-05-07: cookie session 30 hari / 1 hari)
   useEffect(() => {
@@ -59,6 +53,8 @@ export default function AlthenticApp() {
         if (!cancelled) setUser(data.user);
       } catch {
         if (!cancelled) setUser(null);
+      } finally {
+        if (!cancelled) setSessionReady(true);
       }
     })();
     return () => {
@@ -74,7 +70,10 @@ export default function AlthenticApp() {
   let content: React.ReactNode;
   let fullBleed = false; // view yang sembunyikan footer (dashboard admin/seller)
 
-  if ((requiresAuth || isAdminView) && effectiveUser === null) {
+  if ((requiresAuth || isAdminView) && !sessionReady) {
+    const variant = isAdminView ? "admin-dashboard" : view === "dashboard" ? "seller-dashboard" : view === "checkout" ? "checkout" : view === "settings" ? "settings" : view === "notifications" ? "notifications" : view === "collection" ? "collection" : view === "orders" ? "orders" : "onboarding";
+    content = <PageSkeleton variant={variant} />;
+  } else if ((requiresAuth || isAdminView) && effectiveUser === null) {
     content = <NotAuthenticatedView view={view} />;
   } else if (isAdminView && effectiveUser && !effectiveUser.isSuperAdmin) {
     content = <NotFoundView message="Area ini khusus Super-Admin." />;

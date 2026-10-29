@@ -232,7 +232,7 @@ export function CatalogView() {
 
       {/* Grid produk 3/2/1 (SPEC-03-01) */}
       {loading ? (
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div role="status" aria-label="Memuat katalog" aria-live="polite" aria-busy="true" className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {Array.from({ length: 6 }).map((_, i) => (
             <div key={i} className="glass-card overflow-hidden">
               <Skeleton className="aspect-[4/3] w-full rounded-none" />

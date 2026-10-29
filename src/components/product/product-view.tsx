@@ -148,7 +148,7 @@ export function ProductView({ slug }: { slug?: string }) {
 
   if (loading) {
     return (
-      <div className="container-page grid gap-8 py-10 lg:grid-cols-[1.15fr_1fr]">
+      <div role="status" aria-label="Memuat detail produk" aria-live="polite" aria-busy="true" className="container-page grid gap-8 py-10 lg:grid-cols-[1.15fr_1fr]">
         <Skeleton className="aspect-[4/3] w-full rounded-3xl" />
         <div className="space-y-4">
           <Skeleton className="h-8 w-3/4" />

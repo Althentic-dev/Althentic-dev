@@ -109,7 +109,7 @@ export function SettingsView() {
   };
 
   if (!user) {
-    return <div className="container-page py-10"><Skeleton className="h-96 rounded-3xl" /></div>;
+    return <div role="status" aria-label="Memuat pengaturan akun" aria-live="polite" aria-busy="true" className="container-page py-10"><Skeleton className="h-96 rounded-3xl" /></div>;
   }
 
   return (

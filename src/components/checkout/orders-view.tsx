@@ -30,7 +30,7 @@ export function OrdersView() {
 
   if (!orders) {
     return (
-      <div className="container-page max-w-4xl space-y-4 py-10">
+      <div role="status" aria-label="Memuat daftar pesanan" aria-live="polite" aria-busy="true" className="container-page max-w-4xl space-y-4 py-10">
         <Skeleton className="h-9 w-56" />
         {Array.from({ length: 4 }).map((_, i) => (
           <Skeleton key={i} className="h-24 rounded-3xl" />
