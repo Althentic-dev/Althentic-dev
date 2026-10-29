@@ -94,7 +94,7 @@
 - [x] Tampilkan splash saat root page dimuat ulang, hilangkan otomatis setelah animasi, hormati reduced motion, dan unmount canvas agar animasi berhenti.
 - [x] Muat komponen animasi secara lazy agar source canvas tidak menambah bundle awal aplikasi; jangan tampilkan splash saat navigasi view internal.
 - [x] Perbarui changelog dan knowledge graph, lalu jalankan lint/build serta pemeriksaan diff, encoding UTF-8, dan karakter em dash.
-- [ ] Buat Issue dan PR yang saling ditautkan, tulis satu review terkonsolidasi pada CODE_REVIEW.md di worktree, dan biarkan PR terbuka untuk ditinjau pemilik.
+- [x] Buat Issue dan PR yang saling ditautkan, tulis satu review terkonsolidasi pada CODE_REVIEW.md di worktree, dan biarkan PR terbuka untuk ditinjau pemilik.
 
 ## Deferred work
 
