@@ -88,6 +88,14 @@
 - [x] Perbarui knowledge graph, lalu jalankan lint/build serta pemeriksaan diff, encoding UTF-8, dan karakter em dash.
 - [x] Buat Issue dan PR yang terhubung, tulis review terkonsolidasi pada file CODE_REVIEW.md di worktree, dan biarkan PR terbuka untuk ditinjau pemilik.
 
+### PR: Splash screen Particle Text
+
+- [x] Gunakan implementasi Particle Text yang disediakan di `docs/reactbits/text-animations/particle-text.md` sebagai teks “Althentic” berwarna biru pada splash screen.
+- [x] Tampilkan splash saat root page dimuat ulang, hilangkan otomatis setelah animasi, hormati reduced motion, dan unmount canvas agar animasi berhenti.
+- [x] Muat komponen animasi secara lazy agar source canvas tidak menambah bundle awal aplikasi; jangan tampilkan splash saat navigasi view internal.
+- [x] Perbarui changelog dan knowledge graph, lalu jalankan lint/build serta pemeriksaan diff, encoding UTF-8, dan karakter em dash.
+- [ ] Buat Issue dan PR yang saling ditautkan, tulis satu review terkonsolidasi pada CODE_REVIEW.md di worktree, dan biarkan PR terbuka untuk ditinjau pemilik.
+
 ## Deferred work
 
 - [ ] Audit dinamis penuh hanya dijalankan setelah tersedia runner OS sandbox yang menegakkan batas jaringan, environment, filesystem, dan sumber daya.
