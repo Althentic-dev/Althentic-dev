@@ -123,7 +123,7 @@
 - [x] Verifikasi dokumentasi dan implementasi primitive untuk fallback View Transitions API dan reduced motion.
 - [x] Jalankan type-check sebelum perubahan kode, lalu lint, build, diff check, pemeriksaan UTF-8/em-dash, dan pembaruan graph setelah implementasi.
 - [x] Perbarui changelog sesuai marker Unreleased.
-- [ ] Buat Issue dan PR yang saling tertaut, tambahkan review terkonsolidasi pada CODE_REVIEW.md worktree, dan biarkan PR terbuka untuk ditinjau pemilik.
+- [x] Buat Issue dan PR yang saling tertaut, tambahkan review terkonsolidasi pada CODE_REVIEW.md worktree, dan biarkan PR terbuka untuk ditinjau pemilik.
 
 ## Deferred work
 
