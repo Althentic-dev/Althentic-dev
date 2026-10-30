@@ -115,6 +115,16 @@
 - [x] Buat Issue dan PR yang saling ditautkan, catat review terkonsolidasi di worktree, dan biarkan PR terbuka untuk pemilik.
 - [ ] Buat Issue/PR yang saling ditautkan dan review terkonsolidasi pada file CODE_REVIEW.md di worktree; jangan merge PR.
 
+### PR: Theme toggler Animate UI untuk mode terang, gelap, dan sistem
+
+- [x] Ganti tombol tema di Navbar dengan primitive ThemeToggler Animate UI dan pertahankan integrasi state melalui next-themes.
+- [x] Atur siklus tombol menjadi Terang, Sistem, Gelap, lalu kembali ke Terang, dengan ikon dan label aksesibel yang mengikuti pilihan tema aktif.
+- [x] Pastikan pilihan tema di Pengaturan tetap tersinkron dan provider tema class-based yang ada tidak berubah tanpa kebutuhan teknis.
+- [x] Verifikasi dokumentasi dan implementasi primitive untuk fallback View Transitions API dan reduced motion.
+- [x] Jalankan type-check sebelum perubahan kode, lalu lint, build, diff check, pemeriksaan UTF-8/em-dash, dan pembaruan graph setelah implementasi.
+- [x] Perbarui changelog sesuai marker Unreleased.
+- [x] Buat Issue dan PR yang saling tertaut, tambahkan review terkonsolidasi pada CODE_REVIEW.md worktree, dan biarkan PR terbuka untuk ditinjau pemilik.
+
 ## Deferred work
 
 - [ ] Audit dinamis penuh hanya dijalankan setelah tersedia runner OS sandbox yang menegakkan batas jaringan, environment, filesystem, dan sumber daya.

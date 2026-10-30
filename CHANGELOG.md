@@ -5,6 +5,10 @@
 
 ### Unreleased Update
 
+- Ganti tombol tema Navbar dengan ThemeToggler Animate UI yang menyikluskan mode terang, sistem, dan gelap.
+
+### Unreleased Update
+
 - Tampilkan skeleton loader spesifik view saat pemuatan modul atau data awal, cegah flash autentikasi, hormati reduced motion, dan tampilkan error dashboard setelah request gagal.
 
 ### Unreleased Update
