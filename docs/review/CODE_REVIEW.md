@@ -1,13 +1,11 @@
-PR: #28
+PR: #30
 Repo: Althentic-dev/Althentic-dev
 Status: [ ] dicopas
 
-Review PR #28
+Review PR #30
 
 ```md
-Pemuatan awal chunk dan data kini memakai skeleton dengan bentuk yang mengikuti view, sedangkan panel seller/admin menampilkan error setelah request gagal alih-alih terus mengumumkan status loading. State kosong dan fallback autentikasi tetap dipisahkan. Pada analitik admin, perubahan rentang membatalkan request sebelumnya dan memulai skeleton baru, sehingga hasil rentang lama tidak tertukar dengan filter aktif.
+Pada `src/components/app/navbar.tsx`, integrasi memakai state `next-themes` yang sama dengan pilihan tema di Pengaturan. Siklus mode, ikon, dan label aksesibel sudah mengikuti pilihan aktif. `CHANGELOG.md` menggambarkan perubahan yang dikirim, dan `TODO.md` mencatat implementasi serta validasi tanpa memasukkan perubahan schema, storage, atau konfigurasi deployment.
 
-Satu hal untuk ditinjau sebelum merge: `PageSkeleton` diimpor langsung oleh `AlthenticApp`, yang juga membuat seluruh varian skeleton menjadi bagian dari modul client awal meskipun view kontennya dimuat dinamis. Mohon cek ukuran chunk client awal pada Preview dan pastikan tambahan ini masih sebanding dengan manfaat fallback. Jika kenaikannya material, skeleton dasar tetap perlu tersedia sinkron, tetapi layout variasi dapat diperkecil.
-
-`CHANGELOG.md` menjelaskan perilaku baru termasuk error dashboard. `TODO.md` menandai lingkup sesuai implementasi dan validasi. Tidak ada perubahan schema, storage, atau environment; validasi lint terarah dan build berhasil, sementara typecheck masih melaporkan dua error lama di `src/lib/server/safe-fetch.ts`.
+Satu hal untuk diperiksa di Preview: ThemeToggler menjalankan wipe seluruh halaman selama sekitar 700 ms pada browser yang mendukung View Transitions. Karena kontrol ini berada di Navbar dan sering digunakan, mohon pastikan transisi tidak terasa menahan ketika tombol ditekan berulang, dan uji fallback browser serta prefers-reduced-motion. Dokumentasi dan implementasi primitive menyatakan kedua fallback tersedia, tetapi browser belum diuji pada perubahan ini.
 ```
