@@ -8,9 +8,15 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useTheme } from "next-themes";
+import {
+  ThemeToggler,
+  type Resolved,
+  type ThemeSelection,
+} from "@animate-ui/react/primitives/effects/theme-toggler";
 import { ChevronDown } from "@/components/animate-ui/icons/chevron-down";
 import { LogOut } from "@/components/animate-ui/icons/log-out";
 import { Menu } from "@/components/animate-ui/icons/menu";
+import { Monitor } from "@/components/animate-ui/icons/monitor";
 import { Moon } from "@/components/animate-ui/icons/moon";
 import { Package } from "@/components/animate-ui/icons/package";
 import { Settings } from "@/components/animate-ui/icons/settings";
@@ -41,19 +47,42 @@ const NAV_LINKS = [
 ];
 
 function ThemeToggle() {
-  const { theme, setTheme } = useTheme();
+  const { theme, resolvedTheme, setTheme } = useTheme();
+  const nextTheme: Record<ThemeSelection, ThemeSelection> = {
+    light: "system",
+    system: "dark",
+    dark: "light",
+  };
+  const labels: Record<ThemeSelection, string> = {
+    light: "terang",
+    system: "sistem",
+    dark: "gelap",
+  };
+  const icons = { light: Sun, system: Monitor, dark: Moon };
+
   return (
-    <Button
-      variant="ghost"
-      size="icon"
-      aria-label="Ganti mode terang/gelap"
-      onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-      className="rounded-full"
+    <ThemeToggler
+      theme={(theme ?? "system") as ThemeSelection}
+      resolvedTheme={(resolvedTheme ?? "light") as Resolved}
+      setTheme={setTheme}
     >
-      {/* Ikon dikendalikan CSS tema - tanpa state mounting (hindari mismatch) */}
-      <Sun className="hidden h-[18px] w-[18px] dark:block" />
-      <Moon className="h-[18px] w-[18px] dark:hidden" />
-    </Button>
+      {({ effective, toggleTheme }) => {
+        const ThemeIcon = icons[effective];
+        const targetTheme = nextTheme[effective];
+
+        return (
+          <Button
+            variant="ghost"
+            size="icon"
+            aria-label={`Tema ${labels[effective]}. Ubah ke ${labels[targetTheme]}`}
+            onClick={() => toggleTheme(targetTheme)}
+            className="rounded-full"
+          >
+            <ThemeIcon className="h-[18px] w-[18px]" aria-hidden="true" />
+          </Button>
+        );
+      }}
+    </ThemeToggler>
   );
 }
 
